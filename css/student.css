@@ -248,6 +248,28 @@ select:focus, input[type="text"]:focus {
     font-weight: 600;
 }
 
+/* Topics Selection */
+.topics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+.topic-btn {
+    padding: 16px;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.topic-btn i {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
 /* Progress bar */
 .progress-container {
     margin-bottom: 2rem;

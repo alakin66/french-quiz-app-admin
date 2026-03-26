@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 fileTitle = fileTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
                 if (!fileTitle) fileTitle = "Quiz";
 
+                if (!finalData[fileTitle]) {
+                    finalData[fileTitle] = {};
+                }
+
                 const arrayBuffer = await file.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
@@ -98,18 +102,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const validQuestions = jsonArray.filter(row => row.Type && row.Question && row.Answer);
                     
                     if (validQuestions.length > 0) {
-                        const quizKey = workbook.SheetNames.length > 1 ? `${fileTitle} - ${sheetName}` : fileTitle;
-                        finalData[quizKey] = validQuestions;
+                        finalData[fileTitle][sheetName] = validQuestions;
                     } else {
                         console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}" de ${file.name}.`);
                     }
                 }
+                
+                if (Object.keys(finalData[fileTitle]).length === 0) {
+                    delete finalData[fileTitle];
+                }
             }
             
             let safeFileName = 'quizzes.js';
-            let appMainTitle = "Quiz de Français"; // Default Global Title
+            let appMainTitle = "Quiz de Français";
             
-            // If only one file is uploaded, dedicate the app title and JS filename to it
+            // If only one file is uploaded, dedicate the JS filename to it
             if (selectedFiles.length === 1) {
                 let singleTitle = selectedFiles[0].name.replace(/\.xlsx$/i, '');
                 singleTitle = singleTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -117,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 appMainTitle = singleTitle;
             }
 
-            downloadJs(finalData, appMainTitle, safeFileName);
+            downloadJs(finalData, safeFileName);
             
         } catch (error) {
             console.error("Error processing files:", error);
@@ -128,9 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function downloadJs(data, metaTitle, filename) {
+    function downloadJs(data, filename) {
         const jsonString = JSON.stringify(data, null, 2);
-        const jsFileContent = `window.quizConfig = { title: ${JSON.stringify(metaTitle)} };\nwindow.quizzesData = ${jsonString};`;
+        const jsFileContent = `window.quizzesData = ${jsonString};`;
         const blob = new Blob([jsFileContent], { type: "application/javascript" });
         const url = URL.createObjectURL(blob);
         

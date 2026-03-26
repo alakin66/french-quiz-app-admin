@@ -59,16 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
             quizSelect.appendChild(option);
         }
 
-        quizSelect.addEventListener('change', () => {
-            if (quizSelect.value) {
-                startBtn.disabled = false;
-            }
-        });
-    }
+    quizSelect.addEventListener('change', () => {
+        if (quizSelect.value) {
+            startBtn.disabled = false;
+        }
+    });
 
     startBtn.addEventListener('click', () => {
         selectedQuizKey = quizSelect.value;
-        const allQuestions = quizzesData[selectedQuizKey];
+        const allQuestions = quizzesData[selectedTopicKey][selectedQuizKey];
         if (!allQuestions || allQuestions.length === 0) return;
 
         // Shuffle and pick 10 questions randomly
@@ -108,7 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
         quizSelect.value = "";
         startBtn.disabled = true;
         headerScore.classList.add('hidden');
-        switchScreen(resultsScreen, startScreen);
+        
+        if (Object.keys(quizzesData).length > 1) {
+            document.querySelector('.logo-container h1').textContent = "Quiz de Français";
+            document.title = "Quiz de Français";
+            switchScreen(resultsScreen, topicScreen);
+        } else {
+            switchScreen(resultsScreen, startScreen);
+        }
     });
 
     function loadQuestion() {
