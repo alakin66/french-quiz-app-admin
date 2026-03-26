@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedQuizKey = null;
     let selectedTopicKey = null;
     let currentQuiz = [];
+    let incorrectQuestions = [];  // questions answered wrong in last session
     let currentQuestionIndex = 0;
     let score = 0;
     let hasAnsweredCurrent = false;
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!result) return '';
         const pct = Math.round((result.lastScore / result.lastTotal) * 100);
         const emoji = pct >= 80 ? '✅' : pct >= 50 ? '🟡' : '🔴';
-        return `${emoji} ${result.lastScore}/${result.lastTotal}`;
+        return emoji;
     }
 
     // DOM Elements
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const introQuizSelect = document.getElementById('intro-quiz-select');
     const nextBtn = document.getElementById('next-btn');
     const returnBtn = document.getElementById('return-btn');
+    const retryWrongBtn = document.getElementById('retry-wrong-btn');
     const backToTopicsBtn = document.getElementById('back-to-topics-btn');
     const loadingError = document.getElementById('loading-error');
 
@@ -178,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quizSelect.disabled = false;
         introQuizSelect.disabled = false;
         startBtn.disabled = true;
+        headerScore.classList.add('hidden');
         introStartBtn.disabled = true;
         quizSelect.value = '';
         introQuizSelect.value = '';
@@ -317,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentQuiz = shuffled.slice(0, 10);
 
         // Initialize state
+        incorrectQuestions = [];
         currentQuestionIndex = 0;
         score = 0;
         updateScoreHeader();
@@ -341,9 +345,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm("Voulez-vous vraiment quitter ce quiz ? Votre progression sera perdue.")) {
             quizSelect.value = "";
             startBtn.disabled = true;
-            headerScore.classList.add('hidden');
+        headerScore.classList.add('hidden');
             switchScreen(quizScreen, startScreen);
         }
+    });
+
+    retryWrongBtn.addEventListener('click', () => {
+        if (incorrectQuestions.length === 0) return;
+        
+        // Prepare the retry session
+        currentQuiz = [...incorrectQuestions];
+        incorrectQuestions = [];
+        currentQuestionIndex = 0;
+        score = 0;
+        updateScoreHeader();
+        
+        switchScreen(resultsScreen, quizScreen);
+        headerScore.classList.remove('hidden');
+        loadQuestion();
     });
 
     returnBtn.addEventListener('click', () => {
@@ -549,6 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 inputElement.style.borderColor = 'var(--error-color)';
             }
             showFeedback(false, currentQuiz[currentQuestionIndex].FeedbackIncorrect);
+            // Track this question for retry
+            incorrectQuestions.push(currentQuiz[currentQuestionIndex]);
         }
 
         // Disable all inputs
@@ -574,6 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackContainer.classList.remove('hidden');
     }
 
+
     function updateScoreHeader() {
         currentScoreStatus.textContent = score;
     }
@@ -592,6 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             switchScreen(quizScreen, resultsScreen);
             
+            if (incorrectQuestions.length > 0) {
+                retryWrongBtn.classList.remove('hidden');
+            } else {
+                retryWrongBtn.classList.add('hidden');
+            }
             document.getElementById('final-score').textContent = score;
             document.getElementById('final-total').textContent = currentQuiz.length;
             
