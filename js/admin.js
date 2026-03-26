@@ -32,12 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleFiles(files) {
-        // Restrict to single file
-        const file = files[0];
-        if (file && file.name.endsWith('.xlsx')) {
-            selectedFiles = [file]; // Replace existing
-        } else {
-            alert(`Fichier invalide : ${file ? file.name : 'inconnu'}. Seuls les fichiers .xlsx sont autorisés.`);
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.name.endsWith('.xlsx')) {
+                // Prevent duplicates
+                if (!selectedFiles.find(f => f.name === file.name)) {
+                    selectedFiles.push(file);
+                }
+            } else {
+                alert(`Fichier invalide ignoré : ${file.name}. Seuls les fichiers .xlsx sont autorisés.`);
+            }
         }
         renderFileList();
     }
@@ -78,35 +82,42 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             const finalData = {};
-            const file = selectedFiles[0];
             
-            // Clean filename to use as global App Title
-            let appTitle = file.name.replace(/\.xlsx$/i, '');
-            // Remove dashes, numbers, brackets, etc. and keep only words
-            appTitle = appTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
-            if (!appTitle) appTitle = "Quiz de Français"; // Fallback
+            for (const file of selectedFiles) {
+                let fileTitle = file.name.replace(/\.xlsx$/i, '');
+                fileTitle = fileTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
+                if (!fileTitle) fileTitle = "Quiz";
 
-            const arrayBuffer = await file.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            
-            // Iterate over all sheets
-            for (const sheetName of workbook.SheetNames) {
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                const arrayBuffer = await file.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
-                // Basic validation
-                const validQuestions = jsonArray.filter(row => row.Type && row.Question && row.Answer);
-                
-                if (validQuestions.length > 0) {
-                    finalData[sheetName] = validQuestions;
-                } else {
-                    console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}". Vérifiez les entêtes.`);
+                for (const sheetName of workbook.SheetNames) {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                    
+                    const validQuestions = jsonArray.filter(row => row.Type && row.Question && row.Answer);
+                    
+                    if (validQuestions.length > 0) {
+                        const quizKey = workbook.SheetNames.length > 1 ? `${fileTitle} - ${sheetName}` : fileTitle;
+                        finalData[quizKey] = validQuestions;
+                    } else {
+                        console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}" de ${file.name}.`);
+                    }
                 }
             }
             
-            // Name the downloaded JS file safely (e.g. "les-pronoms-relatifs.js")
-            const safeFileName = appTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.js';
-            downloadJs(finalData, appTitle, safeFileName);
+            let safeFileName = 'quizzes.js';
+            let appMainTitle = "Quiz de Français"; // Default Global Title
+            
+            // If only one file is uploaded, dedicate the app title and JS filename to it
+            if (selectedFiles.length === 1) {
+                let singleTitle = selectedFiles[0].name.replace(/\.xlsx$/i, '');
+                singleTitle = singleTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
+                safeFileName = singleTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.js';
+                appMainTitle = singleTitle;
+            }
+
+            downloadJs(finalData, appMainTitle, safeFileName);
             
         } catch (error) {
             console.error("Error processing files:", error);

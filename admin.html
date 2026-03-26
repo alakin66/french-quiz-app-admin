@@ -18,14 +18,14 @@
         </header>
         
         <main class="admin-content">
-            <p class="description">Téléversez <strong>un</strong> fichier Excel (.xlsx) ci-dessous. Chaque feuille de ce fichier représentera un questionnaire (le nom du quiz sera le nom de la feuille). Le nom global de l'application sera tiré du nom de votre fichier Excel. Chaque feuille doit avoir les entêtes : <strong>Type</strong>, <strong>Question</strong>, <strong>Options</strong>, <strong>Answer</strong>, <strong>FeedbackCorrect</strong>, et <strong>FeedbackIncorrect</strong>.</p>
+            <p class="description">Téléversez <strong>vos fichiers</strong> Excel (.xlsx) ci-dessous. L'outil compilera toutes les feuilles de tous les fichiers en une seule base de données `quizzes.js`. Le nom du quiz dans le menu déroulant sera combiné ("NomduFichier - NomDeLaFeuille"). Chaque feuille doit avoir les entêtes : <strong>Type</strong>, <strong>Question</strong>, <strong>Options</strong>, <strong>Answer</strong>, <strong>FeedbackCorrect</strong>, et <strong>FeedbackIncorrect</strong>.</p>
             
             <div class="upload-area" id="drop-zone">
                 <i class="ms-Icon ms-Icon--ExcelDocument" aria-hidden="true"></i>
-                <p>Glissez-déposez votre fichier Excel ici</p>
+                <p>Glissez-déposez vos fichiers Excel ici</p>
                 <p class="sub-text">ou</p>
                 <label for="file-input" class="btn btn-primary">Parcourir</label>
-                <input type="file" id="file-input" accept=".xlsx" hidden>
+                <input type="file" id="file-input" accept=".xlsx" multiple hidden>
             </div>
             
             <div class="file-list" id="file-list"></div>
