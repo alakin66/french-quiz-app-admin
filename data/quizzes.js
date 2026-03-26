@@ -1,5 +1,77 @@
 window.quizzesData = {
   "Pronoms Relatifs": {
+    "_intro": [
+      [
+        "Sujet",
+        "Les Pronoms Relatifs en Français",
+        ""
+      ],
+      [
+        "Qu'est-ce qu'un pronom relatif ?",
+        "",
+        ""
+      ],
+      [
+        "Un pronom relatif est un mot qui introduit une proposition subordonnée relative.",
+        "",
+        ""
+      ],
+      [
+        "Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.",
+        "",
+        ""
+      ],
+      [
+        "Les pronoms relatifs de base",
+        "Explication",
+        "Exemple"
+      ],
+      [
+        "qui",
+        "Remplace le SUJET du verbe dans la proposition subordonnée.",
+        "C'est le chat qui dort."
+      ],
+      [
+        "que / qu'",
+        "Remplace le COMPLÉMENT D'OBJET DIRECT (COD).",
+        "Le livre que je lis est passionnant."
+      ],
+      [
+        "où",
+        "Remplace un LIEU ou un TEMPS.",
+        "La ville où je vis est belle. / Le jour où il est parti..."
+      ],
+      [
+        "dont",
+        "Remplace le complément introduit par 'DE'.",
+        "Le film dont je t'ai parlé est excellent."
+      ],
+      [
+        "Les pronoms relatifs composés",
+        "Explication",
+        "Exemple"
+      ],
+      [
+        "auquel / à laquelle / auxquels...",
+        "Après les prépositions avec 'à' (ex: à + lequel = auquel).",
+        "Le projet auquel je travaille est innovant."
+      ],
+      [
+        "duquel / desquels / desquelles...",
+        "Après les prépositions avec 'de' (ex: de + lequel = duquel).",
+        "La raison pour laquelle il est parti."
+      ],
+      [
+        "lequel / laquelle...",
+        "Après une préposition (avec, sur, pour...). S'accorde avec l'antécédent.",
+        "La table sur laquelle j'ai posé mon café."
+      ],
+      [
+        "Conseil",
+        "Identifiez d'abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec 'de' ?) pour choisir le bon pronom !",
+        ""
+      ]
+    ],
     "Pronoms Relatifs - Basique": [
       {
         "Type": "MultipleChoice",
@@ -246,6 +318,86 @@ window.quizzesData = {
     ]
   },
   "Verbes Transitifs": {
+    "_intro": [
+      [
+        "Sujet",
+        "Les Verbes Transitifs en Français",
+        "",
+        ""
+      ],
+      [
+        "Qu'est-ce qu'un verbe transitif ?",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Un verbe transitif est un verbe qui a besoin d'un complément d'objet pour compléter son sens.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Type",
+        "Définition",
+        "Construction",
+        "Exemple"
+      ],
+      [
+        "Transitif Direct (COD)",
+        "Le verbe se construit SANS préposition avant son complément.",
+        "Verbe + complément direct",
+        "Je mange une pomme. / Il lit un livre."
+      ],
+      [
+        "Transitif Indirect (COI)",
+        "Le verbe se construit AVEC une préposition (à, de) avant son complément.",
+        "Verbe + à/de + complément",
+        "Je parle à Marc. / Il se souvient de toi."
+      ],
+      [
+        "Pronoms de remplacement",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Pour le COD",
+        "Utiliser : le, la, l', les",
+        "",
+        "Je mange la pomme → Je la mange."
+      ],
+      [
+        "Pour le COI avec 'à' (personne)",
+        "Utiliser : lui, leur",
+        "",
+        "Je parle à Marc → Je lui parle."
+      ],
+      [
+        "Pour le COI avec 'à' (chose)",
+        "Utiliser : y",
+        "",
+        "Je pense à ce projet → J'y pense."
+      ],
+      [
+        "Pour le COI avec 'de'",
+        "Utiliser : en",
+        "",
+        "Il parle de son voyage → Il en parle."
+      ],
+      [
+        "Conseil",
+        "Posez la question 'Qui ?' ou 'Quoi ?' directement après le verbe → COD (sans préposition). Si vous avez besoin de 'à qui ?' ou 'de quoi ?' → COI (avec préposition).",
+        "",
+        ""
+      ]
+    ],
     "Transitifs Directs (COD)": [
       {
         "Type": "MultipleChoice",

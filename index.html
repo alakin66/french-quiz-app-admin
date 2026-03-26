@@ -56,9 +56,15 @@
                     <div id="intro-content" class="intro-content">
                         <!-- Populated by JS -->
                     </div>
-                    <button id="go-to-quiz-btn" class="btn btn-primary btn-large" style="margin-top: 2rem;">
-                        <span>Choisir un Quiz</span>
-                        <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>
+                    <div class="form-group" style="margin-top: 2rem; margin-bottom: 0; text-align: left;">
+                        <label for="intro-quiz-select">Choisissez un quiz</label>
+                        <select id="intro-quiz-select">
+                            <option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>
+                        </select>
+                    </div>
+                    <button id="intro-start-btn" class="btn btn-primary btn-large" style="margin-top: 1rem;" disabled>
+                        <span>Commencer le Quiz</span>
+                        <i class="ms-Icon ms-Icon--Play" aria-hidden="true"></i>
                     </button>
                 </div>
             </section>

@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Controls
     const quizSelect = document.getElementById('quiz-select');
     const startBtn = document.getElementById('start-btn');
+    const introStartBtn = document.getElementById('intro-start-btn');
+    const introQuizSelect = document.getElementById('intro-quiz-select');
     const nextBtn = document.getElementById('next-btn');
     const returnBtn = document.getElementById('return-btn');
     const backToTopicsBtn = document.getElementById('back-to-topics-btn');
@@ -86,20 +88,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const welcomeCardH2 = document.querySelector('#start-screen .welcome-card h2');
         if (welcomeCardH2) welcomeCardH2.textContent = topic;
 
-        // Populate the dropdown with the subquizzes
+        // Populate the dropdown with the subquizzes (both on start-screen and intro-screen)
         const subQuizzes = Object.keys(quizzesData[topic]).filter(k => k !== '_intro');
-        quizSelect.innerHTML = '<option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>';
+        const optionHtml = '<option value="" disabled selected>-- S\u00e9lectionnez un niveau/quiz --</option>'
+            + subQuizzes.map(sub => `<option value="${sub}">${sub}</option>`).join('');
         
-        subQuizzes.forEach(sub => {
-            const option = document.createElement('option');
-            option.value = sub;
-            option.textContent = sub;
-            quizSelect.appendChild(option);
-        });
+        quizSelect.innerHTML = optionHtml;
+        introQuizSelect.innerHTML = optionHtml;
         
         quizSelect.disabled = false;
+        introQuizSelect.disabled = false;
         startBtn.disabled = true;
+        introStartBtn.disabled = true;
         quizSelect.value = '';
+        introQuizSelect.value = '';
 
         // Show back button only if there are multiple topics total
         if (Object.keys(quizzesData).length > 1) {
@@ -188,8 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
         switchScreen(introScreen, topicScreen);
     });
 
-    document.getElementById('go-to-quiz-btn').addEventListener('click', () => {
-        switchScreen(introScreen, startScreen);
+    introQuizSelect.addEventListener('change', () => {
+        if (introQuizSelect.value) introStartBtn.disabled = false;
+    });
+
+    introStartBtn.addEventListener('click', () => {
+        selectedQuizKey = introQuizSelect.value;
+        // Keep both selects in sync
+        quizSelect.value = selectedQuizKey;
+        launchQuiz(selectedQuizKey);
     });
 
     quizSelect.addEventListener('change', () => {
@@ -200,7 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startBtn.addEventListener('click', () => {
         selectedQuizKey = quizSelect.value;
-        const allQuestions = quizzesData[selectedTopicKey][selectedQuizKey];
+        launchQuiz(selectedQuizKey);
+    });
+
+    function launchQuiz(quizKey) {
+        const allQuestions = quizzesData[selectedTopicKey][quizKey];
         if (!allQuestions || allQuestions.length === 0) return;
 
         // Shuffle and pick 10 questions randomly
@@ -212,11 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         updateScoreHeader();
         
-        switchScreen(startScreen, quizScreen);
+        const fromScreen = introScreen.classList.contains('active') ? introScreen : startScreen;
+        switchScreen(fromScreen, quizScreen);
         headerScore.classList.remove('hidden');
         
         loadQuestion();
-    });
+    }
 
     nextBtn.addEventListener('click', () => {
         currentQuestionIndex++;
