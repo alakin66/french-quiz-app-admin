@@ -8,6 +8,49 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let hasAnsweredCurrent = false;
 
+    // =============================================
+    // LocalStorage History Module
+    // =============================================
+    const HISTORY_KEY = 'french_quiz_history';
+
+    function loadHistory() {
+        try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; }
+        catch(e) { return {}; }
+    }
+
+    function saveResult(topic, quizKey, quizScore, total) {
+        const history = loadHistory();
+        if (!history[topic]) history[topic] = {};
+        history[topic][quizKey] = {
+            lastScore: quizScore,
+            lastTotal: total,
+            lastDate: new Date().toISOString(),
+            attempts: ((history[topic][quizKey] || {}).attempts || 0) + 1
+        };
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function getQuizResult(topic, quizKey) {
+        const h = loadHistory();
+        return (h[topic] || {})[quizKey] || null;
+    }
+
+    function clearHistory() {
+        localStorage.removeItem(HISTORY_KEY);
+    }
+
+    function hasAnyHistory() {
+        const h = loadHistory();
+        return Object.keys(h).length > 0;
+    }
+
+    function scoreBadge(result) {
+        if (!result) return '';
+        const pct = Math.round((result.lastScore / result.lastTotal) * 100);
+        const emoji = pct >= 80 ? '✅' : pct >= 50 ? '🟡' : '🔴';
+        return `${emoji} ${result.lastScore}/${result.lastTotal}`;
+    }
+
     // DOM Elements
     // Screens
     const topicScreen = document.getElementById('topic-screen');
@@ -70,13 +113,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateTopics(topics) {
         const container = document.getElementById('topics-container');
         container.innerHTML = '';
+        const history = loadHistory();
         topics.forEach(topic => {
+            const topicHistory = history[topic] || {};
+            const subQuizKeys = Object.keys((quizzesData[topic] || {})).filter(k => k !== '_intro');
+            const doneCount = subQuizKeys.filter(k => topicHistory[k]).length;
+            const allDone = doneCount > 0 && doneCount === subQuizKeys.length;
+
             const btn = document.createElement('button');
-            btn.className = 'btn btn-outline topic-btn';
-            btn.innerHTML = `<span>${topic}</span><i class="ms-Icon ms-Icon--ChevronRightSmall"></i>`;
+            btn.className = 'btn btn-outline topic-btn' + (allDone ? ' topic-done' : '');
+
+            const label = document.createElement('span');
+            label.textContent = topic;
+
+            const right = document.createElement('div');
+            right.className = 'topic-btn-right';
+
+            if (doneCount > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'topic-badge' + (allDone ? ' badge-success' : ' badge-partial');
+                badge.textContent = `${doneCount}/${subQuizKeys.length}`;
+                right.appendChild(badge);
+            }
+
+            const chevron = document.createElement('i');
+            chevron.className = 'ms-Icon ms-Icon--ChevronRightSmall';
+            right.appendChild(chevron);
+
+            btn.appendChild(label);
+            btn.appendChild(right);
             btn.onclick = () => selectTopic(topic);
             container.appendChild(btn);
         });
+
+        // Show / hide the clear history button
+        const clearBtn = document.getElementById('clear-history-btn');
+        if (clearBtn) clearBtn.classList.toggle('hidden', !hasAnyHistory());
     }
 
     function selectTopic(topic) {
@@ -90,11 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Populate the dropdown with the subquizzes (both on start-screen and intro-screen)
         const subQuizzes = Object.keys(quizzesData[topic]).filter(k => k !== '_intro');
-        const optionHtml = '<option value="" disabled selected>-- S\u00e9lectionnez un niveau/quiz --</option>'
-            + subQuizzes.map(sub => `<option value="${sub}">${sub}</option>`).join('');
-        
-        quizSelect.innerHTML = optionHtml;
-        introQuizSelect.innerHTML = optionHtml;
+        const history = loadHistory();
+        const topicHistory = history[topic] || {};
+
+        const buildOptions = () => '<option value="" disabled selected>-- S\u00e9lectionnez un niveau/quiz --</option>'
+            + subQuizzes.map(sub => {
+                const result = topicHistory[sub];
+                const badge = result ? ` \u00a0${scoreBadge(result)}` : '';
+                return `<option value="${sub}">${sub}${badge}</option>`;
+            }).join('');
+
+        quizSelect.innerHTML = buildOptions();
+        introQuizSelect.innerHTML = buildOptions();
         
         quizSelect.disabled = false;
         introQuizSelect.disabled = false;
@@ -185,6 +264,23 @@ document.addEventListener('DOMContentLoaded', () => {
         document.title = "Quiz de Français";
         switchScreen(startScreen, topicScreen);
     });
+
+    const clearHistoryBtn = document.getElementById('clear-history-btn');
+    const historyCleared = document.getElementById('history-cleared-msg');
+    if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener('click', () => {
+            const confirmed = confirm(
+                '⚠️ Voulez-vous vraiment effacer tout votre historique ?\n\nCela supprimera les résultats de tous vos quiz. Cette action est irréversible.'
+            );
+            if (confirmed) {
+                clearHistory();
+                populateTopics(Object.keys(quizzesData));
+                clearHistoryBtn.classList.add('hidden');
+                historyCleared.classList.remove('hidden');
+                setTimeout(() => historyCleared.classList.add('hidden'), 3000);
+            }
+        });
+    }
 
     document.getElementById('back-from-intro-btn').addEventListener('click', () => {
         switchScreen(introScreen, topicScreen);
@@ -483,6 +579,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showResults() {
+        // Save result to localStorage
+        saveResult(selectedTopicKey, selectedQuizKey, score, currentQuiz.length);
+
+        // Refresh topic list badges if we are coming back
+        if (Object.keys(quizzesData).length > 1) {
+            populateTopics(Object.keys(quizzesData));
+        }
         // set 100% progress
         progressFill.style.width = '100%';
         

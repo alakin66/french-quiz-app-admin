@@ -199,6 +199,73 @@ p {
     font-family: inherit;
 }
 
+.topic-btn-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topic-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+}
+
+.badge-success {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-partial {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.topic-btn.topic-done {
+    border-color: #86EFAC;
+    background: #F0FDF4;
+}
+
+/* History footer */
+.history-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    min-height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-history-clear {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-history-clear:hover {
+    color: var(--error);
+    border-color: var(--error-border);
+    background: var(--error-bg);
+}
+
+.history-cleared-msg {
+    font-size: 0.85rem;
+    color: var(--success);
+    font-weight: 500;
+    animation: fadeUp 0.3s ease;
+}
+
 .topic-btn:hover {
     border-color: var(--primary);
     background: #FDF4FF;

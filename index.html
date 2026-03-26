@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Fluent UI Icons -->
     <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/student.css?v=5">
+    <link rel="stylesheet" href="css/student.css?v=6">
 </head>
 <body>
     <div class="app-container">
@@ -35,6 +35,16 @@
                     
                     <div id="topics-container" class="topics-container">
                         <!-- Populated by JS -->
+                    </div>
+
+                    <div class="history-footer">
+                        <button id="clear-history-btn" class="btn btn-history-clear hidden">
+                            <i class="ms-Icon ms-Icon--Delete" aria-hidden="true"></i>
+                            Effacer l'historique
+                        </button>
+                        <span id="history-cleared-msg" class="history-cleared-msg hidden">
+                            <i class="ms-Icon ms-Icon--CheckMark"></i> Historique effacé !
+                        </span>
                     </div>
                     
                     <div id="loading-error" class="error-msg hidden">
@@ -173,6 +183,6 @@
         const safeQuizName = quizParam.replace(/[^a-zA-Z0-9_\-]/g, '');
         document.write('<script src="data/' + safeQuizName + '.js?v=4"><' + '/script>');
     </script>
-    <script src="js/student.js?v=4"></script>
+    <script src="js/student.js?v=6"></script>
 </body>
 </html>
