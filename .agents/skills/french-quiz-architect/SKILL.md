@@ -19,7 +19,7 @@ Build a strict client-side only web application designed to be embedded as a Mic
 * Parse the uploaded Excel file using SheetJS. Extract the global app title from the filename (removing `.xlsx` and special characters like dashes and numbers).
 * Iterate through all sheets in the Excel file. Each sheet name represents a quiz category.
 * Combine all parsed quizzes into a global `window.quizzesData` object and a `window.quizConfig` object.
-* Provide a "Télécharger quizzes.js" button that triggers a browser download.
+* Provide a "Télécharger" button that triggers a browser download. The generated `.js` file must be named safely based on the app title (e.g. `les-pronoms-relatifs.js`).
 
 # The Excel File Structure (For the Admin Tool)
 The SheetJS logic must expect Excel sheets with these exact columns:
@@ -33,8 +33,9 @@ The application dynamically renders a different UI depending on the `Type` field
 4.  **OddOneOut:** Display a list of French words from `Options`. The student clicks the word that does not belong. Single click validates immediately.
 
 # Application Flow (Student App - `index.html`)
-1.  **Initialization:** Read `window.quizConfig.title` to set the page title and major `<h1>` and `<h2>` headers dynamically.
-2.  **Start Screen:** Display a dropdown field populated with the titles of the loaded quizzes (derived from the Excel sheet names).
+1.  **URL Parameter Support:** Read the `?quiz=` parameter from the URL to dynamically load `/data/{parameter}.js` via an injected `<script>` tag. Fallback to `quizzes.js` if absent.
+2.  **Initialization:** Read `window.quizConfig.title` to set the page title and major `<h1>` and `<h2>` headers dynamically.
+3.  **Start Screen:** Display a dropdown field populated with the titles of the loaded quizzes (derived from the Excel sheet names).
 3.  **Randomization**: Upon clicking "Commencer le Quiz", randomly select exactly 10 questions from the chosen quiz sheet to present to the user.
 4.  **Quiz View:** Display one question at a time. Include a "Quitter" (Exit) button (an X icon) in the progress header to return to the Start Screen. Include a "Suivant" button that only appears after the student submits an answer. Show either `FeedbackCorrect` or `FeedbackIncorrect` on the same horizontal plane as the "Suivant" button.
 5.  **Results Screen:** When the 10 questions are answered, display an animated circular progress chart with the final score (e.g., "8/10") and a "Retour au Menu Principal" button.

@@ -104,7 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             
-            downloadJs(finalData, appTitle, 'quizzes.js');
+            // Name the downloaded JS file safely (e.g. "les-pronoms-relatifs.js")
+            const safeFileName = appTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.js';
+            downloadJs(finalData, appTitle, safeFileName);
             
         } catch (error) {
             console.error("Error processing files:", error);

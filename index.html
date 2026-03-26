@@ -125,8 +125,14 @@
         </main>
     </div>
 
-    <!-- Load data self-contained -->
-    <script src="data/quizzes.js?v=2"></script>
-    <script src="js/student.js?v=2"></script>
+    <!-- Dynamic Load data based on URL parameter -->
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizParam = urlParams.get('quiz') || 'quizzes';
+        // Sanitize to prevent weird path injections
+        const safeQuizName = quizParam.replace(/[^a-zA-Z0-9_\-]/g, '');
+        document.write('<script src="data/' + safeQuizName + '.js?v=3"><\\/script>');
+    </script>
+    <script src="js/student.js?v=3"></script>
 </body>
 </html>
