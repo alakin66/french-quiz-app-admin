@@ -114,6 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    backToTopicsBtn.addEventListener('click', () => {
+        document.querySelector('.logo-container h1').textContent = "Quiz de Français";
+        document.title = "Quiz de Français";
+        switchScreen(startScreen, topicScreen);
+    });
+
     quizSelect.addEventListener('change', () => {
         if (quizSelect.value) {
             startBtn.disabled = false;
