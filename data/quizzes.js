@@ -1,6 +1,6 @@
-window.quizConfig = { title: "Pronoms Relatifs" };
+window.quizConfig = { title: "Quiz de Français" };
 window.quizzesData = {
-  "Pronoms Relatifs - Basique": [
+  "Pronoms Relatifs - Pronoms Relatifs - Basique": [
     {
       "Type": "MultipleChoice",
       "Question": "C'est le livre ___ j'ai lu hier.",
@@ -122,7 +122,7 @@ window.quizzesData = {
       "FeedbackIncorrect": "Faux. Je ne comprends pas 'quoi' ? Le problème. Donc 'que'."
     }
   ],
-  "Pronoms Relatifs - Avancé": [
+  "Pronoms Relatifs - Pronoms Relatifs - Avancé": [
     {
       "Type": "MultipleChoice",
       "Question": "C'est le film ___ je t'ai parlé.",
@@ -242,6 +242,170 @@ window.quizzesData = {
       "Answer": "avec qui, avec laquelle",
       "FeedbackCorrect": "Bravo, les deux prépositions conviennent pour une personne !",
       "FeedbackIncorrect": "Raté. On peut dire 'avec qui' ou 'avec laquelle' (personne féminine)."
+    }
+  ],
+  "Verbes Transitifs - Transitifs Directs (COD)": [
+    {
+      "Type": "MultipleChoice",
+      "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
+      "Options": "manger, parler, ressembler, sourire",
+      "Answer": "manger",
+      "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
+      "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme)."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Nous ___ la télévision tous les soirs.",
+      "Options": "",
+      "Answer": "regardons",
+      "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
+      "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'."
+    },
+    {
+      "Type": "TrueFalse",
+      "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
+      "Options": "",
+      "Answer": "Vrai",
+      "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
+      "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct."
+    },
+    {
+      "Type": "OddOneOut",
+      "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
+      "Options": "acheter, vendre, répondre, donner",
+      "Answer": "répondre",
+      "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
+      "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
+      "Options": "COD, COI, Sujet",
+      "Answer": "COD",
+      "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
+      "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Ils ont ___ leur maison l'année dernière.",
+      "Options": "",
+      "Answer": "vendu",
+      "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
+      "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
+      "Options": "Je lui mange, Je la mange, Je y mange",
+      "Answer": "Je la mange",
+      "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
+      "FeedbackIncorrect": "Faux, c'est 'la'."
+    },
+    {
+      "Type": "TrueFalse",
+      "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
+      "Options": "",
+      "Answer": "Faux",
+      "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
+      "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Choisis la bonne phrase :",
+      "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
+      "Answer": "J'écoute la radio",
+      "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
+      "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Tu ___ ton temps avec ces bêtises.",
+      "Options": "",
+      "Answer": "perds",
+      "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
+      "FeedbackIncorrect": "C'est le verbe 'perdre'."
+    }
+  ],
+  "Verbes Transitifs - Transitifs Indirects (COI)": [
+    {
+      "Type": "MultipleChoice",
+      "Question": "Lequel de ces verbes est transitif indirect (se construit avec une préposition 'à' ou 'de') ?",
+      "Options": "parler, voir, écouter",
+      "Answer": "parler",
+      "FeedbackCorrect": "Correct ! On 'parle À quelqu'un' ou 'DE quelque chose'.",
+      "FeedbackIncorrect": "Faux. Voir et écouter sont directs. Parler nécessite une préposition."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Je téléphone ___ mon frère.",
+      "Options": "",
+      "Answer": "à",
+      "FeedbackCorrect": "Très bien ! Téléphoner À quelqu'un.",
+      "FeedbackIncorrect": "Il manque la préposition 'à'."
+    },
+    {
+      "Type": "TrueFalse",
+      "Question": "Un verbe transitif indirect a besoin d'une préposition pour introduire son objet.",
+      "Options": "",
+      "Answer": "Vrai",
+      "FeedbackCorrect": "C'est exact, contrairement aux verbes transitifs directs.",
+      "FeedbackIncorrect": "C'est faux, la préposition est obligatoire."
+    },
+    {
+      "Type": "OddOneOut",
+      "Question": "Choisissez le verbe qui N'EST PAS transitif indirect avec 'à' :",
+      "Options": "ressembler à, penser à, oublier, plaire à",
+      "Answer": "oublier",
+      "FeedbackCorrect": "Correct ! 'Oublier' est transitif direct (oublier quelque chose/quelqu'un).",
+      "FeedbackIncorrect": "Incorrect. Oublier est direct."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Quel pronom remplace le COI dans : 'Je parle à Marie' ?",
+      "Options": "Je la parle, Je lui parle, Je le parle",
+      "Answer": "Je lui parle",
+      "FeedbackCorrect": "Bravo ! 'lui' remplace un nom de personne introduit par 'à'.",
+      "FeedbackIncorrect": "Faux, c'est 'lui'."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Il se souvient ___ cet événement.",
+      "Options": "",
+      "Answer": "de",
+      "FeedbackCorrect": "Correct ! Se souvenir DE quelque chose.",
+      "FeedbackIncorrect": "Se souvenir prend toujours la préposition 'de'."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Quel pronom remplace le COI introduit par 'de' : 'Il parle de son voyage' ?",
+      "Options": "Il lui parle, Il en parle, Il y parle",
+      "Answer": "Il en parle",
+      "FeedbackCorrect": "Parfait ! 'en' remplace un groupe nominal introduit par 'de'.",
+      "FeedbackIncorrect": "Faux, c'est 'en'."
+    },
+    {
+      "Type": "TrueFalse",
+      "Question": "On peut utiliser le pronom 'lui' pour remplacer des objets inanimés introduits par 'à'.",
+      "Options": "",
+      "Answer": "Faux",
+      "FeedbackCorrect": "Exact ! Pour les objets inanimés on utilise 'y' (Je pense à la maison -> j'y pense).",
+      "FeedbackIncorrect": "Faux. On utilise 'y' pour les objets, 'lui' est pour les personnes isolées."
+    },
+    {
+      "Type": "MultipleChoice",
+      "Question": "Choisis la bonne phrase :",
+      "Options": "Je joue le piano, Je joue du piano",
+      "Answer": "Je joue du piano",
+      "FeedbackCorrect": "Bravo ! Jouer d'un instrument = COI avec 'de'.",
+      "FeedbackIncorrect": "Faux. Jouer d'un instrument prend 'de'."
+    },
+    {
+      "Type": "FillInBlank",
+      "Question": "Nous nous intéressons ___ ce projet.",
+      "Options": "",
+      "Answer": "à",
+      "FeedbackCorrect": "Correct, s'intéresser 'à' quelque chose.",
+      "FeedbackIncorrect": "Il manque 'à'."
     }
   ]
 };
