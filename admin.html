@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration du Quiz de Français</title>
+    <!-- Use Inter font for a premium look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fluent UI icons -->
+    <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <i class="ms-Icon ms-Icon--Settings" aria-hidden="true"></i>
+            <h1>Administration du Quiz de Français</h1>
+        </header>
+        
+        <main class="admin-content">
+            <p class="description">Téléversez <strong>un</strong> fichier Excel (.xlsx) ci-dessous. Chaque feuille de ce fichier représentera un questionnaire (le nom du quiz sera le nom de la feuille). Le nom global de l'application sera tiré du nom de votre fichier Excel. Chaque feuille doit avoir les entêtes : <strong>Type</strong>, <strong>Question</strong>, <strong>Options</strong>, <strong>Answer</strong>, <strong>FeedbackCorrect</strong>, et <strong>FeedbackIncorrect</strong>.</p>
+            
+            <div class="upload-area" id="drop-zone">
+                <i class="ms-Icon ms-Icon--ExcelDocument" aria-hidden="true"></i>
+                <p>Glissez-déposez votre fichier Excel ici</p>
+                <p class="sub-text">ou</p>
+                <label for="file-input" class="btn btn-primary">Parcourir</label>
+                <input type="file" id="file-input" accept=".xlsx" hidden>
+            </div>
+            
+            <div class="file-list" id="file-list"></div>
+            
+            <div class="actions">
+                <button id="generate-btn" class="btn btn-success" disabled>Générer et Télécharger quizzes.js</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- SheetJS for Excel parsing -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
