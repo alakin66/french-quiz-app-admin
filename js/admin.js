@@ -96,6 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
                 for (const sheetName of workbook.SheetNames) {
+                    // Special handling: Introduction sheet
+                    if (sheetName.toLowerCase() === 'introduction') {
+                        const worksheet = workbook.Sheets[sheetName];
+                        // Read as raw Array of Arrays to preserve table structure
+                        const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+                        // Filter out completely empty rows
+                        const cleanRows = rawRows.filter(row => row.some(cell => String(cell).trim() !== ''));
+                        finalData[fileTitle]._intro = cleanRows;
+                        continue;
+                    }
+
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
                     
@@ -108,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 
-                if (Object.keys(finalData[fileTitle]).length === 0) {
+                if (Object.keys(finalData[fileTitle]).filter(k => k !== '_intro').length === 0) {
                     delete finalData[fileTitle];
                 }
             }

@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     // Screens
     const topicScreen = document.getElementById('topic-screen');
+    const introScreen = document.getElementById('intro-screen');
     const startScreen = document.getElementById('start-screen');
     const quizScreen = document.getElementById('quiz-screen');
     const resultsScreen = document.getElementById('results-screen');
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (welcomeCardH2) welcomeCardH2.textContent = topic;
 
         // Populate the dropdown with the subquizzes
-        const subQuizzes = Object.keys(quizzesData[topic]);
+        const subQuizzes = Object.keys(quizzesData[topic]).filter(k => k !== '_intro');
         quizSelect.innerHTML = '<option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>';
         
         subQuizzes.forEach(sub => {
@@ -107,17 +108,88 @@ document.addEventListener('DOMContentLoaded', () => {
             backToTopicsBtn.classList.add('hidden');
         }
 
-        if (topicScreen.classList.contains('active')) {
-            switchScreen(topicScreen, startScreen);
-        } else if (resultsScreen.classList.contains('active')) {
-            switchScreen(resultsScreen, startScreen);
+        // If topic has intro data, show intro screen first
+        if (quizzesData[topic]._intro) {
+            renderIntro(topic, quizzesData[topic]._intro);
+            const fromScreen = topicScreen.classList.contains('active') ? topicScreen
+                             : resultsScreen.classList.contains('active') ? resultsScreen
+                             : startScreen;
+            switchScreen(fromScreen, introScreen);
+        } else {
+            const fromScreen = topicScreen.classList.contains('active') ? topicScreen : resultsScreen;
+            switchScreen(fromScreen, startScreen);
         }
     }
+
+    function renderIntro(topic, rows) {
+        document.getElementById('intro-title').textContent = topic;
+        const container = document.getElementById('intro-content');
+        container.innerHTML = '';
+
+        rows.forEach(row => {
+            const nonEmpty = row.filter(c => String(c).trim() !== '');
+            if (nonEmpty.length === 0) return;
+
+            if (nonEmpty.length === 1) {
+                // Single cell: heading or paragraph
+                const text = String(nonEmpty[0]).trim();
+                const el = document.createElement('h3');
+                el.className = 'intro-section-heading';
+                el.textContent = text;
+                container.appendChild(el);
+            } else {
+                // Multi-cell: part of a table group — collect into a table
+                // We need to group consecutive multi-cell rows
+                const table = buildOrAppendTable(container, row);
+            }
+        });
+
+        // Now reprocess: group multi-cell rows into <table> elements properly
+        container.innerHTML = '';
+        let currentTable = null;
+        rows.forEach(row => {
+            const nonEmpty = row.filter(c => String(c).trim() !== '');
+            if (nonEmpty.length === 0) {
+                currentTable = null;
+                return;
+            }
+            if (nonEmpty.length === 1) {
+                currentTable = null;
+                const el = document.createElement('h3');
+                el.className = 'intro-section-heading';
+                el.textContent = String(nonEmpty[0]).trim();
+                container.appendChild(el);
+            } else {
+                if (!currentTable) {
+                    currentTable = document.createElement('table');
+                    currentTable.className = 'intro-table';
+                    container.appendChild(currentTable);
+                }
+                const tr = document.createElement('tr');
+                row.forEach((cell, i) => {
+                    const td = i === 0 ? document.createElement('th') : document.createElement('td');
+                    td.textContent = String(cell);
+                    tr.appendChild(td);
+                });
+                currentTable.appendChild(tr);
+            }
+        });
+    }
+
+    function buildOrAppendTable(container, row) { /* unused helper */ }
 
     backToTopicsBtn.addEventListener('click', () => {
         document.querySelector('.logo-container h1').textContent = "Quiz de Français";
         document.title = "Quiz de Français";
         switchScreen(startScreen, topicScreen);
+    });
+
+    document.getElementById('back-from-intro-btn').addEventListener('click', () => {
+        switchScreen(introScreen, topicScreen);
+    });
+
+    document.getElementById('go-to-quiz-btn').addEventListener('click', () => {
+        switchScreen(introScreen, startScreen);
     });
 
     quizSelect.addEventListener('change', () => {

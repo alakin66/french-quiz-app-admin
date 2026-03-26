@@ -44,7 +44,26 @@
                 </div>
             </section>
 
-            <!-- Screen 1: Start Screen -->
+            <!-- Screen 1: Introduction -->
+            <section id="intro-screen" class="screen hidden fade-in">
+                <div class="welcome-card intro-card">
+                    <div class="intro-header">
+                        <button id="back-from-intro-btn" class="btn btn-secondary" style="width: auto; font-size: 0.9rem; padding: 8px 16px;">
+                            <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i> Retour
+                        </button>
+                        <h2 id="intro-title">Introduction</h2>
+                    </div>
+                    <div id="intro-content" class="intro-content">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button id="go-to-quiz-btn" class="btn btn-primary btn-large" style="margin-top: 2rem;">
+                        <span>Choisir un Quiz</span>
+                        <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Screen 2: Start Screen -->
             <section id="start-screen" class="screen hidden fade-in">
                 <div class="welcome-card">
                     <button id="back-to-topics-btn" class="btn btn-secondary hidden" style="margin-bottom: 20px; width: auto; font-size: 0.9rem; padding: 8px 16px;">
