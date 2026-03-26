@@ -1,6 +1,6 @@
 window.quizzesData = {
   "Pronoms Relatifs": {
-    "Basique": [
+    "Pronoms Relatifs - Basique": [
       {
         "Type": "MultipleChoice",
         "Question": "C'est le livre ___ j'ai lu hier.",
@@ -122,7 +122,7 @@ window.quizzesData = {
         "FeedbackIncorrect": "Faux. Je ne comprends pas 'quoi' ? Le problème. Donc 'que'."
       }
     ],
-    "Avancé": [
+    "Pronoms Relatifs - Avancé": [
       {
         "Type": "MultipleChoice",
         "Question": "C'est le film ___ je t'ai parlé.",
@@ -246,7 +246,7 @@ window.quizzesData = {
     ]
   },
   "Verbes Transitifs": {
-    "Directs (COD)": [
+    "Transitifs Directs (COD)": [
       {
         "Type": "MultipleChoice",
         "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
@@ -328,7 +328,7 @@ window.quizzesData = {
         "FeedbackIncorrect": "C'est le verbe 'perdre'."
       }
     ],
-    "Indirects (COI)": [
+    "Transitifs Indirects (COI)": [
       {
         "Type": "MultipleChoice",
         "Question": "Lequel de ces verbes est transitif indirect (se construit avec une préposition 'à' ou 'de') ?",

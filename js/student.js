@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // State variables
     let quizzesData = null;
     let selectedQuizKey = null;
+    let selectedTopicKey = null;
     let currentQuiz = [];
     let currentQuestionIndex = 0;
     let score = 0;
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     // Screens
+    const topicScreen = document.getElementById('topic-screen');
     const startScreen = document.getElementById('start-screen');
     const quizScreen = document.getElementById('quiz-screen');
     const resultsScreen = document.getElementById('results-screen');
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-btn');
     const nextBtn = document.getElementById('next-btn');
     const returnBtn = document.getElementById('return-btn');
+    const backToTopicsBtn = document.getElementById('back-to-topics-btn');
     const loadingError = document.getElementById('loading-error');
 
     // Quiz elements
