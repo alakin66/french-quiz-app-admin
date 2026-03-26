@@ -46,11 +46,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.quizzesData && Object.keys(window.quizzesData).length > 0) {
         quizzesData = window.quizzesData;
-        populateDropdown();
+        
+        const topics = Object.keys(quizzesData);
+        
+        if (topics.length === 1) {
+            selectTopic(topics[0]);
+        } else {
+            populateTopics(topics);
+            startScreen.classList.remove('active');
+            startScreen.classList.add('hidden');
+            topicScreen.classList.remove('hidden');
+            topicScreen.classList.add('active');
+        }
     } else {
         console.error("Failed to find window.quizzesData. Ensure quizzes.js is loaded in the HTML.");
         quizSelect.innerHTML = '<option disabled>Impossible de charger les quiz</option>';
         loadingError.classList.remove('hidden');
+    }
+
+    function populateTopics(topics) {
+        const container = document.getElementById('topics-container');
+        container.innerHTML = '';
+        topics.forEach(topic => {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-outline topic-btn';
+            btn.innerHTML = `<span>${topic}</span><i class="ms-Icon ms-Icon--ChevronRightSmall"></i>`;
+            btn.onclick = () => selectTopic(topic);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectTopic(topic) {
+        selectedTopicKey = topic;
+        
+        // Update Title & H1
+        document.querySelector('.logo-container h1').textContent = topic;
+        document.title = topic;
+        const welcomeCardH2 = document.querySelector('#start-screen .welcome-card h2');
+        if (welcomeCardH2) welcomeCardH2.textContent = topic;
+
+        // Populate the dropdown with the subquizzes
+        const subQuizzes = Object.keys(quizzesData[topic]);
+        quizSelect.innerHTML = '<option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>';
+        
+        subQuizzes.forEach(sub => {
+            const option = document.createElement('option');
+            option.value = sub;
+            option.textContent = sub;
+            quizSelect.appendChild(option);
+        });
+        
+        quizSelect.disabled = false;
+        startBtn.disabled = true;
+        quizSelect.value = '';
+
+        // Show back button only if there are multiple topics total
+        if (Object.keys(quizzesData).length > 1) {
+            backToTopicsBtn.classList.remove('hidden');
+        } else {
+            backToTopicsBtn.classList.add('hidden');
+        }
+
+        if (topicScreen.classList.contains('active')) {
+            switchScreen(topicScreen, startScreen);
+        } else if (resultsScreen.classList.contains('active')) {
+            switchScreen(resultsScreen, startScreen);
+        }
     }
 
     quizSelect.addEventListener('change', () => {
