@@ -50,15 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingError.classList.remove('hidden');
     }
 
-    function populateDropdown() {
-        quizSelect.innerHTML = '<option value="" disabled selected>Sélectionnez un quiz...</option>';
-        for (const quizName in quizzesData) {
-            const option = document.createElement('option');
-            option.value = quizName;
-            option.textContent = quizName;
-            quizSelect.appendChild(option);
-        }
-
     quizSelect.addEventListener('change', () => {
         if (quizSelect.value) {
             startBtn.disabled = false;
