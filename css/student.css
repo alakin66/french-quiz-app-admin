@@ -547,6 +547,12 @@ select:focus, input[type="text"]:focus {
 /* ============================================
    Results Screen
    ============================================ */
+.results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
 .results-card { text-align: center; }
 
 .trophy-icon i {

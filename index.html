@@ -38,13 +38,13 @@
                     </div>
 
                     <div class="history-footer">
-                        <button id="clear-history-btn" class="btn btn-history-clear hidden">
+                        <button id="clear-history-btn" class="btn-history-clear hidden">
                             <i class="ms-Icon ms-Icon--Delete" aria-hidden="true"></i>
-                            Effacer l'historique
+                            Effacer mon historique
                         </button>
-                        <span id="history-cleared-msg" class="history-cleared-msg hidden">
-                            <i class="ms-Icon ms-Icon--CheckMark"></i> Historique effacé !
-                        </span>
+                        <div id="history-cleared-msg" class="history-cleared-msg hidden">
+                            <i class="ms-Icon ms-Icon--CheckMark" aria-hidden="true"></i> Historique effacé !
+                        </div>
                     </div>
                     
                     <div id="loading-error" class="error-msg hidden">
@@ -189,6 +189,6 @@
         const safeQuizName = quizParam.replace(/[^a-zA-Z0-9_\-]/g, '');
         document.write('<script src="data/' + safeQuizName + '.js?v=4"><' + '/script>');
     </script>
-    <script src="js/student.js?v=6"></script>
+    <script src="js/student.js?v=5"></script>
 </body>
 </html>

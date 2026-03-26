@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quizSelect.disabled = false;
         introQuizSelect.disabled = false;
         startBtn.disabled = true;
-        headerScore.classList.add('hidden');
+        if (headerScore) headerScore.classList.add('hidden');
         introStartBtn.disabled = true;
         quizSelect.value = '';
         introQuizSelect.value = '';
@@ -321,13 +321,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initialize state
         incorrectQuestions = [];
+        if (retryWrongBtn) retryWrongBtn.classList.add('hidden');
         currentQuestionIndex = 0;
         score = 0;
         updateScoreHeader();
         
         const fromScreen = introScreen.classList.contains('active') ? introScreen : startScreen;
         switchScreen(fromScreen, quizScreen);
-        headerScore.classList.remove('hidden');
+        if (headerScore) headerScore.classList.remove('hidden');
         
         loadQuestion();
     }
@@ -345,30 +346,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm("Voulez-vous vraiment quitter ce quiz ? Votre progression sera perdue.")) {
             quizSelect.value = "";
             startBtn.disabled = true;
-        headerScore.classList.add('hidden');
+            if (headerScore) headerScore.classList.add('hidden');
             switchScreen(quizScreen, startScreen);
         }
     });
 
-    retryWrongBtn.addEventListener('click', () => {
-        if (incorrectQuestions.length === 0) return;
-        
-        // Prepare the retry session
-        currentQuiz = [...incorrectQuestions];
-        incorrectQuestions = [];
-        currentQuestionIndex = 0;
-        score = 0;
-        updateScoreHeader();
-        
-        switchScreen(resultsScreen, quizScreen);
-        headerScore.classList.remove('hidden');
-        loadQuestion();
-    });
+    if (retryWrongBtn) {
+        retryWrongBtn.addEventListener('click', () => {
+            if (incorrectQuestions.length === 0) return;
+            
+            // Prepare the retry session
+            currentQuiz = [...incorrectQuestions];
+            incorrectQuestions = [];
+            currentQuestionIndex = 0;
+            score = 0;
+            updateScoreHeader();
+            
+            switchScreen(resultsScreen, quizScreen);
+            if (headerScore) headerScore.classList.remove('hidden');
+            loadQuestion();
+        });
+    }
 
     returnBtn.addEventListener('click', () => {
         quizSelect.value = "";
         startBtn.disabled = true;
-        headerScore.classList.add('hidden');
+        if (headerScore) headerScore.classList.add('hidden');
         
         if (Object.keys(quizzesData).length > 1) {
             document.querySelector('.logo-container h1').textContent = "Quiz de Français";
@@ -597,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function updateScoreHeader() {
-        currentScoreStatus.textContent = score;
+        if (currentScoreStatus) currentScoreStatus.textContent = score;
     }
 
     function showResults() {
@@ -614,11 +617,14 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             switchScreen(quizScreen, resultsScreen);
             
-            if (incorrectQuestions.length > 0) {
-                retryWrongBtn.classList.remove('hidden');
-            } else {
-                retryWrongBtn.classList.add('hidden');
+            if (retryWrongBtn) {
+                if (incorrectQuestions && incorrectQuestions.length > 0) {
+                    retryWrongBtn.classList.remove('hidden');
+                } else {
+                    retryWrongBtn.classList.add('hidden');
+                }
             }
+
             document.getElementById('final-score').textContent = score;
             document.getElementById('final-total').textContent = currentQuiz.length;
             
