@@ -74,16 +74,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Excel Parsing Logic ---
+    const progressSection = document.getElementById('progress-section');
+    const progressBar = document.getElementById('admin-progress-fill');
+    const logWindow = document.getElementById('log-window');
+
+    function log(message, type = 'info') {
+        const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-msg">${message}</span>`;
+        logWindow.appendChild(entry);
+        logWindow.scrollTop = logWindow.scrollHeight;
+    }
+
     generateBtn.addEventListener('click', async () => {
         if (selectedFiles.length === 0) return;
         
         generateBtn.disabled = true;
         generateBtn.textContent = "Traitement en cours...";
         
+        progressSection.classList.remove('hidden');
+        logWindow.innerHTML = '';
+        progressBar.style.width = '0%';
+        
+        log(`Démarrage du traitement de ${selectedFiles.length} fichier(s)...`);
+        
         try {
             const finalData = {};
+            let processedFiles = 0;
             
             for (const file of selectedFiles) {
+                log(`Lecture du fichier : ${file.name}`);
                 const arrayBuffer = await file.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
@@ -93,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // First pass: find introduction and valid quiz sheets
                 for (const sheetName of workbook.SheetNames) {
                     if (sheetName.toLowerCase() === 'introduction') {
+                        log(`  • Feuille d'introduction trouvée dans ${file.name}`);
                         const worksheet = workbook.Sheets[sheetName];
                         const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
                         fileIntro = rawRows.filter(row => row.some(cell => String(cell).trim() !== ''));
@@ -107,26 +129,29 @@ document.addEventListener('DOMContentLoaded', () => {
                                 questions: validQuestions
                             });
                         } else {
-                            console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}" de ${file.name}.`);
+                            log(`  • ATTENTION : Aucune question valide dans "${sheetName}"`, 'warn');
                         }
                     }
                 }
 
                 // Second pass: Create a module for each sheet
                 for (const sheet of sheetsToProcess) {
-                    // Use sheetName as the top-level module name
+                    log(`  • Création du module : ${sheet.name} (${sheet.questions.length} questions)`);
                     if (!finalData[sheet.name]) {
                         finalData[sheet.name] = {};
                     }
-                    // Each module contains itself as the only sub-quiz for now
                     finalData[sheet.name][sheet.name] = sheet.questions;
                     
-                    // Attach the file's introduction to this module if it exists
                     if (fileIntro) {
                         finalData[sheet.name]._intro = fileIntro;
                     }
                 }
+
+                processedFiles++;
+                progressBar.style.width = `${(processedFiles / selectedFiles.length) * 100}%`;
             }
+            
+            log("Compilation terminée avec succès !", "success");
             
             let safeFileName = 'quizzes.js';
             let appMainTitle = "Quiz de Français";
@@ -142,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             downloadJs(finalData, safeFileName);
             
         } catch (error) {
+            log(`ERREUR CRITIQUE : ${error.message}`, "error");
             console.error("Error processing files:", error);
             alert("Une erreur s'est produite lors du traitement. Vérifiez la console pour plus de détails.");
         } finally {
@@ -151,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function downloadJs(data, filename) {
+        log(`Préparation du téléchargement de ${filename}...`);
         const jsonString = JSON.stringify(data, null, 2);
         const jsFileContent = `window.quizzesData = ${jsonString};`;
         const blob = new Blob([jsFileContent], { type: "application/javascript" });
@@ -164,5 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        log(`Téléchargement de ${filename} prêt !`, "success");
     }
 });
