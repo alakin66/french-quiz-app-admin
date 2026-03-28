@@ -1,77 +1,5 @@
 window.quizzesData = {
-  "Pronoms Relatifs": {
-    "_intro": [
-      [
-        "Sujet",
-        "Les Pronoms Relatifs en Français",
-        ""
-      ],
-      [
-        "Qu'est-ce qu'un pronom relatif ?",
-        "",
-        ""
-      ],
-      [
-        "Un pronom relatif est un mot qui introduit une proposition subordonnée relative.",
-        "",
-        ""
-      ],
-      [
-        "Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.",
-        "",
-        ""
-      ],
-      [
-        "Les pronoms relatifs de base",
-        "Explication",
-        "Exemple"
-      ],
-      [
-        "qui",
-        "Remplace le SUJET du verbe dans la proposition subordonnée.",
-        "C'est le chat qui dort."
-      ],
-      [
-        "que / qu'",
-        "Remplace le COMPLÉMENT D'OBJET DIRECT (COD).",
-        "Le livre que je lis est passionnant."
-      ],
-      [
-        "où",
-        "Remplace un LIEU ou un TEMPS.",
-        "La ville où je vis est belle. / Le jour où il est parti..."
-      ],
-      [
-        "dont",
-        "Remplace le complément introduit par 'DE'.",
-        "Le film dont je t'ai parlé est excellent."
-      ],
-      [
-        "Les pronoms relatifs composés",
-        "Explication",
-        "Exemple"
-      ],
-      [
-        "auquel / à laquelle / auxquels...",
-        "Après les prépositions avec 'à' (ex: à + lequel = auquel).",
-        "Le projet auquel je travaille est innovant."
-      ],
-      [
-        "duquel / desquels / desquelles...",
-        "Après les prépositions avec 'de' (ex: de + lequel = duquel).",
-        "La raison pour laquelle il est parti."
-      ],
-      [
-        "lequel / laquelle...",
-        "Après une préposition (avec, sur, pour...). S'accorde avec l'antécédent.",
-        "La table sur laquelle j'ai posé mon café."
-      ],
-      [
-        "Conseil",
-        "Identifiez d'abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec 'de' ?) pour choisir le bon pronom !",
-        ""
-      ]
-    ],
+  "Pronoms Relatifs - Basique": {
     "Pronoms Relatifs - Basique": [
       {
         "Type": "MultipleChoice",
@@ -194,6 +122,94 @@ window.quizzesData = {
         "FeedbackIncorrect": "Faux. Je ne comprends pas 'quoi' ? Le problème. Donc 'que'."
       }
     ],
+    "_intro": [
+      [
+        "Sujet",
+        "Les Pronoms Relatifs en Français",
+        "Column 1",
+        ""
+      ],
+      [
+        "Qu'est-ce qu'un pronom relatif ?",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Un pronom relatif est un mot qui introduit une proposition subordonnée relative.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Les pronoms relatifs de base",
+        "Explication",
+        "Exemple",
+        ""
+      ],
+      [
+        "qui",
+        "Remplace le SUJET du verbe dans la proposition subordonnée.",
+        "C'est le chat qui dort.",
+        ""
+      ],
+      [
+        "que / qu'",
+        "Remplace le COMPLÉMENT D'OBJET DIRECT (COD).",
+        "Le livre que je lis est passionnant.",
+        ""
+      ],
+      [
+        "où",
+        "Remplace un LIEU ou un TEMPS.",
+        "La ville où je vis est belle. / Le jour où il est parti...",
+        ""
+      ],
+      [
+        "dont",
+        "Remplace le complément introduit par 'DE'.",
+        "Le film dont je t'ai parlé est excellent.",
+        ""
+      ],
+      [
+        "Les pronoms relatifs composés",
+        "Explication",
+        "Exemple",
+        ""
+      ],
+      [
+        "auquel / à laquelle / auxquels...",
+        "Après les prépositions avec 'à' (ex: à + lequel = auquel).",
+        "Le projet auquel je travaille est innovant.",
+        ""
+      ],
+      [
+        "duquel / desquels / desquelles...",
+        "Après les prépositions avec 'de' (ex: de + lequel = duquel).",
+        "La raison pour laquelle il est parti.",
+        ""
+      ],
+      [
+        "lequel / laquelle...",
+        "Après une préposition (avec, sur, pour...). S'accorde avec l'antécédent.",
+        "La table sur laquelle j'ai posé mon café.",
+        ""
+      ],
+      [
+        "Conseil",
+        "Identifiez d'abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec 'de' ?) pour choisir le bon pronom !",
+        "",
+        ""
+      ]
+    ]
+  },
+  "Pronoms Relatifs - Avancé": {
     "Pronoms Relatifs - Avancé": [
       {
         "Type": "MultipleChoice",
@@ -315,9 +331,187 @@ window.quizzesData = {
         "FeedbackCorrect": "Bravo, les deux prépositions conviennent pour une personne !",
         "FeedbackIncorrect": "Raté. On peut dire 'avec qui' ou 'avec laquelle' (personne féminine)."
       }
+    ],
+    "_intro": [
+      [
+        "Sujet",
+        "Les Pronoms Relatifs en Français",
+        "Column 1",
+        ""
+      ],
+      [
+        "Qu'est-ce qu'un pronom relatif ?",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Un pronom relatif est un mot qui introduit une proposition subordonnée relative.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Les pronoms relatifs de base",
+        "Explication",
+        "Exemple",
+        ""
+      ],
+      [
+        "qui",
+        "Remplace le SUJET du verbe dans la proposition subordonnée.",
+        "C'est le chat qui dort.",
+        ""
+      ],
+      [
+        "que / qu'",
+        "Remplace le COMPLÉMENT D'OBJET DIRECT (COD).",
+        "Le livre que je lis est passionnant.",
+        ""
+      ],
+      [
+        "où",
+        "Remplace un LIEU ou un TEMPS.",
+        "La ville où je vis est belle. / Le jour où il est parti...",
+        ""
+      ],
+      [
+        "dont",
+        "Remplace le complément introduit par 'DE'.",
+        "Le film dont je t'ai parlé est excellent.",
+        ""
+      ],
+      [
+        "Les pronoms relatifs composés",
+        "Explication",
+        "Exemple",
+        ""
+      ],
+      [
+        "auquel / à laquelle / auxquels...",
+        "Après les prépositions avec 'à' (ex: à + lequel = auquel).",
+        "Le projet auquel je travaille est innovant.",
+        ""
+      ],
+      [
+        "duquel / desquels / desquelles...",
+        "Après les prépositions avec 'de' (ex: de + lequel = duquel).",
+        "La raison pour laquelle il est parti.",
+        ""
+      ],
+      [
+        "lequel / laquelle...",
+        "Après une préposition (avec, sur, pour...). S'accorde avec l'antécédent.",
+        "La table sur laquelle j'ai posé mon café.",
+        ""
+      ],
+      [
+        "Conseil",
+        "Identifiez d'abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec 'de' ?) pour choisir le bon pronom !",
+        "",
+        ""
+      ]
     ]
   },
-  "Verbes Transitifs": {
+  "Transitifs Directs (COD)": {
+    "Transitifs Directs (COD)": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
+        "Options": "manger, parler, ressembler, sourire",
+        "Answer": "manger",
+        "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
+        "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme).",
+        "Column 1": ""
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Nous ___ la télévision tous les soirs.",
+        "Options": "",
+        "Answer": "regardons",
+        "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
+        "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'.",
+        "Column 1": ""
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
+        "Options": "",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
+        "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct.",
+        "Column 1": ""
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
+        "Options": "acheter, vendre, répondre, donner",
+        "Answer": "répondre",
+        "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
+        "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'.",
+        "Column 1": ""
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
+        "Options": "COD, COI, Sujet",
+        "Answer": "COD",
+        "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
+        "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition.",
+        "Column 1": ""
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Ils ont ___ leur maison l'année dernière.",
+        "Options": "",
+        "Answer": "vendu",
+        "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
+        "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct.",
+        "Column 1": ""
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
+        "Options": "Je lui mange, Je la mange, Je y mange",
+        "Answer": "Je la mange",
+        "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
+        "FeedbackIncorrect": "Faux, c'est 'la'.",
+        "Column 1": ""
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
+        "Options": "",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
+        "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe.",
+        "Column 1": ""
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Choisis la bonne phrase :",
+        "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
+        "Answer": "J'écoute la radio",
+        "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
+        "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition.",
+        "Column 1": ""
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu ___ ton temps avec ces bêtises.",
+        "Options": "",
+        "Answer": "perds",
+        "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
+        "FeedbackIncorrect": "C'est le verbe 'perdre'.",
+        "Column 1": ""
+      }
+    ],
     "_intro": [
       [
         "Sujet",
@@ -397,89 +591,9 @@ window.quizzesData = {
         "",
         ""
       ]
-    ],
-    "Transitifs Directs (COD)": [
-      {
-        "Type": "MultipleChoice",
-        "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
-        "Options": "manger, parler, ressembler, sourire",
-        "Answer": "manger",
-        "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
-        "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme)."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Nous ___ la télévision tous les soirs.",
-        "Options": "",
-        "Answer": "regardons",
-        "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
-        "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
-        "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct."
-      },
-      {
-        "Type": "OddOneOut",
-        "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
-        "Options": "acheter, vendre, répondre, donner",
-        "Answer": "répondre",
-        "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
-        "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
-        "Options": "COD, COI, Sujet",
-        "Answer": "COD",
-        "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
-        "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Ils ont ___ leur maison l'année dernière.",
-        "Options": "",
-        "Answer": "vendu",
-        "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
-        "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
-        "Options": "Je lui mange, Je la mange, Je y mange",
-        "Answer": "Je la mange",
-        "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
-        "FeedbackIncorrect": "Faux, c'est 'la'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
-        "Options": "",
-        "Answer": "Faux",
-        "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
-        "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Choisis la bonne phrase :",
-        "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
-        "Answer": "J'écoute la radio",
-        "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
-        "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Tu ___ ton temps avec ces bêtises.",
-        "Options": "",
-        "Answer": "perds",
-        "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
-        "FeedbackIncorrect": "C'est le verbe 'perdre'."
-      }
-    ],
+    ]
+  },
+  "Transitifs Indirects (COI)": {
     "Transitifs Indirects (COI)": [
       {
         "Type": "MultipleChoice",
@@ -561,6 +675,86 @@ window.quizzesData = {
         "FeedbackCorrect": "Correct, s'intéresser 'à' quelque chose.",
         "FeedbackIncorrect": "Il manque 'à'."
       }
+    ],
+    "_intro": [
+      [
+        "Sujet",
+        "Les Verbes Transitifs en Français",
+        "",
+        ""
+      ],
+      [
+        "Qu'est-ce qu'un verbe transitif ?",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Un verbe transitif est un verbe qui a besoin d'un complément d'objet pour compléter son sens.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Type",
+        "Définition",
+        "Construction",
+        "Exemple"
+      ],
+      [
+        "Transitif Direct (COD)",
+        "Le verbe se construit SANS préposition avant son complément.",
+        "Verbe + complément direct",
+        "Je mange une pomme. / Il lit un livre."
+      ],
+      [
+        "Transitif Indirect (COI)",
+        "Le verbe se construit AVEC une préposition (à, de) avant son complément.",
+        "Verbe + à/de + complément",
+        "Je parle à Marc. / Il se souvient de toi."
+      ],
+      [
+        "Pronoms de remplacement",
+        "",
+        "",
+        ""
+      ],
+      [
+        "Pour le COD",
+        "Utiliser : le, la, l', les",
+        "",
+        "Je mange la pomme → Je la mange."
+      ],
+      [
+        "Pour le COI avec 'à' (personne)",
+        "Utiliser : lui, leur",
+        "",
+        "Je parle à Marc → Je lui parle."
+      ],
+      [
+        "Pour le COI avec 'à' (chose)",
+        "Utiliser : y",
+        "",
+        "Je pense à ce projet → J'y pense."
+      ],
+      [
+        "Pour le COI avec 'de'",
+        "Utiliser : en",
+        "",
+        "Il parle de son voyage → Il en parle."
+      ],
+      [
+        "Conseil",
+        "Posez la question 'Qui ?' ou 'Quoi ?' directement après le verbe → COD (sans préposition). Si vous avez besoin de 'à qui ?' ou 'de quoi ?' → COI (avec préposition).",
+        "",
+        ""
+      ]
     ]
   }
 };
