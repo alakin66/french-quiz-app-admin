@@ -84,43 +84,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const finalData = {};
             
             for (const file of selectedFiles) {
-                let fileTitle = file.name.replace(/\.xlsx$/i, '');
-                fileTitle = fileTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
-                if (!fileTitle) fileTitle = "Quiz";
-
-                if (!finalData[fileTitle]) {
-                    finalData[fileTitle] = {};
-                }
-
                 const arrayBuffer = await file.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
+                let fileIntro = null;
+                const sheetsToProcess = [];
+
+                // First pass: find introduction and valid quiz sheets
                 for (const sheetName of workbook.SheetNames) {
-                    // Special handling: Introduction sheet
                     if (sheetName.toLowerCase() === 'introduction') {
                         const worksheet = workbook.Sheets[sheetName];
-                        // Read as raw Array of Arrays to preserve table structure
                         const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-                        // Filter out completely empty rows
-                        const cleanRows = rawRows.filter(row => row.some(cell => String(cell).trim() !== ''));
-                        finalData[fileTitle]._intro = cleanRows;
-                        continue;
-                    }
-
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-                    
-                    const validQuestions = jsonArray.filter(row => row.Type && row.Question && row.Answer);
-                    
-                    if (validQuestions.length > 0) {
-                        finalData[fileTitle][sheetName] = validQuestions;
+                        fileIntro = rawRows.filter(row => row.some(cell => String(cell).trim() !== ''));
                     } else {
-                        console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}" de ${file.name}.`);
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                        const validQuestions = jsonArray.filter(row => row.Type && row.Question && row.Answer);
+                        
+                        if (validQuestions.length > 0) {
+                            sheetsToProcess.push({
+                                name: sheetName,
+                                questions: validQuestions
+                            });
+                        } else {
+                            console.warn(`Aucune question valide trouvée dans la feuille "${sheetName}" de ${file.name}.`);
+                        }
                     }
                 }
-                
-                if (Object.keys(finalData[fileTitle]).filter(k => k !== '_intro').length === 0) {
-                    delete finalData[fileTitle];
+
+                // Second pass: Create a module for each sheet
+                for (const sheet of sheetsToProcess) {
+                    // Use sheetName as the top-level module name
+                    if (!finalData[sheet.name]) {
+                        finalData[sheet.name] = {};
+                    }
+                    // Each module contains itself as the only sub-quiz for now
+                    finalData[sheet.name][sheet.name] = sheet.questions;
+                    
+                    // Attach the file's introduction to this module if it exists
+                    if (fileIntro) {
+                        finalData[sheet.name]._intro = fileIntro;
+                    }
                 }
             }
             

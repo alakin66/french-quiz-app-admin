@@ -94,10 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.quizzesData && Object.keys(window.quizzesData).length > 0) {
         quizzesData = window.quizzesData;
-        
         const topics = Object.keys(quizzesData);
         
-        if (topics.length === 1) {
+        // Handle Direct Link routing via ?quiz= parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const directQuizParam = urlParams.get('quiz');
+        let matchedTopic = null;
+
+        if (directQuizParam) {
+            const searchSlug = directQuizParam.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            matchedTopic = topics.find(t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-') === searchSlug);
+        }
+
+        if (matchedTopic) {
+            // Auto-select the requested module
+            selectTopic(matchedTopic);
+        } else if (topics.length === 1) {
             selectTopic(topics[0]);
         } else {
             populateTopics(topics);
@@ -179,11 +191,21 @@ document.addEventListener('DOMContentLoaded', () => {
         
         quizSelect.disabled = false;
         introQuizSelect.disabled = false;
-        startBtn.disabled = true;
+
+        // Auto-select if there's only one subquiz
+        if (subQuizzes.length === 1) {
+            quizSelect.value = subQuizzes[0];
+            introQuizSelect.value = subQuizzes[0];
+            startBtn.disabled = false;
+            introStartBtn.disabled = false;
+        } else {
+            quizSelect.value = '';
+            introQuizSelect.value = '';
+            startBtn.disabled = true;
+            introStartBtn.disabled = true;
+        }
+
         if (headerScore) headerScore.classList.add('hidden');
-        introStartBtn.disabled = true;
-        quizSelect.value = '';
-        introQuizSelect.value = '';
 
         // Show back button only if there are multiple topics total
         if (Object.keys(quizzesData).length > 1) {

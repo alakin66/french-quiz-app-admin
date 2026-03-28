@@ -181,14 +181,8 @@
         </main>
     </div>
 
-    <!-- Dynamic Load data based on URL parameter -->
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const quizParam = urlParams.get('quiz') || 'quizzes';
-        // Sanitize to prevent weird path injections
-        const safeQuizName = quizParam.replace(/[^a-zA-Z0-9_\-]/g, '');
-        document.write('<script src="data/' + safeQuizName + '.js?v=4"><' + '/script>');
-    </script>
-    <script src="js/student.js?v=5"></script>
+    <!-- Load centralized quiz data -->
+    <script src="data/quizzes.js?v=5"></script>
+    <script src="js/student.js?v=6"></script>
 </body>
 </html>
