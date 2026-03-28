@@ -4,85 +4,71 @@ window.quizzesData = {
       [
         "Sujet",
         "Les Pronoms Relatifs en Français",
-        "Column 1",
-        ""
+        "Column 1"
       ],
       [
         "Qu'est-ce qu'un pronom relatif ?",
-        "",
         "",
         ""
       ],
       [
         "Un pronom relatif est un mot qui introduit une proposition subordonnée relative.",
         "",
-        "",
         ""
       ],
       [
         "Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.",
-        "",
         "",
         ""
       ],
       [
         "Les pronoms relatifs de base",
         "Explication",
-        "Exemple",
-        ""
+        "Exemple"
       ],
       [
         "qui",
         "Remplace le SUJET du verbe dans la proposition subordonnée.",
-        "C'est le chat qui dort.",
-        ""
+        "C'est le chat qui dort."
       ],
       [
         "que / qu'",
         "Remplace le COMPLÉMENT D'OBJET DIRECT (COD).",
-        "Le livre que je lis est passionnant.",
-        ""
+        "Le livre que je lis est passionnant."
       ],
       [
         "où",
         "Remplace un LIEU ou un TEMPS.",
-        "La ville où je vis est belle. / Le jour où il est parti...",
-        ""
+        "La ville où je vis est belle. / Le jour où il est parti..."
       ],
       [
         "dont",
         "Remplace le complément introduit par 'DE'.",
-        "Le film dont je t'ai parlé est excellent.",
-        ""
+        "Le film dont je t'ai parlé est excellent."
       ],
       [
         "Les pronoms relatifs composés",
         "Explication",
-        "Exemple",
-        ""
+        "Exemple"
       ],
       [
         "auquel / à laquelle / auxquels...",
         "Après les prépositions avec 'à' (ex: à + lequel = auquel).",
-        "Le projet auquel je travaille est innovant.",
-        ""
+        "Le projet auquel je travaille est innovant."
       ],
       [
         "duquel / desquels / desquelles...",
         "Après les prépositions avec 'de' (ex: de + lequel = duquel).",
-        "La raison pour laquelle il est parti.",
-        ""
+        "La raison pour laquelle il est parti."
       ],
       [
         "lequel / laquelle...",
         "Après une préposition (avec, sur, pour...). S'accorde avec l'antécédent.",
-        "La table sur laquelle j'ai posé mon café.",
-        ""
+        "La table sur laquelle j'ai posé mon café."
       ],
       [
         "Conseil",
         "Identifiez d'abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec 'de' ?) pour choisir le bon pronom !",
-        "",
         ""
       ]
     ],

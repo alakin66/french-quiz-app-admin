@@ -3,11 +3,17 @@
 # Move into the directory where this script is located
 cd "$(dirname "$0")"
 
-# Configure typical paths for macOS (where uv/brew is likely installed)
-export PATH="$HOME/.cargo/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+# Configure typical paths for macOS (where node/nvm/brew is likely installed)
+export PATH="$HOME/.nvm/versions/node/v24.13.1/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-# Run the python script using uv
-uv run publish_quizzes.py
+# Ensure dependencies are installed
+if [ ! -d "node_modules/xlsx" ]; then
+    echo "Installing required library (xlsx)..."
+    npm install xlsx --silent
+fi
+
+# Run the Node script
+node publish_quizzes.js
 
 echo ""
 read -p "Press [Enter] to close..."

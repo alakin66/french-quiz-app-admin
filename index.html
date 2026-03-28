@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Fluent UI Icons -->
     <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/student.css?v=6">
+    <link rel="stylesheet" href="css/student.css?v=11">
 </head>
 <body>
     <div class="app-container">
@@ -22,6 +22,10 @@
             <div class="score-display hidden" id="header-score">
                 <span>Score: <strong id="current-score">0</strong></span>
             </div>
+            <!-- Admin Review Toggle (Header) -->
+            <button id="header-review-btn" class="btn-history-clear hidden" style="margin-left: auto; color: white; border-color: rgba(255,255,255,0.4); padding: 4px 10px; font-size: 0.75rem;">
+                <i class="ms-Icon ms-Icon--PageList" aria-hidden="true"></i> Mode Révision
+            </button>
         </header>
 
         <!-- Main Content Area -->
@@ -99,6 +103,50 @@
                         <span>Commencer le Quiz</span>
                         <i class="ms-Icon ms-Icon--Play" aria-hidden="true"></i>
                     </button>
+
+                    <button id="start-review-btn" class="btn btn-secondary btn-large hidden" style="margin-top: 10px; border-style: dashed;">
+                        <span>Réviser toutes les questions</span>
+                        <i class="ms-Icon ms-Icon--PageList" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Screen: Review Mode View -->
+            <section id="review-screen" class="screen hidden">
+                <div class="quiz-card" style="max-width: 1000px;">
+                    <div class="progress-header" style="margin-bottom: 2rem;">
+                        <div class="progress-text">Question <span id="review-current-num">1</span> sur <span id="review-total-num">10</span></div>
+                        <button id="exit-review-btn" class="btn btn-icon-only" title="Quitter la révision">
+                            <i class="ms-Icon ms-Icon--Cancel" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <h2 class="question-text" id="review-question-text" style="margin-bottom: 1rem;"></h2>
+                    
+                    <div class="review-answer-box" style="background: var(--surface-2); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border-left: 5px solid var(--success); text-align: left;">
+                        <label style="color: var(--success); font-size: 0.8rem; margin-bottom: 5px;">Réponse Correcte</label>
+                        <div id="review-correct-answer" style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary);"></div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; text-align: left;">
+                        <div class="feedback-container correct" style="display: block;">
+                            <label style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">Feedback Si Juste</label>
+                            <p id="review-feedback-correct" style="margin: 0;"></p>
+                        </div>
+                        <div class="feedback-container incorrect" style="display: block;">
+                            <label style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">Feedback Si Faux</label>
+                            <p id="review-feedback-incorrect" style="margin: 0;"></p>
+                        </div>
+                    </div>
+
+                    <div class="review-navigation" style="display: flex; justify-content: space-between; gap: 1rem;">
+                        <button id="review-prev-btn" class="btn btn-secondary" style="flex: 1;">
+                            <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i> Précédent
+                        </button>
+                        <button id="review-next-btn" class="btn btn-primary" style="flex: 1;">
+                            Suivant <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -181,7 +229,9 @@
         </main>
     </div>
 
+    <!-- Load centralized quiz data -->
+    <script src="data/quizzes.js?v=11"></script>
     <!-- Main Student Application -->
-    <script src="js/student.js?v=7"></script>
+    <script src="js/student.js?v=11"></script>
 </body>
 </html>

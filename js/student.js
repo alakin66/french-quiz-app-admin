@@ -5,9 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedTopicKey = null;
     let currentQuiz = [];
     let incorrectQuestions = [];  // questions answered wrong in last session
+    let reviewQuestions = [];    // all questions for review mode
     let currentQuestionIndex = 0;
     let score = 0;
     let hasAnsweredCurrent = false;
+    let isReviewModeActive = false; // New: track review mode toggle
+
+    // Admin / Local Detection
+    const isLocal = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1' || 
+                    window.location.protocol === 'file:';
+    
+    if (isLocal) {
+        const headerReviewBtn = document.getElementById('header-review-btn');
+        if (headerReviewBtn) headerReviewBtn.classList.remove('hidden');
+    }
 
     // =============================================
     // LocalStorage History Module
@@ -59,11 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const startScreen = document.getElementById('start-screen');
     const quizScreen = document.getElementById('quiz-screen');
     const resultsScreen = document.getElementById('results-screen');
+    const reviewScreen = document.getElementById('review-screen');
     const headerScore = document.getElementById('header-score');
 
     // Controls
     const quizSelect = document.getElementById('quiz-select');
     const startBtn = document.getElementById('start-btn');
+    const startReviewBtn = document.getElementById('start-review-btn');
+    const headerReviewBtn = document.getElementById('header-review-btn');
     const introStartBtn = document.getElementById('intro-start-btn');
     const introQuizSelect = document.getElementById('intro-quiz-select');
     const nextBtn = document.getElementById('next-btn');
@@ -84,24 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackText = document.getElementById('feedback-text');
     const currentScoreStatus = document.getElementById('current-score');
 
-    // Load Quiz Data from external JSON
-    fetch('data/quizzes.json?v=' + Date.now())
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
-        .then(data => {
-            if (data && Object.keys(data).length > 0) {
-                quizzesData = data;
-                initApp();
-            } else {
-                showLoadError();
-            }
-        })
-        .catch(err => {
-            console.error("Failed to load quizzes.json:", err);
-            showLoadError();
-        });
+    // Load Quiz Data from window namespace (self-contained)
+    if (window.quizzesData && Object.keys(window.quizzesData).length > 0) {
+        quizzesData = window.quizzesData;
+        initApp();
+    } else {
+        console.error("Failed to find window.quizzesData. Ensure quizzes.js is loaded in the HTML.");
+        showLoadError();
+    }
 
     function showLoadError() {
         quizSelect.innerHTML = '<option disabled>Impossible de charger les quiz</option>';
@@ -218,6 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (headerScore) headerScore.classList.add('hidden');
 
+        if (isLocal && isReviewModeActive) {
+            if (subQuizzes.length === 1) {
+                startReviewBtn.classList.remove('hidden');
+            } else {
+                startReviewBtn.classList.add('hidden');
+            }
+        } else {
+            startReviewBtn.classList.add('hidden');
+        }
+
         // Show back button only if there are multiple topics total
         if (Object.keys(quizzesData).length > 1) {
             backToTopicsBtn.classList.remove('hidden');
@@ -225,8 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
             backToTopicsBtn.classList.add('hidden');
         }
 
-        // If topic has intro data, show intro screen first
-        if (quizzesData[topic]._intro) {
+        // If topic has intro data, show intro screen first (unless in active Review Mode)
+        if (quizzesData[topic]._intro && !isReviewModeActive) {
             renderIntro(topic, quizzesData[topic]._intro);
             const fromScreen = topicScreen.classList.contains('active') ? topicScreen
                              : resultsScreen.classList.contains('active') ? resultsScreen
@@ -323,7 +338,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     introQuizSelect.addEventListener('change', () => {
-        if (introQuizSelect.value) introStartBtn.disabled = false;
+        if (introQuizSelect.value) {
+            introStartBtn.disabled = false;
+            if (isLocal && isReviewModeActive) startReviewBtn.classList.remove('hidden');
+            else startReviewBtn.classList.add('hidden');
+        }
     });
 
     introStartBtn.addEventListener('click', () => {
@@ -336,6 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
     quizSelect.addEventListener('change', () => {
         if (quizSelect.value) {
             startBtn.disabled = false;
+            if (isLocal && isReviewModeActive) startReviewBtn.classList.remove('hidden');
+            else startReviewBtn.classList.add('hidden');
         }
     });
 
@@ -449,11 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
             default:
                 answersContainer.innerHTML = '<p>Type de question inconnu.</p>';
         }
-
-        // Add subtle animation reset
-        answersContainer.style.animation = 'none';
-        answersContainer.offsetHeight; /* trigger reflow */
-        answersContainer.style.animation = 'slideIn 0.3s ease';
     }
 
     function renderMultipleChoice(q, isMultiSelect = false) {
@@ -686,5 +702,95 @@ document.addEventListener('DOMContentLoaded', () => {
         hideOld.classList.add('hidden');
         showNew.classList.remove('hidden');
         showNew.classList.add('active');
+
+        // Toggle Header Review Button visibility
+        if (isLocal && headerReviewBtn) {
+            const adminScreens = [topicScreen, introScreen, startScreen];
+            if (adminScreens.includes(showNew)) {
+                headerReviewBtn.classList.remove('hidden');
+            } else {
+                headerReviewBtn.classList.add('hidden');
+            }
+        }
     }
+
+    // =============================================
+    // Review Mode Implementation
+    // =============================================
+    if (headerReviewBtn) {
+        headerReviewBtn.addEventListener('click', () => {
+            isReviewModeActive = !isReviewModeActive;
+            headerReviewBtn.classList.toggle('active-review', isReviewModeActive);
+            
+            // If we are currently on the quiz selection screen, toggle the review button visibility
+            if (startScreen.classList.contains('active')) {
+                if (isReviewModeActive && (quizSelect.value || introQuizSelect.value)) {
+                    startReviewBtn.classList.remove('hidden');
+                } else {
+                    startReviewBtn.classList.add('hidden');
+                }
+            }
+        });
+    }
+
+    if (startReviewBtn) {
+        startReviewBtn.addEventListener('click', () => {
+            selectedQuizKey = quizSelect.value || introQuizSelect.value;
+            if (!selectedQuizKey) return;
+            launchReview(selectedQuizKey);
+        });
+    }
+
+    function launchReview(quizKey) {
+        const allQuestions = quizzesData[selectedTopicKey][quizKey];
+        if (!allQuestions || allQuestions.length === 0) return;
+
+        reviewQuestions = [...allQuestions];
+        currentQuestionIndex = 0;
+        
+        const fromScreen = introScreen.classList.contains('active') ? introScreen : startScreen;
+        switchScreen(fromScreen, reviewScreen);
+        loadReviewQuestion();
+    }
+
+    function loadReviewQuestion() {
+        const q = reviewQuestions[currentQuestionIndex];
+        
+        document.getElementById('review-current-num').textContent = currentQuestionIndex + 1;
+        document.getElementById('review-total-num').textContent = reviewQuestions.length;
+        document.getElementById('review-question-text').textContent = q.Question;
+        document.getElementById('review-correct-answer').textContent = q.Answer;
+        document.getElementById('review-feedback-correct').innerHTML = q.FeedbackCorrect || "Aucun feedback correct défini.";
+        document.getElementById('review-feedback-incorrect').innerHTML = q.FeedbackIncorrect || "Aucun feedback incorrect défini.";
+
+        document.getElementById('review-prev-btn').disabled = currentQuestionIndex === 0;
+        const nextBtnEl = document.getElementById('review-next-btn');
+        if (currentQuestionIndex === reviewQuestions.length - 1) {
+            nextBtnEl.innerHTML = 'Terminer <i class="ms-Icon ms-Icon--CheckMark" aria-hidden="true"></i>';
+        } else {
+            nextBtnEl.innerHTML = 'Suivant <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>';
+        }
+    }
+
+    document.getElementById('review-prev-btn').addEventListener('click', () => {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadReviewQuestion();
+        }
+    });
+
+    document.getElementById('review-next-btn').addEventListener('click', () => {
+        if (currentQuestionIndex < reviewQuestions.length - 1) {
+            currentQuestionIndex++;
+            loadReviewQuestion();
+        } else {
+            switchScreen(reviewScreen, startScreen);
+        }
+    });
+
+    document.getElementById('exit-review-btn').addEventListener('click', () => {
+        if (confirm("Quitter le mode révision ?")) {
+            switchScreen(reviewScreen, startScreen);
+        }
+    });
 });

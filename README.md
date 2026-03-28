@@ -18,22 +18,22 @@ L'application est disponible à l'adresse suivante :
 ## 👨‍🏫 Comment générer les quiz (Côté Professeur)
 
 ### 1. Préparer vos fichiers Excel
-Placez vos fichiers `.xlsx` directement à la racine du projet. 
+Placez vos fichiers `.xlsx` dans le dossier **`quizzes/`** à la racine du projet. 
 - **Chaque onglet** du fichier (sauf 'Introduction') créera un module de quiz distinct.
 - La ligne 1 doit obligatoirement utiliser ces 6 entêtes : `Type`, `Question`, `Options`, `Answer`, `FeedbackCorrect`, `FeedbackIncorrect`.
 - Un onglet nommé `Introduction` (optionnel) permet d'afficher des consignes ou un tableau de rappel avant le quiz.
 
 ### 2. Mettre à jour et Publier (Option macOS - Recommandé)
 Si vous êtes sur macOS, vous pouvez automatiser la génération et la mise en ligne :
-1. **Prérequis :** Avoir installé [Python](https://www.python.org/) et [uv](https://github.com/astral-sh/uv).
+1. **Prérequis :** Avoir installé [Node.js](https://nodejs.org/) (Version LTS recommandée).
 2. Double-cliquez sur le fichier **`Publish Quizzes.command`** à la racine du projet.
-3. Une fenêtre Terminal s'ouvrira, traitera vos fichiers Excel, mettra à jour `quizzes.js` et **poussera automatiquement les changements sur GitHub**.
+3. Une fenêtre Terminal s'ouvrira, installera les dépendances nécessaires lors du premier lancement, traitera vos fichiers Excel, mettra à jour `quizzes.json` et **poussera automatiquement les changements sur GitHub**.
 
 ### 3. Mettre à jour manuellement (Option Web)
 Si vous n'utilisez pas l'outil automatique :
 1. Ouvrez `admin.html` dans votre navigateur.
-2. Glissez-déposez vos fichiers Excel dans la zone prévue.
-3. Cliquez sur "Générer et Télécharger", puis placez le fichier `quizzes.js` obtenu dans le dossier `data/`.
+2. Glissez-deposez vos fichiers Excel dans la zone prévue.
+3. Cliquez sur "Générer et Télécharger", puis placez le fichier `quizzes.json` obtenu dans le dossier `data/`.
 4. Faites manuellement votre `git add`, `commit` et `push`.
 
 ## 📝 Types de Questions Supportés
@@ -52,6 +52,6 @@ Ce projet est optimisé pour **GitHub Pages**.
 
 ## 🛠 Technologies Utilisées
 - HTML5 / CSS3 / Vanilla JavaScript
-- Python & `uv` (pour l'outil d'administration macOS)
+- Node.js (pour l'outil d'administration macOS)
 - Microsoft Fluent UI Icons
-- SheetJS (`xlsx`) (pour l'outil d'administration web)
+- SheetJS (`xlsx`) (pour l'outil d'administration web et local)

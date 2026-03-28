@@ -158,24 +158,26 @@ document.addEventListener('DOMContentLoaded', () => {
             
             log("Compilation terminée avec succès !", "success");
             
-            let safeFileName = 'quizzes.json';
-            
-            downloadJson(finalData, safeFileName);
-            
-        } catch (error) {
+            let safeFileName = 'quizzes.js';
+
+            downloadJs(finalData, safeFileName);
+
+            } catch (error) {
             log(`ERREUR CRITIQUE : ${error.message}`, "error");
             console.error("Error processing files:", error);
             alert("Une erreur s'est produite lors du traitement. Vérifiez la console pour plus de détails.");
-        } finally {
+            } finally {
             generateBtn.disabled = false;
-            generateBtn.textContent = "Générer et Télécharger quizzes.json";
-        }
+            generateBtn.textContent = "Générer et Télécharger quizzes.js";
+            }
+
     });
 
-    function downloadJson(data, filename) {
+    function downloadJs(data, filename) {
         log(`Préparation du téléchargement de ${filename}...`);
         const jsonString = JSON.stringify(data, null, 2);
-        const blob = new Blob([jsonString], { type: "application/json" });
+        const jsFileContent = `window.quizzesData = ${jsonString};`;
+        const blob = new Blob([jsFileContent], { type: "application/javascript" });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement("a");

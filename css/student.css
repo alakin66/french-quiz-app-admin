@@ -63,10 +63,9 @@ body {
    ============================================ */
 .app-container {
     width: 100%;
-    max-width: 720px;
-    margin: 24px;
-    min-height: 90vh;
-    max-height: 860px;
+    max-width: 1000px;
+    margin: 20px;
+    min-height: 95vh;
     display: flex;
     flex-direction: column;
     background: var(--surface);
@@ -138,15 +137,15 @@ body {
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateX(16px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================
    Cards
    ============================================ */
 .welcome-card, .quiz-card, .results-card {
-    max-width: 580px;
+    width: 100%;
     margin: 0 auto;
     text-align: center;
 }
@@ -257,6 +256,13 @@ p {
     color: var(--error);
     border-color: var(--error-border);
     background: var(--error-bg);
+}
+
+.active-review {
+    background: #FFB300 !important;
+    color: #000 !important;
+    border-color: #FFA000 !important;
+    font-weight: 700 !important;
 }
 
 .history-cleared-msg {
@@ -483,8 +489,13 @@ select:focus, input[type="text"]:focus {
 }
 
 .answers-container {
-    animation: slideIn 0.3s ease;
     min-height: 140px;
+}
+
+.choices-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .text-input {
@@ -614,7 +625,7 @@ select:focus, input[type="text"]:focus {
    ============================================ */
 .intro-card {
     text-align: left;
-    max-width: 680px;
+    width: 100%;
 }
 
 .intro-header {
@@ -626,13 +637,13 @@ select:focus, input[type="text"]:focus {
 
 .intro-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .intro-content {
-    max-height: 55vh;
+    max-height: 70vh;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 15px;
 }
 
 .intro-section-heading {
