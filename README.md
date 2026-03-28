@@ -8,18 +8,19 @@ L'application est disponible à l'adresse suivante :
 
 ## ✨ Fonctionnalités Principales
 - **100% Client-Side :** Aucune base de données ou serveur complexe requis. L'application lit simplement un fichier statique de données `quizzes.js`.
-- **Génération Automatique :** Chaque onglet (feuille) de vos fichiers Excel devient automatiquement un **Module indépendant** dans le menu principal.
-- **Introduction Personnalisable :** Si un fichier Excel contient un onglet nommé `Introduction`, son contenu sera affiché avant de commencer n'importe quel quiz issu de ce fichier.
-- **Questionnaire Aléatoire :** Chaque session de jeu sélectionne et mélange aléatoirement **10 questions** parmi la réserve disponible dans un chapitre.
-- **Refaire les erreurs :** À la fin du quiz, un bouton permet de recommencer immédiatement une session uniquement avec les questions auxquelles l'étudiant a mal répondu.
-- **Suivi des Progrès local :** Les résultats des quiz sont enregistrés dans le navigateur (localStorage) pour afficher des badges de réussite (✅, 🟡, 🔴) dans le menu de sélection.
-- **Feedbacks Pédagogiques :** Affiche un message d'explication différent selon que l'élève a répondu juste ou faux à la question.
+- **Organisation par Fichiers :** Chaque fichier Excel présent dans le dossier `quizzes/` devient automatiquement un **Module indépendant** (ex: "Pronoms Relatifs").
+- **Organisation par Feuilles :** Chaque onglet (feuille) d'un fichier Excel devient un **Quiz spécifique** au sein de ce module.
+- **Introduction Dynamique :** Si un fichier Excel contient un onglet nommé `Introduction`, son contenu (textes et tableaux) sera affiché avant de commencer les quiz de ce module.
+- **Mode Révision (Admin) :** Un mode spécial accessible en local permet de parcourir l'intégralité des questions avec les réponses et feedbacks affichés (bouton dans le header).
+- **Questionnaire Aléatoire :** En mode normal, chaque session sélectionne aléatoirement **10 questions** parmi la réserve disponible.
+- **Suivi des Progrès local :** Les résultats sont enregistrés dans le navigateur pour afficher des badges de réussite (✅, 🟡, 🔴) dans le menu.
 
 ## 👨‍🏫 Comment générer les quiz (Côté Professeur)
 
 ### 1. Préparer vos fichiers Excel
 Placez vos fichiers `.xlsx` dans le dossier **`quizzes/`** à la racine du projet. 
-- **Chaque onglet** du fichier (sauf 'Introduction') créera un module de quiz distinct.
+- **Le nom du fichier** sera le nom du module dans l'application.
+- **Chaque onglet** (sauf 'Introduction') créera un quiz distinct.
 - La ligne 1 doit obligatoirement utiliser ces 6 entêtes : `Type`, `Question`, `Options`, `Answer`, `FeedbackCorrect`, `FeedbackIncorrect`.
 - Un onglet nommé `Introduction` (optionnel) permet d'afficher des consignes ou un tableau de rappel avant le quiz.
 
@@ -27,13 +28,13 @@ Placez vos fichiers `.xlsx` dans le dossier **`quizzes/`** à la racine du proje
 Si vous êtes sur macOS, vous pouvez automatiser la génération et la mise en ligne :
 1. **Prérequis :** Avoir installé [Node.js](https://nodejs.org/) (Version LTS recommandée).
 2. Double-cliquez sur le fichier **`Publish Quizzes.command`** à la racine du projet.
-3. Une fenêtre Terminal s'ouvrira, installera les dépendances nécessaires lors du premier lancement, traitera vos fichiers Excel, mettra à jour `quizzes.json` et **poussera automatiquement les changements sur GitHub**.
+3. Une fenêtre Terminal s'ouvrira, installera les dépendances nécessaires lors du premier lancement, traitera vos fichiers Excel, mettra à jour `quizzes.js` et **poussera automatiquement les changements sur GitHub**.
 
 ### 3. Mettre à jour manuellement (Option Web)
 Si vous n'utilisez pas l'outil automatique :
 1. Ouvrez `admin.html` dans votre navigateur.
-2. Glissez-deposez vos fichiers Excel dans la zone prévue.
-3. Cliquez sur "Générer et Télécharger", puis placez le fichier `quizzes.json` obtenu dans le dossier `data/`.
+2. Glissez-déposez vos fichiers Excel dans la zone prévue.
+3. Cliquez sur "Générer et Télécharger", puis placez le fichier `quizzes.js` obtenu dans le dossier `data/`.
 4. Faites manuellement votre `git add`, `commit` et `push`.
 
 ## 📝 Types de Questions Supportés
