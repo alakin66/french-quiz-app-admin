@@ -84,16 +84,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackText = document.getElementById('feedback-text');
     const currentScoreStatus = document.getElementById('current-score');
 
-    // Load Quiz Data from window namespace (self-contained)
-    if (window.quizConfig && window.quizConfig.title) {
-        document.querySelector('.logo-container h1').textContent = window.quizConfig.title;
-        document.title = window.quizConfig.title;
-        const welcomeCardH2 = document.querySelector('.welcome-card h2');
-        if (welcomeCardH2) welcomeCardH2.textContent = window.quizConfig.title;
+    // Load Quiz Data from external JSON
+    fetch('data/quizzes.json?v=' + Date.now())
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data && Object.keys(data).length > 0) {
+                quizzesData = data;
+                initApp();
+            } else {
+                showLoadError();
+            }
+        })
+        .catch(err => {
+            console.error("Failed to load quizzes.json:", err);
+            showLoadError();
+        });
+
+    function showLoadError() {
+        quizSelect.innerHTML = '<option disabled>Impossible de charger les quiz</option>';
+        loadingError.classList.remove('hidden');
     }
 
-    if (window.quizzesData && Object.keys(window.quizzesData).length > 0) {
-        quizzesData = window.quizzesData;
+    function initApp() {
         const topics = Object.keys(quizzesData);
         
         // Handle Direct Link routing via ?quiz= parameter
@@ -118,10 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
             topicScreen.classList.remove('hidden');
             topicScreen.classList.add('active');
         }
-    } else {
-        console.error("Failed to find window.quizzesData. Ensure quizzes.js is loaded in the HTML.");
-        quizSelect.innerHTML = '<option disabled>Impossible de charger les quiz</option>';
-        loadingError.classList.remove('hidden');
     }
 
     function populateTopics(topics) {

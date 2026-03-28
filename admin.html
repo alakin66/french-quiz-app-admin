@@ -18,7 +18,7 @@
         </header>
         
         <main class="admin-content">
-            <p class="description">Téléversez <strong>vos fichiers</strong> Excel (.xlsx) ci-dessous. L'outil compilera toutes les feuilles de tous les fichiers en une seule base de données `quizzes.js`. <strong>Chaque feuille deviendra un module indépendant</strong> dans le menu principal de l'application. Chaque feuille doit avoir les entêtes : <strong>Type</strong>, <strong>Question</strong>, <strong>Options</strong>, <strong>Answer</strong>, <strong>FeedbackCorrect</strong>, et <strong>FeedbackIncorrect</strong>.</p>
+            <p class="description">Téléversez <strong>vos fichiers</strong> Excel (.xlsx) ci-dessous. L'outil compilera tous les fichiers en une seule base de données `quizzes.json`. <strong>Chaque fichier deviendra un module indépendant</strong>, et chaque feuille de ce fichier (sauf 'Introduction') deviendra un quiz au sein de ce module. Chaque feuille de quiz doit avoir les entêtes : <strong>Type</strong>, <strong>Question</strong>, <strong>Options</strong>, <strong>Answer</strong>, <strong>FeedbackCorrect</strong>, et <strong>FeedbackIncorrect</strong>.</p>
             
             <div class="upload-area" id="drop-zone">
                 <i class="ms-Icon ms-Icon--ExcelDocument" aria-hidden="true"></i>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="actions">
-                <button id="generate-btn" class="btn btn-success" disabled>Générer et Télécharger quizzes.js</button>
+                <button id="generate-btn" class="btn btn-success" disabled>Générer et Télécharger quizzes.json</button>
             </div>
         </main>
     </div>

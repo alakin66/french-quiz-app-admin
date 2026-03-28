@@ -105,6 +105,16 @@ document.addEventListener('DOMContentLoaded', () => {
             
             for (const file of selectedFiles) {
                 log(`Lecture du fichier : ${file.name}`);
+                
+                // Clean filename to use as Module title
+                let fileTitle = file.name.replace(/\.xlsx$/i, '');
+                fileTitle = fileTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
+                if (!fileTitle) fileTitle = "Quiz";
+
+                if (!finalData[fileTitle]) {
+                    finalData[fileTitle] = {};
+                }
+
                 const arrayBuffer = await file.arrayBuffer();
                 const workbook = XLSX.read(arrayBuffer, { type: 'array' });
                 
@@ -118,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const worksheet = workbook.Sheets[sheetName];
                         const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
                         fileIntro = rawRows.filter(row => row.some(cell => String(cell).trim() !== ''));
+                        finalData[fileTitle]._intro = fileIntro;
                     } else {
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonArray = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
@@ -134,17 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // Second pass: Create a module for each sheet
+                // Second pass: Create a quiz for each sheet within the file's module
                 for (const sheet of sheetsToProcess) {
-                    log(`  • Création du module : ${sheet.name} (${sheet.questions.length} questions)`);
-                    if (!finalData[sheet.name]) {
-                        finalData[sheet.name] = {};
-                    }
-                    finalData[sheet.name][sheet.name] = sheet.questions;
-                    
-                    if (fileIntro) {
-                        finalData[sheet.name]._intro = fileIntro;
-                    }
+                    const fullQuizName = `${fileTitle} - ${sheet.name}`;
+                    log(`  • Création du quiz : ${fullQuizName} (${sheet.questions.length} questions)`);
+                    finalData[fileTitle][fullQuizName] = sheet.questions;
                 }
 
                 processedFiles++;
@@ -153,18 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             log("Compilation terminée avec succès !", "success");
             
-            let safeFileName = 'quizzes.js';
-            let appMainTitle = "Quiz de Français";
+            let safeFileName = 'quizzes.json';
             
-            // If only one file is uploaded, dedicate the JS filename to it
-            if (selectedFiles.length === 1) {
-                let singleTitle = selectedFiles[0].name.replace(/\.xlsx$/i, '');
-                singleTitle = singleTitle.replace(/[-_0-9\[\]{}()!@#$%^&*+=;:|\\<>,.?~]/g, ' ').replace(/\s+/g, ' ').trim();
-                safeFileName = singleTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.js';
-                appMainTitle = singleTitle;
-            }
-
-            downloadJs(finalData, safeFileName);
+            downloadJson(finalData, safeFileName);
             
         } catch (error) {
             log(`ERREUR CRITIQUE : ${error.message}`, "error");
@@ -172,15 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Une erreur s'est produite lors du traitement. Vérifiez la console pour plus de détails.");
         } finally {
             generateBtn.disabled = false;
-            generateBtn.textContent = "Générer et Télécharger quizzes.js";
+            generateBtn.textContent = "Générer et Télécharger quizzes.json";
         }
     });
 
-    function downloadJs(data, filename) {
+    function downloadJson(data, filename) {
         log(`Préparation du téléchargement de ${filename}...`);
         const jsonString = JSON.stringify(data, null, 2);
-        const jsFileContent = `window.quizzesData = ${jsonString};`;
-        const blob = new Blob([jsFileContent], { type: "application/javascript" });
+        const blob = new Blob([jsonString], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement("a");
