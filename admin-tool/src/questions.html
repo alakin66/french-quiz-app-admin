@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin — Questions</title>
+    <link rel="stylesheet" href="admin-app.css">
+    <style>
+        .q-wrapper { overflow-x: auto; }
+        .q-table { min-width: 900px; }
+
+        /* Contenteditable cell */
+        .cell-edit {
+            display: block;
+            min-width: 60px;
+            min-height: 20px;
+            outline: none;
+            border-radius: 3px;
+            padding: 3px 5px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .cell-edit:focus {
+            background: rgba(91,95,199,0.07);
+            box-shadow: inset 0 0 0 2px var(--color-primary);
+        }
+
+        /* Row number */
+        .col-num { color: var(--color-text-muted); font-size: 12px; text-align: center; }
+
+        /* Drag handle */
+        .drag-handle {
+            cursor: grab;
+            color: #ccc;
+            font-size: 16px;
+            user-select: none;
+            padding: 0 4px;
+        }
+        .drag-handle:active { cursor: grabbing; }
+
+        .q-table tbody tr.drag-over-above { border-top: 2px solid var(--color-primary); }
+        .q-table tbody tr.drag-over-below { border-bottom: 2px solid var(--color-primary); }
+
+        /* Sticky action bar */
+        .action-bar {
+            position: sticky;
+            bottom: 0;
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 12px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 100;
+        }
+        .row-count { color: var(--color-text-muted); font-size: 13px; margin-left: auto; }
+
+        .q-type-select {
+            font-size: 12px;
+            padding: 3px 4px;
+            border: 1px solid var(--color-border);
+            border-radius: 3px;
+            background: var(--color-surface);
+            color: var(--color-text);
+            cursor: pointer;
+            width: 100%;
+        }
+        .q-type-select:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px var(--color-primary);
+        }
+        .q-type-text {
+            font-size: 12px;
+            color: var(--color-text);
+            padding: 3px 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-header-left">
+            <a class="app-header-title" href="index.html">&#x1F4DA; Quiz Admin</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Modules</a>
+                <span class="breadcrumb-sep">&#x276F;</span>
+                <a href="#" id="bc-module-link">—</a>
+                <span class="breadcrumb-sep">&#x276F;</span>
+                <span class="breadcrumb-current" id="bc-quiz">—</span>
+            </nav>
+        </div>
+        <div class="app-header-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-back">&#x2190; Retour</button>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body" style="padding:0;display:flex;flex-direction:column;overflow:hidden;">
+
+        <div class="q-wrapper" style="flex:1;overflow:auto;padding:20px 20px 0">
+            <table class="data-table q-table" id="q-table">
+                <thead>
+                    <tr>
+                        <th style="width:28px"></th><!-- drag handle -->
+                        <th class="col-num">#</th>
+                        <th class="col-type">Type</th>
+                        <th class="col-q">Question</th>
+                        <th class="col-opts">Options</th>
+                        <th class="col-ans">Réponse</th>
+                        <th class="col-fb">Feedback correct</th>
+                        <th class="col-fb">Feedback incorrect</th>
+                        <th class="col-act" style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="q-tbody"></tbody>
+            </table>
+        </div>
+
+        <!-- Action bar -->
+        <div class="action-bar">
+            <button class="btn btn-primary btn-sm" id="btn-add-row">+ Ajouter une question</button>
+            <span class="row-count" id="row-count">0 question(s)</span>
+        </div>
+    </div>
+</div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="admin-app.js"></script>
+<script>
+// invokeCmd, toast, confirmModal, navTo, getParam, loadData, saveData, escHtml
+// are globals from admin-app.js — no re-declaration needed
+
+var QUESTION_TYPES = ['MultipleChoice','OddOneOut','TrueFalse','FillInBlank'];
+
+var appData = {};
+var moduleName = getParam('module');
+var quizKey    = getParam('quiz');
+var questions  = [];
+
+// ── Auto-save ────────────────────────────────────────────────
+var saveTimer = null;
+
+async function autoSave() {
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    appData[moduleName][quizKey] = questions;
+    await saveData(appData);
+}
+
+function debouncedSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(autoSave, 600);
+}
+
+// ── Build a question row element ─────────────────────────────
+function makeRow(q, idx, isNew) {
+    const tr = document.createElement('tr');
+    tr.dataset.idx = idx;
+    tr.draggable = true;
+
+    const currentType = q.Type || 'MultipleChoice';
+    const typeCell = isNew
+        ? `<select class="q-type-select" data-field="Type">${QUESTION_TYPES.map(t =>
+              `<option value="${t}"${t === currentType ? ' selected' : ''}>${t}</option>`
+          ).join('')}</select>`
+        : `<span class="q-type-text" data-field="Type">${escHtml(currentType)}</span>`;
+
+    tr.innerHTML = `
+        <td><span class="drag-handle" title="D\u00e9placer">&#x2630;</span></td>
+        <td class="col-num">${idx + 1}</td>
+        <td class="col-type">${typeCell}</td>
+        <td class="col-q">
+            <span class="cell-edit" contenteditable="true"
+                data-field="Question">${escHtml(q.Question || '')}</span>
+        </td>
+        <td class="col-opts">
+            <span class="cell-edit" contenteditable="true"
+                data-field="Options">${escHtml(q.Options || '')}</span>
+        </td>
+        <td class="col-ans">
+            <span class="cell-edit" contenteditable="true"
+                data-field="Answer">${escHtml(q.Answer || '')}</span>
+        </td>
+        <td class="col-fb">
+            <span class="cell-edit" contenteditable="true"
+                data-field="FeedbackCorrect">${escHtml(q.FeedbackCorrect || '')}</span>
+        </td>
+        <td class="col-fb">
+            <span class="cell-edit" contenteditable="true"
+                data-field="FeedbackIncorrect">${escHtml(q.FeedbackIncorrect || '')}</span>
+        </td>
+        <td class="col-act">
+            <div class="actions-col">
+                <button class="btn btn-secondary btn-icon btn-sm" title="Monter" onclick="moveRow(this, -1)">&#x2191;</button>
+                <button class="btn btn-secondary btn-icon btn-sm" title="Descendre" onclick="moveRow(this, 1)">&#x2193;</button>
+                <button class="btn btn-secondary btn-icon btn-sm" title="Dupliquer" onclick="duplicateRow(this)">&#x29C9;</button>
+                <button class="btn btn-danger btn-sm" title="Supprimer" onclick="deleteRow(this)">&#x2715;</button>
+            </div>
+        </td>
+    `;
+
+    tr.querySelectorAll('.cell-edit').forEach(el => {
+        el.addEventListener('input', debouncedSave);
+    });
+    tr.querySelectorAll('.q-type-select').forEach(el => {
+        el.addEventListener('change', debouncedSave);
+    });
+
+    tr.addEventListener('dragstart', onDragStart);
+    tr.addEventListener('dragover', onDragOver);
+    tr.addEventListener('dragleave', onDragLeave);
+    tr.addEventListener('drop', onDrop);
+    tr.addEventListener('dragend', onDragEnd);
+
+    return tr;
+}
+
+// ── Render all rows ──────────────────────────────────────────
+function renderTable() {
+    const tbody = document.getElementById('q-tbody');
+    tbody.innerHTML = '';
+    questions.forEach((q, i) => tbody.appendChild(makeRow(q, i, false)));
+    document.getElementById('row-count').textContent = `${questions.length} question(s)`;
+}
+
+// ── Read current state from DOM into questions array ─────────
+function syncFromDom() {
+    const rows = document.querySelectorAll('#q-tbody tr[data-idx]');
+    questions = Array.from(rows).map(tr => {
+        const get = field => {
+            const el = tr.querySelector(`[data-field="${field}"]`);
+            if (!el) return '';
+            return el.tagName === 'SELECT' ? el.value : el.textContent.trim();
+        };
+        return {
+            Type:              get('Type'),
+            Question:          get('Question'),
+            Options:           get('Options'),
+            Answer:            get('Answer'),
+            FeedbackCorrect:   get('FeedbackCorrect'),
+            FeedbackIncorrect: get('FeedbackIncorrect'),
+        };
+    });
+}
+
+// ── Add row ──────────────────────────────────────────────────
+function addRow() {
+    syncFromDom();
+    const newQ = { Type: 'MultipleChoice', Question: '', Options: '', Answer: '', FeedbackCorrect: '', FeedbackIncorrect: '' };
+    questions.push(newQ);
+    const tbody = document.getElementById('q-tbody');
+    const newIdx = questions.length - 1;
+    tbody.appendChild(makeRow(newQ, newIdx, true));
+    document.getElementById('row-count').textContent = `${questions.length} question(s)`;
+    const lastRow = tbody.lastElementChild;
+    if (lastRow) {
+        const cell = lastRow.querySelector('[data-field="Question"]');
+        if (cell) cell.focus();
+        lastRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    autoSave();
+}
+
+// ── Move row ─────────────────────────────────────────────────
+function moveRow(btn, dir) {
+    syncFromDom();
+    const tr = btn.closest('tr');
+    const idx = parseInt(tr.dataset.idx, 10);
+    const newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= questions.length) return;
+    [questions[idx], questions[newIdx]] = [questions[newIdx], questions[idx]];
+    renderTable();
+    autoSave();
+}
+
+// ── Duplicate row ────────────────────────────────────────────
+function duplicateRow(btn) {
+    syncFromDom();
+    const tr = btn.closest('tr');
+    const idx = parseInt(tr.dataset.idx, 10);
+    const copy = { ...questions[idx] };
+    questions.splice(idx + 1, 0, copy);
+    renderTable();
+    autoSave();
+}
+
+// ── Delete row ───────────────────────────────────────────────
+function deleteRow(btn) {
+    syncFromDom();
+    const tr = btn.closest('tr');
+    const idx = parseInt(tr.dataset.idx, 10);
+    questions.splice(idx, 1);
+    renderTable();
+    autoSave();
+}
+
+// ── Drag-and-drop reorder ────────────────────────────────────
+var dragSrcIdx = null;
+
+function onDragStart(e) {
+    dragSrcIdx = parseInt(this.dataset.idx, 10);
+    this.style.opacity = '0.5';
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const rect = this.getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    this.classList.remove('drag-over-above', 'drag-over-below');
+    this.classList.add(e.clientY < mid ? 'drag-over-above' : 'drag-over-below');
+}
+
+function onDragLeave() {
+    this.classList.remove('drag-over-above', 'drag-over-below');
+}
+
+function onDrop(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over-above', 'drag-over-below');
+    const destIdx = parseInt(this.dataset.idx, 10);
+    if (dragSrcIdx === null || dragSrcIdx === destIdx) return;
+    syncFromDom();
+    const rect = this.getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    const insertAfter = e.clientY >= mid;
+
+    const [moved] = questions.splice(dragSrcIdx, 1);
+    let insertAt = destIdx;
+    if (dragSrcIdx < destIdx) insertAt = destIdx - 1 + (insertAfter ? 1 : 0);
+    else insertAt = destIdx + (insertAfter ? 1 : 0);
+    questions.splice(insertAt, 0, moved);
+    renderTable();
+    autoSave();
+}
+
+function onDragEnd() {
+    this.style.opacity = '';
+    document.querySelectorAll('#q-tbody tr').forEach(tr => {
+        tr.classList.remove('drag-over-above', 'drag-over-below');
+    });
+    dragSrcIdx = null;
+}
+
+// ── Init ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!moduleName || !quizKey) {
+        toast('Param\u00e8tres manquants.', 'error');
+        return;
+    }
+
+    appData = await loadData();
+    if (!appData[moduleName]) appData[moduleName] = {};
+    if (!appData[moduleName][quizKey]) appData[moduleName][quizKey] = [];
+
+    questions = JSON.parse(JSON.stringify(appData[moduleName][quizKey]));
+
+    document.getElementById('bc-module-link').textContent = moduleName;
+    document.getElementById('bc-module-link').href = `module.html?module=${encodeURIComponent(moduleName)}`;
+    document.getElementById('bc-quiz').textContent = quizKey;
+    document.title = `Quiz Admin \u2014 ${quizKey}`;
+
+    renderTable();
+
+    document.getElementById('btn-add-row').addEventListener('click', addRow);
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+        navTo('module.html', { module: moduleName });
+    });
+});
+</script>
+</body>
+</html>

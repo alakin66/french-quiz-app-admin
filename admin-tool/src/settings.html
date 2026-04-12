@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin — Paramètres</title>
+    <link rel="stylesheet" href="admin-app.css">
+    <style>
+        .settings-card { max-width: 560px; }
+        .token-row { display: flex; gap: 8px; align-items: flex-end; }
+        .token-row .form-control { flex: 1; }
+        .token-row .btn { flex-shrink: 0; height: 38px; }
+        .hint {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+        .info-box {
+            background: rgba(91,95,199,0.07);
+            border: 1px solid rgba(91,95,199,0.2);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+        .info-box strong { color: var(--color-primary); }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-header-left">
+            <a class="app-header-title" href="index.html">&#x1F4DA; Quiz Admin</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Modules</a>
+                <span class="breadcrumb-sep">&#x276F;</span>
+                <span class="breadcrumb-current">Paramètres</span>
+            </nav>
+        </div>
+        <div class="app-header-actions">
+            <a class="btn btn-ghost btn-sm" href="index.html">&#x2190; Retour</a>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body">
+
+        <div class="page-toolbar">
+            <h1 class="card-title">&#x2699;&#xFE0F; Paramètres</h1>
+        </div>
+
+        <div class="card settings-card">
+            <div class="card-body">
+
+                <div class="info-box">
+                    Ces paramètres permettent à l'outil d'administration de <strong>publier automatiquement</strong>
+                    les quiz sur GitHub Pages via l'API Git.<br>
+                    Le fichier <code>settings.json</code> est stocké localement dans le dossier
+                    <code>admin-tool/</code> et n'est <strong>jamais</strong> versionné.
+                </div>
+
+                <!-- GitHub username -->
+                <div class="form-group">
+                    <label for="gh-user">Nom d'utilisateur GitHub</label>
+                    <input type="text" id="gh-user" class="form-control"
+                        placeholder="ex : alakin66" autocomplete="off">
+                    <div class="hint">Votre nom d'utilisateur GitHub (pas l'e-mail).</div>
+                </div>
+
+                <!-- GitHub repo -->
+                <div class="form-group">
+                    <label for="gh-repo">Dépôt GitHub (owner/repo)</label>
+                    <input type="text" id="gh-repo" class="form-control"
+                        placeholder="ex : alakin66/french-quiz-app" autocomplete="off">
+                    <div class="hint">
+                        Le chemin complet du dépôt, ex : <code>alakin66/french-quiz-app</code>.
+                    </div>
+                </div>
+
+                <!-- GitHub token -->
+                <div class="form-group">
+                    <label for="gh-token">Token d'accès personnel (PAT)</label>
+                    <div class="token-row">
+                        <input type="password" id="gh-token" class="form-control"
+                            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="new-password">
+                        <button class="btn btn-secondary" id="btn-toggle-token" type="button"
+                            title="Afficher / masquer le token">
+                            &#x1F441;
+                        </button>
+                    </div>
+                    <div class="hint">
+                        Requis pour les dépôts privés ou pour pousser sans configurer SSH.
+                        Le token doit avoir la permission <strong>repo</strong> (ou <strong>public_repo</strong>
+                        pour un dépôt public).<br>
+                        <a id="gh-token-link" href="#" style="color:var(--color-primary)">
+                            &#x1F517; Créer un token sur GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                    <button class="btn btn-primary" id="btn-save-settings">&#x1F4BE; Enregistrer</button>
+                    <button class="btn btn-secondary" id="btn-clear-settings">Effacer tout</button>
+                    <span id="save-feedback" style="font-size:13px;color:var(--color-success);display:none">
+                        &#x2714; Paramètres enregistrés.
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="admin-app.js"></script>
+<script>
+// invokeCmd, toast, confirmModal are globals from admin-app.js — no re-declaration needed
+
+async function loadSettings() {
+    try {
+        const raw = await invokeCmd('read_settings');
+        return JSON.parse(raw || '{}');
+    } catch (e) {
+        return {};
+    }
+}
+
+async function saveSettings() {
+    const settings = {
+        githubUser:  document.getElementById('gh-user').value.trim(),
+        githubRepo:  document.getElementById('gh-repo').value.trim(),
+        githubToken: document.getElementById('gh-token').value.trim(),
+    };
+    try {
+        await invokeCmd('write_settings', { json: JSON.stringify(settings, null, 2) });
+        const fb = document.getElementById('save-feedback');
+        fb.style.display = 'inline';
+        setTimeout(() => { fb.style.display = 'none'; }, 3000);
+        toast('Paramètres enregistrés.', 'success');
+    } catch (e) {
+        toast('Erreur lors de l\'enregistrement.', 'error');
+    }
+}
+
+async function clearSettings() {
+    const ok = await confirmModal('Effacer tous les paramètres ?');
+    if (!ok) return;
+    document.getElementById('gh-user').value = '';
+    document.getElementById('gh-repo').value = '';
+    document.getElementById('gh-token').value = '';
+    try {
+        await invokeCmd('write_settings', { json: '{}' });
+        toast('Paramètres effacés.', 'success');
+    } catch (e) {
+        toast('Erreur lors de l\'effacement.', 'error');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const settings = await loadSettings();
+    document.getElementById('gh-user').value  = settings.githubUser  || '';
+    document.getElementById('gh-repo').value  = settings.githubRepo  || '';
+    document.getElementById('gh-token').value = settings.githubToken || '';
+
+    document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
+    document.getElementById('btn-clear-settings').addEventListener('click', clearSettings);
+
+    // Token visibility toggle
+    const tokenInput = document.getElementById('gh-token');
+    document.getElementById('btn-toggle-token').addEventListener('click', () => {
+        tokenInput.type = tokenInput.type === 'password' ? 'text' : 'password';
+    });
+
+    // GitHub token creation link
+    document.getElementById('gh-token-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        try {
+            window.__TAURI__.shell.open('https://github.com/settings/tokens/new?scopes=repo&description=QuizAdmin');
+        } catch (err) {
+            window.open('https://github.com/settings/tokens/new?scopes=repo&description=QuizAdmin', '_blank');
+        }
+    });
+
+    // Save on Enter key in fields
+    ['gh-user','gh-repo','gh-token'].forEach(id => {
+        document.getElementById(id).addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') saveSettings();
+        });
+    });
+});
+</script>
+</body>
+</html>

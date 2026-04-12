@@ -1,58 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz de Français</title>
-    <!-- Modern Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Fluent UI Icons -->
-    <link href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/student.css?v=11">
+    <link rel="stylesheet" href="css/student.css?v=12">
 </head>
 <body>
     <div class="app-container">
-        
+
         <!-- Header -->
         <header class="app-header">
             <div class="logo-container">
-                <i class="ms-Icon ms-Icon--Education" aria-hidden="true"></i>
+                <span class="icon" aria-hidden="true">🎓</span>
                 <h1>Quiz de Français</h1>
             </div>
             <div class="score-display hidden" id="header-score">
                 <span>Score: <strong id="current-score">0</strong></span>
             </div>
-            <!-- Admin Review Toggle (Header) -->
-            <button id="header-review-btn" class="btn-history-clear hidden" style="margin-left: auto; color: white; border-color: rgba(255,255,255,0.4); padding: 4px 10px; font-size: 0.75rem;">
-                <i class="ms-Icon ms-Icon--PageList" aria-hidden="true"></i> Mode Révision
-            </button>
         </header>
 
         <!-- Main Content Area -->
         <main class="app-main">
-            
+
             <!-- Screen 0: Topic Selection -->
             <section id="topic-screen" class="screen active fade-in">
                 <div class="welcome-card">
                     <h2>Nos Modules</h2>
                     <p>Sélectionnez un sujet ci-dessous pour voir les quizz disponibles.</p>
-                    
+
                     <div id="topics-container" class="topics-container">
                         <!-- Populated by JS -->
                     </div>
 
                     <div class="history-footer">
                         <button id="clear-history-btn" class="btn-history-clear hidden">
-                            <i class="ms-Icon ms-Icon--Delete" aria-hidden="true"></i>
+                            <span class="icon" aria-hidden="true">🗑</span>
                             Effacer mon historique
                         </button>
                         <div id="history-cleared-msg" class="history-cleared-msg hidden">
-                            <i class="ms-Icon ms-Icon--CheckMark" aria-hidden="true"></i> Historique effacé !
+                            <span class="icon" aria-hidden="true">✓</span> Historique effacé !
                         </div>
                     </div>
-                    
+
                     <div id="loading-error" class="error-msg hidden">
-                        <i class="ms-Icon ms-Icon--ErrorBadge" aria-hidden="true"></i>
+                        <span class="icon" aria-hidden="true">⚠</span>
                         <span>Échec du chargement des modules. Vérifiez votre URL.</span>
                     </div>
                 </div>
@@ -62,10 +55,10 @@
             <section id="intro-screen" class="screen hidden fade-in">
                 <div class="welcome-card intro-card">
                     <div class="intro-header">
-                        <button id="back-from-intro-btn" class="btn btn-secondary" style="width: auto; font-size: 0.9rem; padding: 8px 16px;">
-                            <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i> Retour
-                        </button>
                         <h2 id="intro-title">Introduction</h2>
+                        <button id="back-from-intro-btn" class="btn btn-secondary" style="width: auto; font-size: 0.9rem; padding: 8px 16px;">
+                            <span class="icon" aria-hidden="true">←</span> Retour
+                        </button>
                     </div>
                     <div id="intro-content" class="intro-content">
                         <!-- Populated by JS -->
@@ -76,9 +69,22 @@
                             <option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>
                         </select>
                     </div>
+                    <div class="form-group" style="margin-top: 1rem; margin-bottom: 0; text-align: left;">
+                        <label for="intro-question-count">Nombre de questions</label>
+                        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                            <select id="intro-question-count" disabled style="width:auto;">
+                                <option value="" disabled selected>—</option>
+                            </select>
+                            <input type="number" id="intro-question-count-custom" class="text-input"
+                                min="1" max="10" style="max-width:120px;" disabled>
+                            <button type="button" id="intro-question-count-random"
+                                    class="btn btn-secondary randomize-toggle" disabled>
+                                Sélection aléatoire</button>
+                        </div>
+                    </div>
                     <button id="intro-start-btn" class="btn btn-primary btn-large" style="margin-top: 1rem;" disabled>
                         <span>Commencer le Quiz</span>
-                        <i class="ms-Icon ms-Icon--Play" aria-hidden="true"></i>
+                        <span class="icon" aria-hidden="true">▶</span>
                     </button>
                 </div>
             </section>
@@ -86,12 +92,14 @@
             <!-- Screen 2: Start Screen -->
             <section id="start-screen" class="screen hidden fade-in">
                 <div class="welcome-card">
-                    <button id="back-to-topics-btn" class="btn btn-secondary hidden" style="margin-bottom: 20px; width: auto; font-size: 0.9rem; padding: 8px 16px;">
-                        <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i> Retour
-                    </button>
+                    <div style="display:flex; justify-content:flex-end;">
+                        <button id="back-to-topics-btn" class="btn btn-secondary hidden" style="margin-bottom: 20px; width: auto; font-size: 0.9rem; padding: 8px 16px;">
+                            <span class="icon" aria-hidden="true">←</span> Retour
+                        </button>
+                    </div>
                     <h2>Bienvenue !</h2>
                     <p>Sélectionnez un niveau ou un chapitre ci-dessous pour commencer à pratiquer.</p>
-                    
+
                     <div class="form-group">
                         <label for="quiz-select">Choisissez un quiz</label>
                         <select id="quiz-select">
@@ -99,65 +107,35 @@
                         </select>
                     </div>
 
-                    <button id="start-btn" class="btn btn-primary btn-large" disabled>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="question-count">Nombre de questions</label>
+                        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                            <select id="question-count" disabled style="width:auto;">  
+                                <option value="" disabled selected>—</option>
+                            </select>
+                            <input type="number" id="question-count-custom" class="text-input"
+                                min="1" max="10" style="max-width:120px;" disabled>
+                            <button type="button" id="question-count-random"
+                                    class="btn btn-secondary randomize-toggle" disabled>
+                                Sélection aléatoire</button>
+                        </div>
+                    </div>
+
+                    <button id="start-btn" class="btn btn-primary btn-large" style="margin-top: 1rem;" disabled>
                         <span>Commencer le Quiz</span>
-                        <i class="ms-Icon ms-Icon--Play" aria-hidden="true"></i>
-                    </button>
-
-                    <button id="start-review-btn" class="btn btn-secondary btn-large hidden" style="margin-top: 10px; border-style: dashed;">
-                        <span>Réviser toutes les questions</span>
-                        <i class="ms-Icon ms-Icon--PageList" aria-hidden="true"></i>
+                        <span class="icon" aria-hidden="true">▶</span>
                     </button>
                 </div>
             </section>
 
-            <!-- Screen: Review Mode View -->
-            <section id="review-screen" class="screen hidden">
-                <div class="quiz-card" style="max-width: 1000px;">
-                    <div class="progress-header" style="margin-bottom: 2rem;">
-                        <div class="progress-text">Question <span id="review-current-num">1</span> sur <span id="review-total-num">10</span></div>
-                        <button id="exit-review-btn" class="btn btn-icon-only" title="Quitter la révision">
-                            <i class="ms-Icon ms-Icon--Cancel" aria-hidden="true"></i>
-                        </button>
-                    </div>
-
-                    <h2 class="question-text" id="review-question-text" style="margin-bottom: 1rem;"></h2>
-                    
-                    <div class="review-answer-box" style="background: var(--surface-2); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border-left: 5px solid var(--success); text-align: left;">
-                        <label style="color: var(--success); font-size: 0.8rem; margin-bottom: 5px;">Réponse Correcte</label>
-                        <div id="review-correct-answer" style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary);"></div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; text-align: left;">
-                        <div class="feedback-container correct" style="display: block;">
-                            <label style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">Feedback Si Juste</label>
-                            <p id="review-feedback-correct" style="margin: 0;"></p>
-                        </div>
-                        <div class="feedback-container incorrect" style="display: block;">
-                            <label style="font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">Feedback Si Faux</label>
-                            <p id="review-feedback-incorrect" style="margin: 0;"></p>
-                        </div>
-                    </div>
-
-                    <div class="review-navigation" style="display: flex; justify-content: space-between; gap: 1rem;">
-                        <button id="review-prev-btn" class="btn btn-secondary" style="flex: 1;">
-                            <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i> Précédent
-                        </button>
-                        <button id="review-next-btn" class="btn btn-primary" style="flex: 1;">
-                            Suivant <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Screen 2: Quiz View -->
+            <!-- Screen 3: Quiz View -->
             <section id="quiz-screen" class="screen hidden">
                 <div class="quiz-card">
                     <div class="progress-container">
                         <div class="progress-header">
                             <div class="progress-text">Question <span id="current-question-num">1</span> sur <span id="total-questions-num">10</span></div>
                             <button id="exit-quiz-btn" class="btn btn-icon-only" title="Quitter le quiz">
-                                <i class="ms-Icon ms-Icon--Cancel" aria-hidden="true"></i>
+                                <span class="icon" aria-hidden="true">✕</span>
                             </button>
                         </div>
                         <div class="progress-bar">
@@ -166,40 +144,35 @@
                     </div>
 
                     <h2 class="question-text" id="question-text">Chargement de la question...</h2>
-                    
-                    <!-- Dynamic UI Area for Question Inputs -->
+
                     <div id="answers-container" class="answers-container">
                         <!-- Populated by JS -->
                     </div>
 
-                    <!-- Footer Area -->
                     <div class="card-footer">
-                        <!-- Feedback Area -->
                         <div id="feedback-container" class="feedback-container hidden">
                             <div class="feedback-icon" id="feedback-icon"></div>
                             <p id="feedback-text" class="feedback-text"></p>
                         </div>
-
                         <div class="action-footer">
                             <button id="next-btn" class="btn btn-primary hidden">
                                 <span>Suivant</span>
-                                <i class="ms-Icon ms-Icon--Forward" aria-hidden="true"></i>
+                                <span class="icon" aria-hidden="true">→</span>
                             </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Screen 3: Results -->
+            <!-- Screen 4: Results -->
             <section id="results-screen" class="screen hidden fade-in">
                 <div class="results-card">
                     <div class="trophy-icon">
-                        <i class="ms-Icon ms-Icon--Trophy2Solid" aria-hidden="true"></i>
+                        <span style="font-size: 56px; display: inline-block; margin-bottom: 0.75rem;">🏆</span>
                     </div>
                     <h2>Quiz Terminé !</h2>
                     <p class="score-text">Vous avez obtenu <strong id="final-score">0</strong> sur <strong id="final-total">0</strong></p>
-                    
-                    <!-- Mini Graph or Visual Feedback -->
+
                     <div class="score-circle">
                         <svg viewBox="0 0 36 36" class="circular-chart">
                             <path class="circle-bg"
@@ -215,11 +188,11 @@
 
                     <div class="results-actions">
                         <button id="retry-wrong-btn" class="btn btn-primary hidden">
-                            <i class="ms-Icon ms-Icon--Refresh" aria-hidden="true"></i>
+                            <span class="icon" aria-hidden="true">↺</span>
                             <span>Refaire les erreurs</span>
                         </button>
                         <button id="return-btn" class="btn btn-secondary">
-                            <i class="ms-Icon ms-Icon--Back" aria-hidden="true"></i>
+                            <span class="icon" aria-hidden="true">←</span>
                             <span>Retour au Menu Principal</span>
                         </button>
                     </div>
@@ -229,9 +202,7 @@
         </main>
     </div>
 
-    <!-- Load centralized quiz data -->
-    <script src="data/quizzes.js?v=11"></script>
-    <!-- Main Student Application -->
-    <script src="js/student.js?v=11"></script>
+    <script src="data/quizzes.js?v=12"></script>
+    <script src="js/student.js?v=12"></script>
 </body>
 </html>

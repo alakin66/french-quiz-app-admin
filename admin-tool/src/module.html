@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin — Module</title>
+    <link rel="stylesheet" href="admin-app.css">
+    <style>
+        .intro-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .quiz-name-link {
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font);
+            font-size: 13px;
+            padding: 0;
+            text-align: left;
+        }
+        .quiz-name-link:hover { text-decoration: underline; }
+        #new-quiz-row { display:flex; gap:8px; align-items:center; padding:12px 12px; border-top:1px solid var(--color-border); }
+        #new-quiz-input { flex:1; }
+        .intro-section { margin-bottom:24px; }
+        .html-editor-wrap { display:none; margin-top:8px; }
+        .module-meta-section { display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+        .module-meta-section .form-group { flex:1; min-width:200px; margin-bottom:0; }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-header-left">
+            <a class="app-header-title" href="index.html">&#x1F4DA; Quiz Admin</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Modules</a>
+                <span class="breadcrumb-sep">&#x276F;</span>
+                <span class="breadcrumb-current" id="bc-module">—</span>
+            </nav>
+        </div>
+        <div class="app-header-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-export-excel">&#x1F4C4; Exporter Excel</button>
+            <a class="btn btn-ghost btn-sm" href="index.html">&#x2190; Retour</a>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body">
+
+        <!-- Module name + description -->
+        <div class="module-meta-section">
+            <div class="form-group">
+                <label for="module-name-input">Nom du module</label>
+                <input type="text" id="module-name-input" class="form-control" placeholder="Nom du module">
+            </div>
+            <div class="form-group" style="flex:2">
+                <label for="module-desc-input">Description</label>
+                <input type="text" id="module-desc-input" class="form-control" placeholder="Description facultative">
+            </div>
+        </div>
+
+        <!-- Introduction section -->
+        <div class="card intro-section">
+            <div class="card-header">
+                <span class="card-title">&#x1F4CB; Introduction</span>
+                <div class="intro-actions">
+                    <button class="btn btn-secondary btn-sm" id="btn-toggle-html-editor">
+                        Modifier le HTML
+                    </button>
+                    <label class="btn btn-secondary btn-sm" style="cursor:pointer">
+                        &#x2B06; Importer introduction depuis Excel
+                        <input type="file" id="intro-file-input" accept=".xlsx" style="display:none">
+                    </label>
+                    <button class="btn btn-secondary btn-sm" id="btn-clear-intro">Effacer</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="intro-preview" id="intro-preview">
+                    <span class="text-muted">Aucune introduction définie.</span>
+                </div>
+                <div class="html-editor-wrap" id="html-editor-wrap">
+                    <textarea id="intro-html-editor" class="intro-html-editor" rows="10"
+                        placeholder="Collez votre HTML ici..."></textarea>
+                    <div style="display:flex;gap:8px;margin-top:8px">
+                        <button class="btn btn-primary btn-sm" id="btn-apply-html">Appliquer</button>
+                        <button class="btn btn-secondary btn-sm" id="btn-cancel-html">Annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz list -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">&#x1F4DD; Quiz</span>
+                <span id="quiz-count-badge" class="badge badge-primary">0</span>
+                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-excel">&#x2B06; Importer Quiz depuis Excel</button>
+            </div>
+            <div class="card-body" style="padding:0">
+                <table class="data-table" id="quiz-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du quiz</th>
+                            <th class="text-center">Questions</th>
+                            <th style="text-align:right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quiz-tbody"></tbody>
+                </table>
+                <!-- New quiz row -->
+                <div id="new-quiz-row">
+                    <input type="text" id="new-quiz-input" class="form-control"
+                        placeholder="Nom du nouveau quiz (ex : Basique)">
+                    <button class="btn btn-primary btn-sm" id="btn-add-quiz">+ Ajouter Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Quiz from Excel modal -->
+<div class="modal-overlay hidden" id="import-quiz-modal">
+    <div class="modal">
+        <div class="modal-title">Importer Quiz depuis Excel</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Fichier Excel</label>
+                <label class="btn btn-secondary btn-sm" style="cursor:pointer;display:inline-block">
+                    &#x1F4C2; Choisir un fichier .xlsx
+                    <input type="file" id="import-quiz-file" accept=".xlsx" style="display:none">
+                </label>
+                <span id="import-quiz-filename" class="text-muted" style="margin-left:8px;font-size:13px"></span>
+            </div>
+            <div class="form-group" id="import-quiz-sheet-group" style="display:none">
+                <label for="import-quiz-sheet">Feuille (quiz) à importer</label>
+                <select id="import-quiz-sheet" class="form-control"></select>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" id="import-quiz-cancel">Annuler</button>
+            <button class="btn btn-primary" id="import-quiz-confirm" disabled>Importer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename modal -->
+<div class="modal-overlay hidden" id="rename-modal">
+    <div class="modal">
+        <div class="modal-title">Renommer le quiz</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="rename-input">Nouveau nom</label>
+                <input type="text" id="rename-input" class="form-control">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" id="rename-cancel">Annuler</button>
+            <button class="btn btn-primary" id="rename-confirm">Renommer</button>
+        </div>
+    </div>
+</div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="admin-app.js"></script>
+<script src="intro-parser.js"></script>
+<script src="excel-builder.js"></script>
+<script>
+// invokeCmd, toast, confirmModal, navTo, getParam, loadData, saveData, escHtml
+// are globals from admin-app.js — no re-declaration needed
+
+var appData = {};
+var moduleName = getParam('module');
+var pendingRenameKey = null;
+
+// ── Helpers ──────────────────────────────────────────────────
+function getModule() { return appData[moduleName] || {}; }
+
+function quizKeys() {
+    return Object.keys(getModule()).filter(k => k !== '_intro' && k !== '_description');
+}
+
+// ── Render quizzes ───────────────────────────────────────────
+function renderQuizTable() {
+    const tbody = document.getElementById('quiz-tbody');
+    const keys = quizKeys();
+    document.getElementById('quiz-count-badge').textContent = keys.length;
+
+    if (keys.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">
+            <div class="empty-state" style="padding:30px 24px">
+                <div class="empty-state-title">Aucun quiz</div>
+                <div class="empty-state-desc">Ajoutez un quiz ci-dessous.</div>
+            </div></td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = keys.map(key => {
+        const questions = getModule()[key] || [];
+        const mJson = escHtml(JSON.stringify(moduleName));
+        const kJson = escHtml(JSON.stringify(key));
+        return `<tr data-key="${escHtml(key)}">
+            <td>
+                <button class="quiz-name-link"
+                    onclick="navTo('questions.html', {module: ${mJson}, quiz: ${kJson}})">
+                    ${escHtml(key)}
+                </button>
+            </td>
+            <td class="text-center"><span class="badge badge-muted">${questions.length}</span></td>
+            <td>
+                <div class="actions-col">
+                    <button class="btn btn-secondary btn-sm"
+                        onclick="navTo('questions.html', {module: ${mJson}, quiz: ${kJson}})">
+                        Questions
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="testQuiz(${kJson})">
+                        Tester
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="openRename(${kJson})">
+                        Renommer
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteQuiz(${kJson})">
+                        Supprimer
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ── Intro preview ────────────────────────────────────────────
+function renderIntroPreview(html) {
+    const preview = document.getElementById('intro-preview');
+    if (!html || !html.trim()) {
+        preview.innerHTML = '<span class="text-muted">Aucune introduction définie.</span>';
+    } else {
+        preview.innerHTML = html;
+    }
+}
+
+// ── Save module ──────────────────────────────────────────────
+async function saveModule() {
+    const newName = document.getElementById('module-name-input').value.trim();
+    const desc = document.getElementById('module-desc-input').value.trim();
+
+    if (!newName) { toast('Le nom du module est requis.', 'error'); return; }
+
+    // Rename if needed
+    if (newName !== moduleName) {
+        if (appData[newName]) { toast('Un module avec ce nom existe déjà.', 'error'); return; }
+        appData[newName] = appData[moduleName];
+        delete appData[moduleName];
+        moduleName = newName;
+        document.getElementById('bc-module').textContent = moduleName;
+        // Update URL without reload
+        const url = new URL(window.location.href);
+        url.searchParams.set('module', moduleName);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    appData[moduleName]._description = desc;
+    await saveData(appData);
+    toast('Module enregistré.', 'success');
+}
+
+// ── Add quiz ─────────────────────────────────────────────────
+async function addQuiz() {
+    const input = document.getElementById('new-quiz-input');
+    const name = input.value.trim();
+    if (!name) { toast('Entrez un nom de quiz.', 'error'); return; }
+    if (getModule()[name] !== undefined) { toast('Ce quiz existe déjà.', 'error'); return; }
+    appData[moduleName][name] = [];
+    await saveData(appData);
+    input.value = '';
+    renderQuizTable();
+    toast(`Quiz "${name}" créé.`, 'success');
+}
+
+// ── Delete quiz ──────────────────────────────────────────────
+async function deleteQuiz(key) {
+    const ok = await confirmModal(`Supprimer le quiz «&nbsp;${escHtml(key)}&nbsp;» ?`);
+    if (!ok) return;
+    delete appData[moduleName][key];
+    await saveData(appData);
+    renderQuizTable();
+    toast(`Quiz "${key}" supprimé.`, 'success');
+}
+
+// ── Rename quiz ──────────────────────────────────────────────
+function openRename(key) {
+    pendingRenameKey = key;
+    document.getElementById('rename-input').value = key;
+    document.getElementById('rename-modal').classList.remove('hidden');
+    setTimeout(() => document.getElementById('rename-input').select(), 50);
+}
+
+async function confirmRename() {
+    const newKey = document.getElementById('rename-input').value.trim();
+    if (!newKey) { toast('Entrez un nom.', 'error'); return; }
+    if (newKey === pendingRenameKey) { document.getElementById('rename-modal').classList.add('hidden'); return; }
+    if (getModule()[newKey] !== undefined) { toast('Ce nom existe déjà.', 'error'); return; }
+
+    const questions = appData[moduleName][pendingRenameKey];
+    // Preserve insertion order by rebuilding the object
+    const rebuilt = {};
+    Object.entries(appData[moduleName]).forEach(([k, v]) => {
+        if (k === pendingRenameKey) rebuilt[newKey] = questions;
+        else rebuilt[k] = v;
+    });
+    appData[moduleName] = rebuilt;
+    await saveData(appData);
+    document.getElementById('rename-modal').classList.add('hidden');
+    renderQuizTable();
+    toast(`Quiz renommé en "${newKey}".`, 'success');
+    pendingRenameKey = null;
+}
+
+// ── Test quiz (opens student app in system browser) ──────────
+async function testQuiz(key) {
+    try {
+        var jsContent = buildStudentJs(appData);
+        await invokeCmd('write_quizzes_js', { content: jsContent });
+        var fullKey = moduleName + ' - ' + key;
+        var query = '?quiz=' + encodeURIComponent(moduleName)
+                  + '&preselect=' + encodeURIComponent(fullKey);
+        await invokeCmd('open_student_app', { query: query });
+        toast('Application \u00e9tudiant ouverte.', 'info');
+    } catch (e) {
+        toast('Impossible d\'ouvrir l\'application \u00e9tudiant : ' + String(e), 'error');
+    }
+}
+
+// ── Intro HTML editor ─────────────────────────────────────────
+var htmlEditorOpen = false;
+
+function toggleHtmlEditor() {
+    htmlEditorOpen = !htmlEditorOpen;
+    const wrap = document.getElementById('html-editor-wrap');
+    const btn = document.getElementById('btn-toggle-html-editor');
+    if (htmlEditorOpen) {
+        document.getElementById('intro-html-editor').value = appData[moduleName]._intro || '';
+        wrap.style.display = 'block';
+        btn.textContent = 'Masquer l\'éditeur';
+    } else {
+        wrap.style.display = 'none';
+        btn.textContent = 'Modifier le HTML';
+    }
+}
+
+async function applyHtml() {
+    const html = document.getElementById('intro-html-editor').value;
+    appData[moduleName]._intro = html;
+    renderIntroPreview(html);
+    await saveData(appData);
+    toast('Introduction mise à jour.', 'success');
+}
+
+// ── Intro from Excel ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!moduleName) { toast('Module non spécifié.', 'error'); return; }
+
+    appData = await loadData();
+    if (!appData[moduleName]) {
+        appData[moduleName] = { _description: '', _intro: '' };
+    }
+
+    // Populate header + fields
+    document.getElementById('bc-module').textContent = moduleName;
+    document.title = `Quiz Admin — ${moduleName}`;
+    document.getElementById('module-name-input').value = moduleName;
+    document.getElementById('module-desc-input').value = appData[moduleName]._description || '';
+    renderIntroPreview(appData[moduleName]._intro || '');
+    renderQuizTable();
+
+    // Auto-save on blur
+    document.getElementById('module-name-input').addEventListener('blur', saveModule);
+    document.getElementById('module-desc-input').addEventListener('blur', saveModule);
+
+    // Export Excel
+    document.getElementById('btn-export-excel').addEventListener('click', () => {
+        try {
+            const data = buildModuleXlsx(moduleName, appData[moduleName]);
+            downloadXlsx(data, moduleName.replace(/[^a-zA-Z0-9_-]/g, '_') + '.xlsx');
+            toast('Export Excel prêt.', 'success');
+        } catch (e) {
+            toast('Erreur export : ' + e.message, 'error');
+        }
+    });
+
+    // Add quiz
+    document.getElementById('btn-add-quiz').addEventListener('click', addQuiz);
+    document.getElementById('new-quiz-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') addQuiz();
+    });
+
+    // Intro editor
+    document.getElementById('btn-toggle-html-editor').addEventListener('click', toggleHtmlEditor);
+    document.getElementById('btn-apply-html').addEventListener('click', applyHtml);
+    document.getElementById('btn-cancel-html').addEventListener('click', () => {
+        document.getElementById('html-editor-wrap').style.display = 'none';
+        htmlEditorOpen = false;
+        document.getElementById('btn-toggle-html-editor').textContent = 'Modifier le HTML';
+    });
+    document.getElementById('btn-clear-intro').addEventListener('click', async () => {
+        const ok = await confirmModal('Effacer l\'introduction de ce module ?');
+        if (!ok) return;
+        appData[moduleName]._intro = '';
+        renderIntroPreview('');
+        await saveData(appData);
+        toast('Introduction effacée.', 'success');
+    });
+
+    // Intro from Excel file
+    document.getElementById('intro-file-input').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const buffer = await file.arrayBuffer();
+        const html = window.parseIntroXlsx(buffer);
+        if (!html) { toast('Impossible de lire l\'introduction depuis ce fichier.', 'error'); return; }
+
+        // Update module name from filename
+        const nameFromFile = file.name.replace(/\.xlsx$/i, '').trim();
+        document.getElementById('module-name-input').value = nameFromFile;
+
+        // Update description from workbook metadata (Subject or Title property)
+        const meta = window.parseIntroMeta(buffer);
+        if (meta && meta.description) {
+            document.getElementById('module-desc-input').value = meta.description;
+        }
+
+        appData[moduleName]._intro = html;
+        renderIntroPreview(html);
+        await saveData(appData);
+        toast('Introduction importée.', 'success');
+        e.target.value = '';
+    });
+
+    // Import Quiz from Excel modal
+    var importQuizWb = null;
+
+    document.getElementById('btn-import-quiz-excel').addEventListener('click', () => {
+        importQuizWb = null;
+        document.getElementById('import-quiz-filename').textContent = '';
+        document.getElementById('import-quiz-sheet-group').style.display = 'none';
+        document.getElementById('import-quiz-confirm').disabled = true;
+        document.getElementById('import-quiz-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('import-quiz-file').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const buffer = await file.arrayBuffer();
+        importQuizWb = XLSX.read(buffer, { type: 'array' });
+        const sheets = importQuizWb.SheetNames.filter(n => n.toLowerCase() !== 'introduction');
+        const sel = document.getElementById('import-quiz-sheet');
+        sel.innerHTML = sheets.map(n => `<option value="${escHtml(n)}">${escHtml(n)}</option>`).join('');
+        document.getElementById('import-quiz-filename').textContent = file.name;
+        document.getElementById('import-quiz-sheet-group').style.display = sheets.length ? '' : 'none';
+        document.getElementById('import-quiz-confirm').disabled = sheets.length === 0;
+        e.target.value = '';
+    });
+
+    document.getElementById('import-quiz-confirm').addEventListener('click', async () => {
+        const sheetName = document.getElementById('import-quiz-sheet').value;
+        if (!importQuizWb || !sheetName) return;
+        const rows = XLSX.utils.sheet_to_json(importQuizWb.Sheets[sheetName], { defval: '' });
+        const imported = rows.map(row => ({
+            Type: row.Type || row.type || '',
+            Question: row.Question || row.question || '',
+            Options: row.Options || row.options || '',
+            Answer: row.Answer || row.answer || '',
+            FeedbackCorrect: row.FeedbackCorrect || row['Feedback Correct'] || '',
+            FeedbackIncorrect: row.FeedbackIncorrect || row['Feedback Incorrect'] || '',
+        })).filter(q => q.Type && q.Question);
+        appData[moduleName][sheetName] = imported;
+        await saveData(appData);
+        renderQuizTable();
+        document.getElementById('import-quiz-modal').classList.add('hidden');
+        toast(`Quiz "${sheetName}" import\u00e9 \u2014 ${imported.length} question(s).`, 'success');
+    });
+
+    document.getElementById('import-quiz-cancel').addEventListener('click', () => {
+        document.getElementById('import-quiz-modal').classList.add('hidden');
+    });
+
+    // Rename modal
+    document.getElementById('rename-confirm').addEventListener('click', confirmRename);
+    document.getElementById('rename-cancel').addEventListener('click', () => {
+        document.getElementById('rename-modal').classList.add('hidden');
+        pendingRenameKey = null;
+    });
+    document.getElementById('rename-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') confirmRename();
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "githubUser": "your-github-username",
+  "githubRepo": "owner/repo-name",
+  "githubToken": "ghp_xxxxxxxxxxxxxxxxxxxx"
+}

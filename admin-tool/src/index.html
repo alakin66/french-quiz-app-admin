@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin — Modules</title>
+    <link rel="stylesheet" href="admin-app.css">
+    <style>
+        .module-name-link {
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font);
+            font-size: 13px;
+            padding: 0;
+            text-align: left;
+        }
+        .module-name-link:hover { text-decoration: underline; }
+        #import-modal .modal { max-width: 640px; width: 100%; }
+        #publish-modal .modal { max-width: 600px; width: 100%; }
+        .publish-log { margin-top: 12px; }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-header-left">
+            <span class="app-header-title">&#x1F4DA; Quiz Admin</span>
+            <nav class="breadcrumb">
+                <span class="breadcrumb-current">Modules</span>
+            </nav>
+        </div>
+        <div class="app-header-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-export-json" title="Exporter les quizzes en JSON">
+                &#x1F4BE; Exporter Quizzes
+            </button>
+            <button class="btn btn-ghost btn-sm" id="btn-import-json" title="Importer des quizzes depuis JSON">
+                &#x1F4C2; Importer Quizzes
+            </button>
+            <button class="btn btn-ghost btn-sm" id="btn-publish" title="Publier sur GitHub">
+                &#x1F680; Publier
+            </button>
+            <a class="btn btn-ghost btn-sm" href="settings.html" title="Paramètres">
+                &#x2699;&#xFE0F; Paramètres
+            </a>
+            <button class="btn btn-ghost btn-sm" id="btn-quit" title="Quitter">
+                &#x2715; Quitter
+            </button>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body">
+
+        <!-- Page toolbar -->
+        <div class="page-toolbar">
+            <div class="page-toolbar-left">
+                <h1 class="card-title">Liste des modules</h1>
+            </div>
+            <div class="page-toolbar-right">
+                <button class="btn btn-secondary" id="btn-import-excel">&#x2B06; Importer Excel</button>
+                <button class="btn btn-secondary" id="btn-new-module">+ Nouveau module</button>
+                <button class="btn btn-primary" id="btn-test-app">&#x1F50D; Tester l'app</button>
+            </div>
+        </div>
+
+        <!-- Module table -->
+        <div class="card">
+            <div class="card-body" style="padding:0">
+                <table class="data-table" id="module-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du module</th>
+                            <th>Description</th>
+                            <th class="text-center">Nb. de quiz</th>
+                            <th style="text-align:right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="module-tbody">
+                        <tr id="empty-row">
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">&#x1F4DA;</div>
+                                    <div class="empty-state-title">Aucun module</div>
+                                    <div class="empty-state-desc">Importez un fichier Excel ou créez un nouveau module.</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Import Excel Modal ───────────────────────────────────── -->
+<div class="modal-overlay hidden" id="import-modal">
+    <div class="modal modal-lg">
+        <div class="modal-title">Importer depuis Excel</div>
+        <div class="modal-body">
+            <div class="drag-drop-zone" id="drop-zone">
+                <div class="drag-drop-icon">&#x1F4C4;</div>
+                <div class="drag-drop-label">Glissez-déposez des fichiers .xlsx ici</div>
+                <div class="drag-drop-hint">ou cliquez pour sélectionner</div>
+            </div>
+            <div class="log-window mt-12" id="import-log">En attente de fichiers...</div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" id="import-close">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Publish Modal ────────────────────────────────────────── -->
+<div class="modal-overlay hidden" id="publish-modal">
+    <div class="modal">
+        <div class="modal-title">&#x1F680; Publier les quiz</div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="commit-msg">Message de commit</label>
+                <input type="text" id="commit-msg" class="form-control"
+                    value="chore: update quizzes.js via Admin app">
+            </div>
+            <div class="log-window publish-log" id="publish-log">Prêt à publier.</div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" id="publish-close">Annuler</button>
+            <button class="btn btn-success" id="publish-confirm">
+                <span id="publish-spinner" class="spinner hidden"></span>
+                Publier
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SheetJS (local bundle) -->
+<script src="xlsx.full.min.js"></script>
+<script src="admin-app.js"></script>
+<script src="intro-parser.js"></script>
+<script src="excel-builder.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

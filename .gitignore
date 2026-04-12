@@ -1,1 +1,8 @@
 .DS_Store
+node_modules/
+admin-tool/settings.json
+admin-tool/src-tauri/target/
+admin-tool/src-tauri/gen/
+quizzes/
+Excel-files/
+scripts/
