@@ -536,5 +536,541 @@ window.quizzesData = {
         "FeedbackIncorrect": "Il manque 'à'."
       }
     ]
+  },
+  "Verbes Transitifs": {
+    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n</colgroup>\n<tbody>\n  <tr class=\"title-row\"><th>Les Verbes Transitifs</th><td colspan=\"2\">Les Verbes Transitifs en Français</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Qu&apos;est-ce qu&apos;un verbe transitif ?</th><td colspan=\"2\">Un verbe transitif est un verbe qui a besoin d&apos;un complément d&apos;objet pour compléter son sens.<br/>On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td></td><td>Construction</td><td>Exemple</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Direct (COD)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + complément direct</td><td>Le verbe se construit SANS préposition avant son complément.</td><td>Je mange une pomme. / Il lit un livre.</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Indirect (COI)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + à/de + complément</td><td>Le verbe se construit AVEC une préposition (à, de) avant son complément.</td><td>Je parle à Marc. / Il se souvient de toi.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Pronoms de remplacement</td></tr>\n  <tr class=\"explanation\"><td>Pour le COD</td><td>Utiliser : le, la, l&apos;, les</td><td>Je mange la pomme → Je la mange.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec &apos;à&apos; (personne)</td><td>Utiliser : lui, leur</td><td>Je parle à Marc → Je lui parle.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec &apos;à&apos; (chose)</td><td>Utiliser : y</td><td>Je pense à ce projet → J&apos;y pense.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec &apos;de&apos;</td><td>Utiliser : en</td><td>Il parle de son voyage → Il en parle.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Posez la question &apos;Qui ?&apos; ou &apos;Quoi ?&apos; directement après le verbe → COD (sans préposition). Si vous avez besoin de &apos;à qui ?&apos; ou &apos;de quoi ?&apos; → COI (avec préposition).</td></tr>\n</tbody>\n</table>",
+    "Verbes Transitifs - Transitifs Directs (COD)": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
+        "Options": "manger, parler, ressembler, sourire",
+        "Answer": "manger",
+        "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
+        "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme)."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Nous ___ la télévision tous les soirs.",
+        "Options": "",
+        "Answer": "regardons",
+        "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
+        "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
+        "Options": "",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
+        "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
+        "Options": "acheter, vendre, répondre, donner",
+        "Answer": "répondre",
+        "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
+        "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
+        "Options": "COD, COI, Sujet",
+        "Answer": "COD",
+        "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
+        "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Ils ont ___ leur maison l'année dernière.",
+        "Options": "",
+        "Answer": "vendu",
+        "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
+        "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
+        "Options": "Je lui mange, Je la mange, Je y mange",
+        "Answer": "Je la mange",
+        "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
+        "FeedbackIncorrect": "Faux, c'est 'la'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
+        "Options": "",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
+        "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Choisis la bonne phrase :",
+        "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
+        "Answer": "J'écoute la radio",
+        "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
+        "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu ___ ton temps avec ces bêtises.",
+        "Options": "",
+        "Answer": "perds",
+        "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
+        "FeedbackIncorrect": "C'est le verbe 'perdre'."
+      }
+    ],
+    "Verbes Transitifs - Transitifs Indirects (COI)": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Lequel de ces verbes est transitif indirect (se construit avec une préposition 'à' ou 'de') ?",
+        "Options": "parler, voir, écouter",
+        "Answer": "parler",
+        "FeedbackCorrect": "Correct ! On 'parle À quelqu'un' ou 'DE quelque chose'.",
+        "FeedbackIncorrect": "Faux. Voir et écouter sont directs. Parler nécessite une préposition."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Je téléphone ___ mon frère.",
+        "Options": "",
+        "Answer": "à",
+        "FeedbackCorrect": "Très bien ! Téléphoner À quelqu'un.",
+        "FeedbackIncorrect": "Il manque la préposition 'à'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Un verbe transitif indirect a besoin d'une préposition pour introduire son objet.",
+        "Options": "",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "C'est exact, contrairement aux verbes transitifs directs.",
+        "FeedbackIncorrect": "C'est faux, la préposition est obligatoire."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Choisissez le verbe qui N'EST PAS transitif indirect avec 'à' :",
+        "Options": "ressembler à, penser à, oublier, plaire à",
+        "Answer": "oublier",
+        "FeedbackCorrect": "Correct ! 'Oublier' est transitif direct (oublier quelque chose/quelqu'un).",
+        "FeedbackIncorrect": "Incorrect. Oublier est direct."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Quel pronom remplace le COI dans : 'Je parle à Marie' ?",
+        "Options": "Je la parle, Je lui parle, Je le parle",
+        "Answer": "Je lui parle",
+        "FeedbackCorrect": "Bravo ! 'lui' remplace un nom de personne introduit par 'à'.",
+        "FeedbackIncorrect": "Faux, c'est 'lui'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Il se souvient ___ cet événement.",
+        "Options": "",
+        "Answer": "de",
+        "FeedbackCorrect": "Correct ! Se souvenir DE quelque chose.",
+        "FeedbackIncorrect": "Se souvenir prend toujours la préposition 'de'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Quel pronom remplace le COI introduit par 'de' : 'Il parle de son voyage' ?",
+        "Options": "Il lui parle, Il en parle, Il y parle",
+        "Answer": "Il en parle",
+        "FeedbackCorrect": "Parfait ! 'en' remplace un groupe nominal introduit par 'de'.",
+        "FeedbackIncorrect": "Faux, c'est 'en'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "On peut utiliser le pronom 'lui' pour remplacer des objets inanimés introduits par 'à'.",
+        "Options": "",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! Pour les objets inanimés on utilise 'y' (Je pense à la maison -> j'y pense).",
+        "FeedbackIncorrect": "Faux. On utilise 'y' pour les objets, 'lui' est pour les personnes isolées."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Choisis la bonne phrase :",
+        "Options": "Je joue le piano, Je joue du piano",
+        "Answer": "Je joue du piano",
+        "FeedbackCorrect": "Bravo ! Jouer d'un instrument = COI avec 'de'.",
+        "FeedbackIncorrect": "Faux. Jouer d'un instrument prend 'de'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Nous nous intéressons ___ ce projet.",
+        "Options": "",
+        "Answer": "à",
+        "FeedbackCorrect": "Correct, s'intéresser 'à' quelque chose.",
+        "FeedbackIncorrect": "Il manque 'à'."
+      }
+    ]
+  },
+  "Pronoms_Quiz_test": {
+    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n</colgroup>\n<tbody>\n  <tr class=\"title-row\"><th>Sujet</th><td colspan=\"2\">Les Pronoms Personnels en Français – COD, COI, Y, EN</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Qu&apos;est-ce qu&apos;un pronom personnel complément ?</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Un pronom personnel complément remplace un groupe nominal déjà mentionné pour éviter la répétition.</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Il se place généralement avant le verbe conjugué (ou l&apos;auxiliaire).</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td>Les pronoms COD et COI</td><td>Explication</td><td>Exemple</td></tr>\n  <tr class=\"explanation\"><td>le / la / l&apos; / les</td><td>Remplace le Complément d&apos;Objet Direct (COD). Répond à : quoi ? qui ?</td><td>Tu lis ce livre ? → Oui, je le lis.</td></tr>\n  <tr class=\"explanation\"><td>lui</td><td>Remplace le COI singulier (à + personne). Répond à : à qui ?</td><td>Tu parles à Marie ? → Je lui parle.</td></tr>\n  <tr class=\"explanation\"><td>leur</td><td>Remplace le COI pluriel (à + personnes). Répond à : à qui ?</td><td>Tu écris à tes amis ? → Je leur écris.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td>Les pronoms adverbiaux</td><td>Explication</td><td>Exemple</td></tr>\n  <tr class=\"explanation\"><td>y</td><td>Remplace un lieu ou un complément introduit par &apos;à&apos; (chose). Répond à : où ? à quoi ?</td><td>Tu vas à Paris ? → Oui, j&apos;y vais.</td></tr>\n  <tr class=\"explanation\"><td>en</td><td>Remplace un complément introduit par &apos;de&apos; ou une expression de quantité. Répond à : de quoi ? combien ?</td><td>Tu veux du café ? → Oui, j&apos;en veux.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Ordre des pronoms</th><td colspan=\"2\">me/te/se/nous/vous → le/la/les → lui/leur → y → en</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Identifiez d&apos;abord la fonction du groupe nominal remplacé (COD ? COI ? lieu ? complément avec &apos;de&apos; ?) pour choisir le bon pronom !</td></tr>\n</tbody>\n</table>",
+    "Pronoms_Quiz_test - Pronoms COD & COI - A2": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu vois Marie tous les jours ? → Oui, je ___ vois tous les jours.",
+        "Options": "le, la, les, lui",
+        "Answer": "la",
+        "FeedbackCorrect": "Bravo ! Marie est féminin singulier → COD = la.",
+        "FeedbackIncorrect": "Faux. Marie (féminin singulier) est COD du verbe voir → 'la'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Il mange les pommes. → Il ___ mange.",
+        "Options": "",
+        "Answer": "les",
+        "FeedbackCorrect": "Correct ! 'les pommes' (pluriel) = COD → les.",
+        "FeedbackIncorrect": "Non. 'Les pommes' est un COD pluriel → pronom 'les'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le pronom COD 'le' peut remplacer un nom féminin singulier.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! Pour féminin singulier on utilise 'la', pas 'le'.",
+        "FeedbackIncorrect": "Faux ! 'le' est masculin singulier. Le féminin singulier → 'la'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu parles à ton professeur ? → Oui, je ___ parle souvent.",
+        "Options": "le, la, lui, y",
+        "Answer": "lui",
+        "FeedbackCorrect": "Parfait ! 'parler à + personne' → COI = lui.",
+        "FeedbackIncorrect": "Faux. 'Parler à' + personne → COI. Masculin ou féminin singulier = 'lui'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu téléphones à tes parents ? → Oui, je ___ téléphone.",
+        "Options": "",
+        "Answer": "leur",
+        "FeedbackCorrect": "Bravo ! 'à tes parents' (pluriel, personnes) → COI = leur.",
+        "FeedbackIncorrect": "Non. 'Téléphoner à' + personnes (pluriel) → 'leur'."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Quel pronom n'est PAS un pronom COD ?",
+        "Options": "le, la, les, lui",
+        "Answer": "lui",
+        "FeedbackCorrect": "Correct ! 'lui' est un pronom COI (à + personne).",
+        "FeedbackIncorrect": "Raté ! 'lui' est un pronom COI, pas COD."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "J'aime beaucoup ce film. → Je ___ aime beaucoup.",
+        "Options": "le, la, lui, leur",
+        "Answer": "le",
+        "FeedbackCorrect": "Correct ! 'ce film' (masculin singulier, COD) → le.",
+        "FeedbackIncorrect": "Faux. 'Ce film' = masculin singulier, COD → 'le'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu écris à ta sœur ? → Oui, je ___ écris une lettre.",
+        "Options": "",
+        "Answer": "lui",
+        "FeedbackCorrect": "Bien ! 'écrire à + personne singulière' → COI = lui.",
+        "FeedbackIncorrect": "Incorrect. 'Écrire à + personne singulière' → 'lui'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le pronom COI 'leur' s'utilise pour des personnes au pluriel.",
+        "Options": "Vrai, Faux",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "Exact ! Ex. : Je leur envoie un message (à mes amis).",
+        "FeedbackIncorrect": "C'est vrai ! 'leur' = COI pluriel (personnes)."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu regardes la télévision ? → Non, je ne ___ regarde pas.",
+        "Options": "le, la, les, lui",
+        "Answer": "la",
+        "FeedbackCorrect": "Très bien ! 'la télévision' (féminin, COD) → la.",
+        "FeedbackIncorrect": "Faux. 'La télévision' est féminin singulier → COD 'la'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Nous invitons nos voisins. → Nous ___ invitons.",
+        "Options": "",
+        "Answer": "les",
+        "FeedbackCorrect": "Correct ! 'nos voisins' = COD pluriel → les.",
+        "FeedbackIncorrect": "Non. 'Nos voisins' est un COD pluriel → 'les'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Elle répond à ses collègues. → Elle ___ répond rapidement.",
+        "Options": "les, leur, lui, y",
+        "Answer": "leur",
+        "FeedbackCorrect": "Bravo ! 'répondre à + personnes (pluriel)' → leur.",
+        "FeedbackIncorrect": "Faux. 'Répondre à' + personnes au pluriel → 'leur'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "On peut utiliser 'lui' et 'leur' pour remplacer des objets inanimés.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! 'lui/leur' ne remplacent que des personnes en COI.",
+        "FeedbackIncorrect": "Faux ! Pour des choses on utilise 'y' (à + chose) ou 'en' (de + chose)."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu connais ce chanteur ? → Oui, je ___ connais bien.",
+        "Options": "",
+        "Answer": "le",
+        "FeedbackCorrect": "Bien joué ! 'ce chanteur' (masculin, COD) → le.",
+        "FeedbackIncorrect": "Non. 'Ce chanteur' est masculin singulier → COD 'le'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu donnes un cadeau à Marie et à Luc ? → Oui, je ___ donne un cadeau.",
+        "Options": "lui, leur, les, y",
+        "Answer": "leur",
+        "FeedbackCorrect": "Parfait ! Deux personnes → COI pluriel = leur.",
+        "FeedbackIncorrect": "Faux. Marie ET Luc = plusieurs personnes → 'leur'."
+      }
+    ],
+    "Pronoms_Quiz_test - Pronoms Y & EN - B1": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu vas à la salle de sport ? → Oui, j'___ vais trois fois par semaine.",
+        "Options": "y, en, le, lui",
+        "Answer": "y",
+        "FeedbackCorrect": "Correct ! Y remplace 'à + lieu' (la salle de sport).",
+        "FeedbackIncorrect": "Faux. 'À la salle de sport' est un lieu → pronom Y."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu veux du pain ? → Oui, j'___ veux, merci.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Bravo ! 'du pain' = quantité indéfinie → EN.",
+        "FeedbackIncorrect": "Non. 'Du pain' est une quantité → pronom EN."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le pronom Y peut remplacer une personne introduite par 'à'.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! Y ne remplace PAS une personne → on utilise lui/leur.",
+        "FeedbackIncorrect": "Faux ! Pour une personne (à + personne) on dit 'lui' ou 'leur', pas 'y'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Il pense à ses vacances. → Il ___ pense tout le temps.",
+        "Options": "y, en, lui, les",
+        "Answer": "y",
+        "FeedbackCorrect": "Bien ! 'Penser à + chose' → Y.",
+        "FeedbackIncorrect": "Faux. 'Penser à' + chose (vacances) → Y."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Vous avez des enfants ? → Oui, nous ___ avons deux.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Parfait ! 'des enfants' avec quantité → EN.",
+        "FeedbackIncorrect": "Non. La quantité (deux) indique qu'il faut EN."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Quelle phrase utilise Y pour remplacer un lieu ?",
+        "Options": "J'y pense souvent. / Il y mange. / Nous y habitons. / Elle y répond.",
+        "Answer": "Il y mange. / Nous y habitons.",
+        "FeedbackCorrect": "Exact ! Y remplace un lieu dans 'Il y mange' (au restaurant) et 'Nous y habitons'.",
+        "FeedbackIncorrect": "Regardez bien : Y remplace un lieu (à + endroit) ou une chose (à + chose)."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu reviens de Paris ? → Oui, j'___ reviens ce soir.",
+        "Options": "y, en, le, là",
+        "Answer": "en",
+        "FeedbackCorrect": "Très bien ! 'Revenir de + lieu' → EN.",
+        "FeedbackIncorrect": "Faux. 'Revenir de + lieu' → EN (pas Y qui suit 'à')."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Elle a besoin de repos. → Elle ___ a besoin.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Correct ! 'Avoir besoin de + chose' → EN.",
+        "FeedbackIncorrect": "Non. 'Avoir besoin de' + chose → EN."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Dans 'Il en parle', EN remplace un complément introduit par 'de'.",
+        "Options": "Vrai, Faux",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "Exact ! 'Parler de quelque chose' → EN.",
+        "FeedbackIncorrect": "C'est vrai ! 'Parler de' → EN remplace 'de + chose'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu t'intéresses à la musique ? → Oui, je m'___ intéresse beaucoup.",
+        "Options": "y, en, lui, la",
+        "Answer": "y",
+        "FeedbackCorrect": "Bravo ! 'S'intéresser à + chose' → Y.",
+        "FeedbackIncorrect": "Faux. 'S'intéresser à + chose' → Y."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu as acheté des tomates ? → J'___ ai acheté un kilo.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Bien ! 'des tomates' + quantité (un kilo) → EN.",
+        "FeedbackIncorrect": "Non. 'Des tomates' avec une quantité → EN."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Vous habitez à Lyon ? → Non, nous n'___ habitons plus.",
+        "Options": "y, en, là, lui",
+        "Answer": "y",
+        "FeedbackCorrect": "Correct ! 'Habiter à + ville' → Y.",
+        "FeedbackIncorrect": "Faux. 'Habiter à Lyon' (lieu) → Y."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "EN peut remplacer une quantité comme 'beaucoup de' ou 'plusieurs'.",
+        "Options": "Vrai, Faux",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "Exact ! Ex. : Tu lis beaucoup de livres ? → Oui, j'en lis beaucoup.",
+        "FeedbackIncorrect": "C'est vrai ! EN remplace 'de + nom' et les expressions de quantité."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Il rêve de voyager au Japon. → Il ___ rêve depuis longtemps.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Excellent ! 'Rêver de + chose' → EN.",
+        "FeedbackIncorrect": "Non. 'Rêver de + chose' → EN."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Tu vas au marché ? → Non, je n'___ vais pas aujourd'hui.",
+        "Options": "y, en, le, là",
+        "Answer": "y",
+        "FeedbackCorrect": "Parfait ! 'Au marché' est un lieu → Y.",
+        "FeedbackIncorrect": "Faux. 'Au marché' est un lieu → pronom Y."
+      }
+    ],
+    "Pronoms_Quiz_test - Pronoms Mixte & Ordre - B2": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Je vais envoyer ce rapport à mes collègues. → Je vais ___ ___ envoyer.",
+        "Options": "le leur, leur le, les leur, le y",
+        "Answer": "le leur",
+        "FeedbackCorrect": "Bravo ! COD 'le' vient avant COI 'leur'. Ordre : COD → COI.",
+        "FeedbackIncorrect": "Faux. COD (le) se place avant COI (leur) : 'je vais le leur envoyer'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu m'as rendu les clés ? → Oui, je ___ ___ ai rendues.",
+        "Options": "",
+        "Answer": "te les",
+        "FeedbackCorrect": "Parfait ! Ordre : me/te avant le/la/les. 'je te les ai rendues'.",
+        "FeedbackIncorrect": "Ordre correct : pronom personnel (te) → COD (les). Réponse : te les."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Dans 'Je les lui donne', LUI est un pronom COD.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! 'lui' est COI. 'les' est le COD.",
+        "FeedbackIncorrect": "Faux ! 'lui' = COI. Dans cet ordre, COD (les) précède COI (lui)."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Elle a parlé de ce projet à son chef. → Elle ___ ___ a parlé.",
+        "Options": "lui en, en lui, y lui, le lui",
+        "Answer": "lui en",
+        "FeedbackCorrect": "Excellent ! COI 'lui' (à son chef) + EN (de ce projet). Ordre : lui → en.",
+        "FeedbackIncorrect": "Faux. 'Parler de' → EN ; 'à son chef' → lui. Ordre : lui en."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Il m'a conseillé d'aller à cette conférence. → Il m'a conseillé d'___ aller.",
+        "Options": "",
+        "Answer": "y",
+        "FeedbackCorrect": "Correct ! 'Aller à + lieu' → Y.",
+        "FeedbackIncorrect": "Non. 'À cette conférence' (lieu) → Y."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Donnez ces formulaires aux étudiants ! → ___ ___ donnez ! (impératif affirmatif)",
+        "Options": "Donnez-les-leur, Donnez-leur-les, Les donnez-leur, Les leur donnez",
+        "Answer": "Donnez-les-leur",
+        "FeedbackCorrect": "Bravo ! À l'impératif affirmatif : verbe + COD + COI avec tirets.",
+        "FeedbackIncorrect": "Faux. Impératif affirmatif : verbe-COD-COI → 'Donnez-les-leur'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "À l'impératif négatif, les pronoms se placent après le verbe.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact ! À l'impératif négatif, les pronoms restent avant le verbe : Ne les lui donne pas.",
+        "FeedbackIncorrect": "Faux ! Impératif négatif → pronoms AVANT le verbe. Ex. : Ne les lui donne pas."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Il se souvient de son enfance. → Il ___ souvient souvent.",
+        "Options": "",
+        "Answer": "s'en",
+        "FeedbackCorrect": "Parfait ! 'Se souvenir de + chose' → s'en (pronom réfléchi + EN).",
+        "FeedbackIncorrect": "Non. 'Se souvenir de' + chose → 's'en' (s' + en)."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Le directeur s'oppose à cette décision. → Il ___ oppose fermement.",
+        "Options": "s'y, s'en, lui, y",
+        "Answer": "s'y",
+        "FeedbackCorrect": "Exact ! 'S'opposer à + chose' → s'y (pronom réfléchi + Y).",
+        "FeedbackIncorrect": "Faux. 'S'opposer à + chose' → s'y."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Je me doute de quelque chose. → Je m'___ doute.",
+        "Options": "",
+        "Answer": "en",
+        "FeedbackCorrect": "Bravo ! 'Se douter de + chose' → EN.",
+        "FeedbackIncorrect": "Non. 'Se douter de' → EN."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Ne donne pas ces médicaments aux enfants ! → Ne ___ ___ donne pas ! (impératif négatif)",
+        "Options": "les leur, leur les, les y, y les",
+        "Answer": "les leur",
+        "FeedbackCorrect": "Parfait ! Impératif négatif : ne + COD + COI + verbe + pas.",
+        "FeedbackIncorrect": "Faux. Négatif : ne les leur donne pas (même ordre qu'à l'indicatif)."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Dans 'Il y en a beaucoup', Y et EN peuvent coexister dans la même phrase.",
+        "Options": "Vrai, Faux",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "Exact ! 'Il y en a' est une expression idiomatique très courante.",
+        "FeedbackIncorrect": "C'est vrai ! 'Il y en a' est une combinaison figée (y + en devant avoir)."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Dis-moi la vérité ! → Dis-___ ! (impératif affirmatif, 'à moi')",
+        "Options": "",
+        "Answer": "la-moi",
+        "FeedbackCorrect": "Bravo ! Impératif affirmatif : verbe + COD (la) + COI (moi).",
+        "FeedbackIncorrect": "Non. Impératif affirmatif : verbe-COD-COI. COD = la, COI = moi → 'Dis-la-moi'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Le directeur a présenté ce plan à l'équipe. → Il ___ ___ a présenté.",
+        "Options": "le lui, lui le, le y, en lui",
+        "Answer": "le lui",
+        "FeedbackCorrect": "Correct ! COD (le) avant COI (lui). Ordre : le lui.",
+        "FeedbackIncorrect": "Faux. L'ordre est toujours COD avant COI : 'le lui'."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Quelle phrase contient une ERREUR dans l'ordre des pronoms ?",
+        "Options": "Je le lui ai dit. / Je lui le dirai. / Je te les envoie. / Je leur en parle.",
+        "Answer": "Je lui le dirai.",
+        "FeedbackCorrect": "Bien vu ! L'ordre correct est COD avant COI → 'Je le lui dirai'.",
+        "FeedbackIncorrect": "Faux ! 'Je lui le dirai' est incorrect. L'ordre doit être : COD (le) avant COI (lui) → 'Je le lui dirai'."
+      }
+    ]
   }
 };
