@@ -170,12 +170,10 @@ function setupDropZone() {
     const logEl = document.getElementById('import-log');
 
     zone.addEventListener('click', async () => {
-        const paths = await invokeCmd('open_excel_dialog');
-        if (!paths || paths.length === 0) return;
+        const files = await invokeCmd('open_and_read_excel_files');
+        if (!files || files.length === 0) return;
         logEl.textContent = '';
-        for (const p of paths) {
-            const fileName = p.split('/').pop();
-            const bytes = await invokeCmd('read_binary_file', { path: p });
+        for (const [fileName, bytes] of files) {
             await processExcelBuffer(new Uint8Array(bytes).buffer, fileName, logEl);
         }
     });

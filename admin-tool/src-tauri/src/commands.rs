@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use serde::{Deserialize, Serialize};
-use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_dialog::{DialogExt, FilePath};
 
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
@@ -14,12 +14,37 @@ pub struct Settings {
     pub github_token: String,
 }
 
+fn is_repo_root(dir: &Path) -> bool {
+    (dir.join("admin-tool").exists() && dir.join("data").exists())
+        || dir.join(".git").exists()
+        || (dir.join("index.html").exists() && dir.join("data").exists())
+}
+
 fn repo_root() -> Result<PathBuf, String> {
-    // Walk up from current exe location to find a dir that contains admin-tool/
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
+    eprintln!("[repo_root] exe = {:?}", exe);
+
+    // Walk up from exe — .app bundles are deep inside target/
     let mut dir = exe.as_path();
-    for _ in 0..8 {
-        if dir.join("admin-tool").exists() || dir.join("data").exists() {
+    for _ in 0..20 {
+        if let Some(p) = dir.parent() {
+            dir = p;
+            if is_repo_root(dir) {
+                eprintln!("[repo_root] found via exe walk: {:?}", dir);
+                return Ok(dir.to_path_buf());
+            }
+        } else {
+            break;
+        }
+    }
+
+    // Fallback: walk up from current working directory
+    let cwd = std::env::current_dir().map_err(|e| e.to_string())?;
+    eprintln!("[repo_root] cwd = {:?}", cwd);
+    let mut dir = cwd.as_path();
+    for _ in 0..10 {
+        if is_repo_root(dir) {
+            eprintln!("[repo_root] found via cwd walk: {:?}", dir);
             return Ok(dir.to_path_buf());
         }
         match dir.parent() {
@@ -27,8 +52,9 @@ fn repo_root() -> Result<PathBuf, String> {
             None => break,
         }
     }
-    // Fallback: current working directory
-    std::env::current_dir().map_err(|e| e.to_string())
+
+    eprintln!("[repo_root] not found, falling back to cwd: {:?}", cwd);
+    Ok(cwd)
 }
 
 fn settings_path(root: &Path) -> PathBuf {
@@ -39,6 +65,7 @@ fn settings_path(root: &Path) -> PathBuf {
 pub fn read_data() -> Result<String, String> {
     let root = repo_root()?;
     let path = root.join("data").join("quizzes.json");
+    eprintln!("[read_data] path = {:?}, exists = {}", path, path.exists());
     if !path.exists() {
         return Ok("{}".to_string());
     }
@@ -149,6 +176,33 @@ pub fn quit_app(app_handle: tauri::AppHandle) {
 #[tauri::command]
 pub fn debug_log(msg: String) {
     eprintln!("[JS] {msg}"); // v2
+}
+
+#[tauri::command]
+pub async fn open_and_read_excel_files(app: tauri::AppHandle) -> Result<Vec<(String, Vec<u8>)>, String> {
+    let (tx, rx) = tokio::sync::oneshot::channel();
+    app.dialog()
+        .file()
+        .add_filter("Excel", &["xlsx"])
+        .pick_files(move |files| {
+            let result: Vec<(String, Vec<u8>)> = files
+                .unwrap_or_default()
+                .into_iter()
+                .filter_map(|fp| {
+                    let path = match fp {
+                        FilePath::Path(p) => p,
+                        FilePath::Url(u) => u.to_file_path().ok()?,
+                    };
+                    let name = path.file_name()?.to_str()?.to_string();
+                    let bytes = fs::read(&path)
+                        .map_err(|e| eprintln!("[open_and_read_excel_files] read {:?}: {}", path, e))
+                        .ok()?;
+                    Some((name, bytes))
+                })
+                .collect();
+            let _ = tx.send(result);
+        });
+    rx.await.map_err(|e| e.to_string())
 }
 
 #[tauri::command]

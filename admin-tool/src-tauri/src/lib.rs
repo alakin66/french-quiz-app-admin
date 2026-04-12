@@ -15,6 +15,7 @@ pub fn run() {
             commands::write_settings,
             commands::quit_app,
             commands::debug_log,
+            commands::open_and_read_excel_files,
             commands::open_excel_dialog,
             commands::open_json_dialog,
             commands::save_json_dialog,
