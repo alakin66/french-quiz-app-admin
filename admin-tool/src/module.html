@@ -40,7 +40,7 @@
             </nav>
         </div>
         <div class="app-header-actions">
-            <button class="btn btn-ghost btn-sm" id="btn-export-module-json">&#x1F4E4; Exporter Module</button>
+            <button class="btn btn-ghost btn-sm" id="btn-export-module-json">Exporter Module</button>
             <a class="btn btn-ghost btn-sm" id="btn-header-back" href="index.html">&#x2190; Retour</a>
         </div>
     </header>
@@ -66,7 +66,7 @@
                 <span class="card-title">&#x1F4CB; Introduction</span>
                 <div class="intro-actions">
                     <button class="btn btn-primary btn-sm" id="btn-edit-intro">Éditer</button>
-                    <button class="btn btn-secondary btn-sm" id="btn-import-intro-json">&#x1F4C2; Importer Introduction</button>
+                    <button class="btn btn-secondary btn-sm" id="btn-import-intro-json">Importer Introduction</button>
                     <button class="btn btn-secondary btn-sm" id="btn-clear-intro">Effacer</button>
                 </div>
             </div>
@@ -97,13 +97,15 @@
             <div class="card-header">
                 <span class="card-title">&#x1F4DD; Quiz</span>
                 <span id="quiz-count-badge" class="badge badge-primary">0</span>
-                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-json">&#x1F4C2; Importer Quiz</button>
+                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-json">Importer Quiz</button>
+                <button class="btn btn-secondary btn-sm" id="btn-generate-quiz">&#x2728; Génère Quiz</button>
             </div>
             <div class="card-body" style="padding:0">
                 <table class="data-table" id="quiz-table">
                     <thead>
                         <tr>
                             <th>Nom du quiz</th>
+                            <th>Description</th>
                             <th class="text-center">Questions</th>
                             <th style="text-align:right">Actions</th>
                         </tr>
@@ -152,7 +154,7 @@ function getModule() { return appData[moduleName] || {}; }
 
 function quizKeys() {
     return Object.keys(getModule()).filter(function(k) {
-        return k !== '_intro' && k !== '_description';
+        return k !== '_intro' && k !== '_description' && k !== '_quizDescriptions';
     });
 }
 
@@ -163,7 +165,7 @@ function renderQuizTable() {
     document.getElementById('quiz-count-badge').textContent = keys.length;
 
     if (keys.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3">' +
+        tbody.innerHTML = '<tr><td colspan="4">' +
             '<div class="empty-state" style="padding:30px 24px">' +
             '<div class="empty-state-title">Aucun quiz</div>' +
             '<div class="empty-state-desc">Ajoutez un quiz ci-dessous.</div>' +
@@ -173,6 +175,7 @@ function renderQuizTable() {
 
     tbody.innerHTML = keys.map(function(key) {
         var questions = getModule()[key] || [];
+        var desc = ((getModule()._quizDescriptions || {})[key]) || '';
         var mJson = escHtml(JSON.stringify(moduleName));
         var kJson = escHtml(JSON.stringify(key));
         return '<tr data-key="' + escHtml(key) + '">' +
@@ -180,6 +183,7 @@ function renderQuizTable() {
             '<button class="quiz-name-link"' +
             ' onclick="navTo(\'questions.html\', {module: ' + mJson + ', quiz: ' + kJson + '})">' +
             escHtml(key) + '</button></td>' +
+            '<td class="text-muted" style="font-size:12px;max-width:260px">' + escHtml(desc) + '</td>' +
             '<td class="text-center"><span class="badge badge-muted">' + questions.length + '</span></td>' +
             '<td><div class="actions-col">' +
             '<button class="btn btn-secondary btn-sm"' +
@@ -244,6 +248,10 @@ async function deleteQuiz(key) {
     var ok = await confirmModal('Supprimer le quiz \u00ab\u00a0' + escHtml(key) + '\u00a0\u00bb\u00a0?');
     if (!ok) return;
     delete appData[moduleName][key];
+    var descs = appData[moduleName]._quizDescriptions;
+    if (descs && descs[key] !== undefined) {
+        delete descs[key];
+    }
     await saveData(appData);
     renderQuizTable();
     toast('Quiz "' + key + '" supprim\u00e9.', 'success');
@@ -270,6 +278,11 @@ async function confirmRename() {
         else rebuilt[k] = v;
     });
     appData[moduleName] = rebuilt;
+    var descs = appData[moduleName]._quizDescriptions;
+    if (descs && descs[pendingRenameKey] !== undefined) {
+        descs[newKey] = descs[pendingRenameKey];
+        delete descs[pendingRenameKey];
+    }
     await saveData(appData);
     document.getElementById('rename-modal').classList.add('hidden');
     renderQuizTable();
@@ -712,7 +725,7 @@ async function importQuizFromJson() {
     if (!srcModule) return;
 
     var quizzes = Object.keys(incoming[srcModule] || {}).filter(function(k) {
-        return k !== '_intro' && k !== '_description';
+        return k !== '_intro' && k !== '_description' && k !== '_quizDescriptions';
     });
     if (quizzes.length === 0) { toast('Aucun quiz dans ce module.', 'error'); return; }
 
@@ -763,6 +776,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('btn-export-module-json').addEventListener('click', exportModuleJson);
     document.getElementById('btn-import-intro-json').addEventListener('click', importIntroFromJson);
     document.getElementById('btn-import-quiz-json').addEventListener('click', importQuizFromJson);
+    document.getElementById('btn-generate-quiz').addEventListener('click', function() {
+        navTo('generate-quiz.html', { module: moduleName });
+    });
 
     document.getElementById('btn-add-quiz').addEventListener('click', addQuiz);
     document.getElementById('new-quiz-input').addEventListener('keydown', function(e) {

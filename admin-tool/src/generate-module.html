@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Admin — Générer un module</title>
+    <link rel="stylesheet" href="admin-app.css">
+</head>
+<body>
+<div class="app-layout">
+
+    <header class="app-header">
+        <div class="app-header-left">
+            <a class="app-header-title" href="index.html">&#x1F4DA; Quiz Admin</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Modules</a>
+                <span class="breadcrumb-sep">&#x276F;</span>
+                <span class="breadcrumb-current">Générer un module</span>
+            </nav>
+        </div>
+        <div class="app-header-actions">
+            <a class="btn btn-ghost btn-sm" href="index.html">&#x2190; Retour</a>
+        </div>
+    </header>
+
+    <div class="app-body">
+
+        <div class="page-toolbar">
+            <div class="page-toolbar-left">
+                <h1 class="card-title">&#x2728; Générer un module avec l'IA</h1>
+            </div>
+        </div>
+
+        <!-- Module params -->
+        <div class="card mb-16">
+            <div class="card-header"><span class="card-title">Paramètres du module</span></div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="gen-module-name">Nom du module</label>
+                    <input type="text" id="gen-module-name" class="form-control"
+                        placeholder="ex : Les Pronoms Relatifs">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="gen-module-instructions">Instructions LLM</label>
+                    <input type="text" id="gen-module-instructions" class="form-control"
+                        placeholder="ex : Niveau B1, focus sur dont et où, mix QCM et FillInBlank">
+                </div>
+            </div>
+        </div>
+
+        <!-- First quiz -->
+        <div class="card mb-16">
+            <div class="card-header"><span class="card-title">Premier quiz</span></div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="gen-quiz-name">Nom du quiz</label>
+                    <input type="text" id="gen-quiz-name" class="form-control"
+                        placeholder="ex : Pronoms Relatifs - A2">
+                </div>
+                <div class="form-group">
+                    <label for="gen-quiz-instructions">Instructions LLM</label>
+                    <input type="text" id="gen-quiz-instructions" class="form-control"
+                        placeholder="ex : Niveau A2, QCM et Vrai/Faux, reconnaissance de base">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="gen-question-count">Nombre de questions</label>
+                    <input type="number" id="gen-question-count" class="form-control"
+                        min="5" max="50" value="10" style="max-width:90px">
+                </div>
+            </div>
+        </div>
+
+        <!-- User prompt -->
+        <div class="card mb-16">
+            <div class="card-header">
+                <span class="card-title">Prompt utilisateur</span>
+                <span class="hint">Mis à jour automatiquement — modifiable avant génération</span>
+            </div>
+            <div class="card-body">
+                <textarea id="gen-user-prompt" class="form-control"
+                    rows="9" style="font-family:monospace;font-size:12px;resize:vertical"></textarea>
+            </div>
+        </div>
+
+        <!-- Technical prompt -->
+        <div class="card mb-16">
+            <div class="card-header">
+                <span class="card-title">Prompt technique (système)</span>
+            </div>
+            <div class="card-body">
+                <textarea id="gen-tech-prompt" class="form-control"
+                    rows="5" style="font-family:monospace;font-size:12px;resize:vertical"></textarea>
+            </div>
+        </div>
+
+        <div style="margin-bottom:24px">
+            <button class="btn btn-primary" id="btn-generate">
+                <span id="gen-spinner" class="spinner hidden"></span>
+                &#x2728; Générer
+            </button>
+        </div>
+
+        <!-- Result (hidden until generated) -->
+        <div class="card hidden mb-16" id="result-card">
+            <div class="card-header">
+                <span class="card-title">Résultat JSON</span>
+                <button class="btn btn-success btn-sm" id="btn-import-result">
+                    &#x2705; Importer dans l'app
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="hint" style="margin-bottom:8px">
+                    Vérifiez le JSON avant d'importer. Vous pouvez le corriger directement ici.
+                </div>
+                <textarea id="gen-result" class="form-control"
+                    rows="22" style="font-family:monospace;font-size:11px;resize:vertical"></textarea>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="admin-app.js"></script>
+<script src="generate-module.js"></script>
+</body>
+</html>

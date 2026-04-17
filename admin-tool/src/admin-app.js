@@ -150,6 +150,7 @@ function buildStudentJs(data) {
                 if (val) studentData[moduleName]._description = val;
                 return;
             }
+            if (key === '_quizDescriptions') { return; }
             const fullKey = moduleName + ' - ' + key;
             studentData[moduleName][fullKey] = val;
         });
@@ -177,6 +178,53 @@ function shortQuizName(moduleName, fullKey) {
     return fullKey.startsWith(prefix) ? fullKey.slice(prefix.length) : fullKey;
 }
 
+async function callLlm(settings, systemPrompt, userPrompt) {
+    const provider = settings.llmProvider || 'claude';
+    const apiKey   = settings.llmApiKey   || '';
+    if (!apiKey) throw new Error('Aucune clé API configurée dans les paramètres.');
+
+    if (provider === 'claude') {
+        const resp = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+                'x-api-key':         apiKey,
+                'anthropic-version': '2023-06-01',
+                'content-type':      'application/json',
+            },
+            body: JSON.stringify({
+                model:      'claude-sonnet-4-6',
+                max_tokens: 8192,
+                system:     systemPrompt,
+                messages:   [{ role: 'user', content: userPrompt }],
+            }),
+        });
+        if (!resp.ok) {
+            const err = await resp.text();
+            throw new Error('Claude API ' + resp.status + ': ' + err);
+        }
+        const data = await resp.json();
+        return data.content[0].text;
+    }
+
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=' + apiKey;
+    const resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+            contents: [
+                { role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] },
+            ],
+            generationConfig: { maxOutputTokens: 8192, responseMimeType: "application/json" },
+        }),
+    });
+    if (!resp.ok) {
+        const err = await resp.text();
+        throw new Error('Gemini API ' + resp.status + ': ' + err);
+    }
+    const data = await resp.json();
+    return data.candidates[0].content.parts[0].text;
+}
+
 window.AdminApp = {
     invokeCmd,
     toast,
@@ -190,4 +238,5 @@ window.AdminApp = {
     buildStudentJs,
     escHtml,
     shortQuizName,
+    callLlm,
 };

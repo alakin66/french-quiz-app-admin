@@ -24,6 +24,7 @@ pub fn run() {
             commands::read_binary_file,
             commands::read_text_file_at,
             commands::write_text_file_at,
+            commands::read_quiz_template,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

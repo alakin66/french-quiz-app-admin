@@ -275,6 +275,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDropZone();
 
     document.getElementById('btn-test-app').addEventListener('click', testStudentApp);
+    document.getElementById('btn-generate-module').addEventListener('click', () => navTo('generate-module.html'));
     document.getElementById('btn-new-module').addEventListener('click', newModule);
     document.getElementById('btn-export-questionnaire').addEventListener('click', exportQuestionnaire);
     document.getElementById('btn-import-questionnaire').addEventListener('click', importQuestionnaire);

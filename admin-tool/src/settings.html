@@ -105,6 +105,40 @@
 
                 <hr class="section-divider">
 
+                <p class="section-title">&#x2728; Génération par IA</p>
+
+                <div class="form-group">
+                    <label>Fournisseur LLM</label>
+                    <div style="display:flex;gap:16px;margin-top:2px">
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400">
+                            <input type="radio" name="llm-provider" id="llm-claude" value="claude">
+                            Claude (Anthropic)
+                        </label>
+                        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400">
+                            <input type="radio" name="llm-provider" id="llm-gemini" value="gemini">
+                            Gemini (Google)
+                        </label>
+                    </div>
+                    <div class="hint">
+                        Claude&nbsp;: modèle <code>claude-sonnet-4-6</code> &nbsp;·&nbsp; Gemini&nbsp;: modèle <code>gemini-3.1-pro-preview</code>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="llm-api-key">Clé API</label>
+                    <div class="token-row">
+                        <input type="password" id="llm-api-key" class="form-control"
+                            placeholder="sk-ant-... ou AIza..." autocomplete="new-password">
+                        <button class="btn btn-secondary" id="btn-toggle-llm-key" type="button"
+                            title="Afficher / masquer la clé">&#x1F441;</button>
+                    </div>
+                    <div class="hint">
+                        Stockée localement dans <code>admin-tool/settings.json</code>, jamais versionnée.
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
                 <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
                     <button class="btn btn-primary" id="btn-save-settings">&#x1F4BE; Enregistrer</button>
                     <button class="btn btn-secondary" id="btn-clear-settings">Effacer tout</button>
@@ -133,10 +167,13 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
+    const checkedProvider = document.querySelector('input[name="llm-provider"]:checked');
     const settings = {
         githubUser:  document.getElementById('gh-user').value.trim(),
         githubRepo:  document.getElementById('gh-repo').value.trim(),
         githubToken: document.getElementById('gh-token').value.trim(),
+        llmProvider: checkedProvider ? checkedProvider.value : 'claude',
+        llmApiKey:   document.getElementById('llm-api-key').value.trim(),
     };
     try {
         await invokeCmd('write_settings', { json: JSON.stringify(settings, null, 2) });
@@ -152,9 +189,12 @@ async function saveSettings() {
 async function clearSettings() {
     const ok = await confirmModal('Effacer tous les paramètres ?');
     if (!ok) return;
-    document.getElementById('gh-user').value = '';
-    document.getElementById('gh-repo').value = '';
-    document.getElementById('gh-token').value = '';
+    document.getElementById('gh-user').value    = '';
+    document.getElementById('gh-repo').value    = '';
+    document.getElementById('gh-token').value   = '';
+    document.getElementById('llm-api-key').value = '';
+    document.getElementById('llm-claude').checked = true;
+    document.getElementById('llm-gemini').checked = false;
     try {
         await invokeCmd('write_settings', { json: '{}' });
         toast('Paramètres effacés.', 'success');
@@ -169,6 +209,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('gh-repo').value  = settings.githubRepo  || '';
     document.getElementById('gh-token').value = settings.githubToken || '';
 
+    const isGemini = settings.llmProvider === 'gemini';
+    document.getElementById('llm-claude').checked  = !isGemini;
+    document.getElementById('llm-gemini').checked  = isGemini;
+    document.getElementById('llm-api-key').value   = settings.llmApiKey || '';
+
     document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
     document.getElementById('btn-clear-settings').addEventListener('click', clearSettings);
 
@@ -176,6 +221,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tokenInput = document.getElementById('gh-token');
     document.getElementById('btn-toggle-token').addEventListener('click', () => {
         tokenInput.type = tokenInput.type === 'password' ? 'text' : 'password';
+    });
+
+    // LLM key visibility toggle
+    const llmKeyInput = document.getElementById('llm-api-key');
+    document.getElementById('btn-toggle-llm-key').addEventListener('click', () => {
+        llmKeyInput.type = llmKeyInput.type === 'password' ? 'text' : 'password';
     });
 
     // GitHub token creation link
@@ -189,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Save on Enter key in fields
-    ['gh-user','gh-repo','gh-token'].forEach(id => {
+    ['gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
         document.getElementById(id).addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveSettings();
         });

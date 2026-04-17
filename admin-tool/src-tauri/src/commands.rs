@@ -297,6 +297,11 @@ pub fn read_text_file_at(path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
+pub fn read_quiz_template() -> &'static str {
+    include_str!("../../../quiz-template.json")
+}
+
+#[tauri::command]
 pub fn write_text_file_at(path: String, content: String) -> Result<(), String> {
     fs::write(&path, content).map_err(|e| e.to_string())
 }
