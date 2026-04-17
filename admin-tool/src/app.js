@@ -82,6 +82,14 @@ async function exportJson() {
     toast('Export Quizzes enregistr\u00e9.', 'success');
 }
 
+// ── Export Questionnaire ─────────────────────────────────────
+async function exportQuestionnaire() {
+    const path = await invokeCmd('save_named_json_dialog', { name: 'questionnaire.json' });
+    if (!path) return;
+    await invokeCmd('write_text_file_at', { path, content: JSON.stringify(appData, null, 2) });
+    toast('Questionnaire export\u00e9.', 'success');
+}
+
 // ── Import JSON ──────────────────────────────────────────────
 async function importJson() {
     const ok = await confirmModal('Remplacer toutes les donn\u00e9es actuelles par le contenu du fichier JSON ?\u003cbr\u003e\u003cbr\u003e\u003cstrong\u003eCette action est irr\u00e9versible.\u003c/strong\u003e');
@@ -97,6 +105,62 @@ async function importJson() {
     } catch (err) {
         toast('Fichier JSON invalide : ' + err.message, 'error');
     }
+}
+
+// ── Import Questionnaire (merge) ─────────────────────────────
+async function importQuestionnaire() {
+    const path = await invokeCmd('open_json_dialog');
+    if (!path) return;
+    const text = await invokeCmd('read_text_file_at', { path });
+    let incoming;
+    try { incoming = JSON.parse(text); } catch (e) { toast('JSON invalide\u00a0: ' + e.message, 'error'); return; }
+
+    const modules = Object.keys(incoming);
+    if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
+
+    const conflicts = modules.filter(m => !!appData[m]);
+    if (conflicts.length > 0) {
+        const ok = await confirmModal(
+            'Les modules suivants existent d\u00e9j\u00e0 et seront remplac\u00e9s\u00a0:<br>' +
+            '<strong>' + conflicts.map(escHtml).join(', ') + '</strong><br><br>Continuer\u00a0?'
+        );
+        if (!ok) return;
+    }
+
+    modules.forEach(m => { appData[m] = incoming[m]; });
+    await saveData(appData);
+    renderTable();
+    toast(modules.length + ' module(s) import\u00e9(s).', 'success');
+}
+
+// ── Import Module from JSON ──────────────────────────────────
+async function importModuleFromJson() {
+    const path = await invokeCmd('open_json_dialog');
+    if (!path) return;
+    const text = await invokeCmd('read_text_file_at', { path });
+    let incoming;
+    try { incoming = JSON.parse(text); } catch (e) { toast('JSON invalide\u00a0: ' + e.message, 'error'); return; }
+
+    const modules = Object.keys(incoming);
+    if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
+
+    let chosen;
+    if (modules.length === 1) {
+        chosen = modules[0];
+    } else {
+        chosen = await selectModal('Choisir le module \u00e0 importer\u00a0:', modules);
+        if (!chosen) return;
+    }
+
+    if (appData[chosen]) {
+        const ok = await confirmModal('Le module <strong>' + escHtml(chosen) + '</strong> existe d\u00e9j\u00e0. Le remplacer\u00a0?');
+        if (!ok) return;
+    }
+
+    appData[chosen] = incoming[chosen];
+    await saveData(appData);
+    renderTable();
+    toast('Module \u00ab\u00a0' + chosen + '\u00a0\u00bb import\u00e9.', 'success');
 }
 
 // ── Import Excel ─────────────────────────────────────────────
@@ -243,7 +307,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-test-app').addEventListener('click', testStudentApp);
     document.getElementById('btn-new-module').addEventListener('click', newModule);
     document.getElementById('btn-export-json').addEventListener('click', exportJson);
+    document.getElementById('btn-export-questionnaire').addEventListener('click', exportQuestionnaire);
     document.getElementById('btn-import-json').addEventListener('click', importJson);
+    document.getElementById('btn-import-questionnaire').addEventListener('click', importQuestionnaire);
+    document.getElementById('btn-import-module-json').addEventListener('click', importModuleFromJson);
 
     // Import Excel modal
     const importModal = document.getElementById('import-modal');

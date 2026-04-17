@@ -639,18 +639,6 @@ a:hover { text-decoration: underline; }
     border: none;
 }
 
-.intro-html-editor {
-    width: 100%;
-    min-height: 200px;
-    font-family: "Menlo", "Courier New", monospace;
-    font-size: 12px;
-    padding: 12px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    resize: vertical;
-    line-height: 1.6;
-}
-
 /* ── Inline editable cells ──────────────────────────────────── */
 [contenteditable="true"] {
     outline: none;
@@ -740,6 +728,160 @@ a:hover { text-decoration: underline; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #C8C8C8; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #AAAAAA; }
+
+/* ── Intro WYSIWYG toolbar ──────────────────────────────────── */
+.intro-editor-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 8px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+}
+.intro-toolbar-left  { display: flex; align-items: center; gap: 4px; }
+.intro-toolbar-right { display: flex; align-items: center; gap: 6px; }
+
+.toolbar-fmt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-text);
+    transition: background var(--transition), border-color var(--transition);
+    padding: 0;
+}
+.toolbar-fmt-btn:hover { background: var(--color-hover); }
+.toolbar-fmt-btn.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.toolbar-color-wrap {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+.toolbar-color-wrap span { font-weight: 700; font-size: 13px; pointer-events: none; }
+.toolbar-color-wrap input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+}
+
+/* ── Intro editable cell cues ───────────────────────────────── */
+.intro-preview td[contenteditable="true"],
+.intro-preview th[contenteditable="true"] {
+    display: table-cell;
+    cursor: text;
+    outline: none;
+    min-height: 32px;
+}
+.intro-preview td[contenteditable="true"]:hover,
+.intro-preview th[contenteditable="true"]:hover {
+    background-color: rgba(91, 95, 199, 0.06) !important;
+}
+.intro-preview td[contenteditable="true"]:focus,
+.intro-preview th[contenteditable="true"]:focus {
+    background-color: rgba(91, 95, 199, 0.10) !important;
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+    color: var(--color-text) !important;
+}
+
+/* ── Edit mode: visible cell borders ───────────────────────── */
+.intro-preview.edit-mode td,
+.intro-preview.edit-mode th {
+    border: 1px solid var(--color-border) !important;
+}
+.intro-preview.edit-mode .row-action-cell {
+    border: none !important;
+}
+.intro-preview.edit-mode {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+/* ── Non-formattable cells ──────────────────────────────────── */
+.intro-preview th[data-no-format]:hover,
+.intro-preview td[data-no-format]:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    cursor: text;
+}
+.intro-preview th[data-no-format]:focus,
+.intro-preview td[data-no-format]:focus {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: inset 0 0 0 2px #aaa !important;
+}
+
+/* ── Row action column ──────────────────────────────────────── */
+.row-action-cell {
+    width: 52px;
+    white-space: nowrap;
+    padding: 4px !important;
+    vertical-align: middle !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: right;
+}
+
+.row-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    background: var(--color-surface);
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    padding: 0;
+    transition: background var(--transition), color var(--transition);
+}
+.row-delete-btn:hover       { background: var(--color-danger);  color: #fff; border-color: var(--color-danger);  }
+.row-insert-btn:hover       { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.row-insert-above-btn:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+/* ── Row insert menu ────────────────────────────────────────── */
+.row-insert-menu {
+    position: fixed;
+    z-index: 1000;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    min-width: 220px;
+    padding: 4px 0;
+}
+.row-insert-option {
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--color-text);
+}
+.row-insert-option:hover { background: var(--color-hover); }
+
+/* ── Disabled state (e.g. anchor links during edit mode) ───── */
+.btn-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
 
 /* ── Utility ────────────────────────────────────────────────── */
 .text-muted { color: var(--color-text-muted); }

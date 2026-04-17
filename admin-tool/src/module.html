@@ -22,7 +22,6 @@
         #new-quiz-row { display:flex; gap:8px; align-items:center; padding:12px 12px; border-top:1px solid var(--color-border); }
         #new-quiz-input { flex:1; }
         .intro-section { margin-bottom:24px; }
-        .html-editor-wrap { display:none; margin-top:8px; }
         .module-meta-section { display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
         .module-meta-section .form-group { flex:1; min-width:200px; margin-bottom:0; }
     </style>
@@ -42,7 +41,8 @@
         </div>
         <div class="app-header-actions">
             <button class="btn btn-ghost btn-sm" id="btn-export-excel">&#x1F4C4; Exporter Excel</button>
-            <a class="btn btn-ghost btn-sm" href="index.html">&#x2190; Retour</a>
+            <button class="btn btn-ghost btn-sm" id="btn-export-module-json">&#x1F4E4; Exporter Module JSON</button>
+            <a class="btn btn-ghost btn-sm" id="btn-header-back" href="index.html">&#x2190; Retour</a>
         </div>
     </header>
 
@@ -66,27 +66,33 @@
             <div class="card-header">
                 <span class="card-title">&#x1F4CB; Introduction</span>
                 <div class="intro-actions">
-                    <button class="btn btn-secondary btn-sm" id="btn-toggle-html-editor">
-                        Modifier le HTML
-                    </button>
+                    <button class="btn btn-primary btn-sm" id="btn-edit-intro">Éditer</button>
                     <label class="btn btn-secondary btn-sm" style="cursor:pointer">
-                        &#x2B06; Importer introduction depuis Excel
+                        &#x2B06; Importer Introduction depuis Excel
                         <input type="file" id="intro-file-input" accept=".xlsx" style="display:none">
                     </label>
+                    <button class="btn btn-secondary btn-sm" id="btn-import-intro-json">&#x1F4C2; Importer Introduction JSON</button>
                     <button class="btn btn-secondary btn-sm" id="btn-clear-intro">Effacer</button>
                 </div>
             </div>
             <div class="card-body">
+                <div class="intro-editor-toolbar hidden" id="intro-editor-toolbar">
+                    <div class="intro-toolbar-left">
+                        <button class="toolbar-fmt-btn" id="tb-bold" title="Gras"><b>B</b></button>
+                        <button class="toolbar-fmt-btn" id="tb-italic" title="Italique"><i>I</i></button>
+                        <button class="toolbar-fmt-btn" id="tb-underline" title="Soulign&#xE9;"><u>U</u></button>
+                        <label class="toolbar-fmt-btn toolbar-color-wrap" title="Couleur du texte">
+                            <span>A</span>
+                            <input type="color" id="tb-color" value="#000000">
+                        </label>
+                    </div>
+                    <div class="intro-toolbar-right">
+                        <button class="btn btn-primary btn-sm" id="btn-save-intro-edit">Sauvegarder</button>
+                        <button class="btn btn-secondary btn-sm" id="btn-cancel-intro-edit">Annuler</button>
+                    </div>
+                </div>
                 <div class="intro-preview" id="intro-preview">
                     <span class="text-muted">Aucune introduction définie.</span>
-                </div>
-                <div class="html-editor-wrap" id="html-editor-wrap">
-                    <textarea id="intro-html-editor" class="intro-html-editor" rows="10"
-                        placeholder="Collez votre HTML ici..."></textarea>
-                    <div style="display:flex;gap:8px;margin-top:8px">
-                        <button class="btn btn-primary btn-sm" id="btn-apply-html">Appliquer</button>
-                        <button class="btn btn-secondary btn-sm" id="btn-cancel-html">Annuler</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -97,6 +103,7 @@
                 <span class="card-title">&#x1F4DD; Quiz</span>
                 <span id="quiz-count-badge" class="badge badge-primary">0</span>
                 <button class="btn btn-secondary btn-sm" id="btn-import-quiz-excel">&#x2B06; Importer Quiz depuis Excel</button>
+                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-json">&#x1F4C2; Importer Quizz JSON</button>
             </div>
             <div class="card-body" style="padding:0">
                 <table class="data-table" id="quiz-table">
@@ -167,73 +174,64 @@
 <script src="intro-parser.js"></script>
 <script src="excel-builder.js"></script>
 <script>
-// invokeCmd, toast, confirmModal, navTo, getParam, loadData, saveData, escHtml
-// are globals from admin-app.js — no re-declaration needed
-
 var appData = {};
 var moduleName = getParam('module');
 var pendingRenameKey = null;
+var introEditActive = false;
+var savedRange = null;
+var cachedSettings = {};
 
 // ── Helpers ──────────────────────────────────────────────────
 function getModule() { return appData[moduleName] || {}; }
 
 function quizKeys() {
-    return Object.keys(getModule()).filter(k => k !== '_intro' && k !== '_description');
+    return Object.keys(getModule()).filter(function(k) {
+        return k !== '_intro' && k !== '_description';
+    });
 }
 
 // ── Render quizzes ───────────────────────────────────────────
 function renderQuizTable() {
-    const tbody = document.getElementById('quiz-tbody');
-    const keys = quizKeys();
+    var tbody = document.getElementById('quiz-tbody');
+    var keys = quizKeys();
     document.getElementById('quiz-count-badge').textContent = keys.length;
 
     if (keys.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3">
-            <div class="empty-state" style="padding:30px 24px">
-                <div class="empty-state-title">Aucun quiz</div>
-                <div class="empty-state-desc">Ajoutez un quiz ci-dessous.</div>
-            </div></td></tr>`;
+        tbody.innerHTML = '<tr><td colspan="3">' +
+            '<div class="empty-state" style="padding:30px 24px">' +
+            '<div class="empty-state-title">Aucun quiz</div>' +
+            '<div class="empty-state-desc">Ajoutez un quiz ci-dessous.</div>' +
+            '</div></td></tr>';
         return;
     }
 
-    tbody.innerHTML = keys.map(key => {
-        const questions = getModule()[key] || [];
-        const mJson = escHtml(JSON.stringify(moduleName));
-        const kJson = escHtml(JSON.stringify(key));
-        return `<tr data-key="${escHtml(key)}">
-            <td>
-                <button class="quiz-name-link"
-                    onclick="navTo('questions.html', {module: ${mJson}, quiz: ${kJson}})">
-                    ${escHtml(key)}
-                </button>
-            </td>
-            <td class="text-center"><span class="badge badge-muted">${questions.length}</span></td>
-            <td>
-                <div class="actions-col">
-                    <button class="btn btn-secondary btn-sm"
-                        onclick="navTo('questions.html', {module: ${mJson}, quiz: ${kJson}})">
-                        Questions
-                    </button>
-                    <button class="btn btn-secondary btn-sm" onclick="testQuiz(${kJson})">
-                        Tester
-                    </button>
-                    <button class="btn btn-secondary btn-sm" onclick="openRename(${kJson})">
-                        Renommer
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteQuiz(${kJson})">
-                        Supprimer
-                    </button>
-                </div>
-            </td>
-        </tr>`;
+    tbody.innerHTML = keys.map(function(key) {
+        var questions = getModule()[key] || [];
+        var mJson = escHtml(JSON.stringify(moduleName));
+        var kJson = escHtml(JSON.stringify(key));
+        return '<tr data-key="' + escHtml(key) + '">' +
+            '<td>' +
+            '<button class="quiz-name-link"' +
+            ' onclick="navTo(\'questions.html\', {module: ' + mJson + ', quiz: ' + kJson + '})">' +
+            escHtml(key) + '</button></td>' +
+            '<td class="text-center"><span class="badge badge-muted">' + questions.length + '</span></td>' +
+            '<td><div class="actions-col">' +
+            '<button class="btn btn-secondary btn-sm"' +
+            ' onclick="navTo(\'questions.html\', {module: ' + mJson + ', quiz: ' + kJson + '})">Questions</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="testQuiz(' + kJson + ')">Tester</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="copyQuizLink(' + kJson + ')">Copier le lien</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="exportQuizJson(' + kJson + ')">&#x1F4E4; Exporter</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="openRename(' + kJson + ')">Renommer</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="deleteQuiz(' + kJson + ')">Supprimer</button>' +
+            '</div></td></tr>';
     }).join('');
 }
 
 // ── Intro preview ────────────────────────────────────────────
 function renderIntroPreview(html) {
-    const preview = document.getElementById('intro-preview');
+    var preview = document.getElementById('intro-preview');
     if (!html || !html.trim()) {
-        preview.innerHTML = '<span class="text-muted">Aucune introduction définie.</span>';
+        preview.innerHTML = '<span class="text-muted">Aucune introduction d\u00e9finie.</span>';
     } else {
         preview.innerHTML = html;
     }
@@ -241,50 +239,48 @@ function renderIntroPreview(html) {
 
 // ── Save module ──────────────────────────────────────────────
 async function saveModule() {
-    const newName = document.getElementById('module-name-input').value.trim();
-    const desc = document.getElementById('module-desc-input').value.trim();
+    var newName = document.getElementById('module-name-input').value.trim();
+    var desc = document.getElementById('module-desc-input').value.trim();
 
     if (!newName) { toast('Le nom du module est requis.', 'error'); return; }
 
-    // Rename if needed
     if (newName !== moduleName) {
-        if (appData[newName]) { toast('Un module avec ce nom existe déjà.', 'error'); return; }
+        if (appData[newName]) { toast('Un module avec ce nom existe d\u00e9j\u00e0.', 'error'); return; }
         appData[newName] = appData[moduleName];
         delete appData[moduleName];
         moduleName = newName;
         document.getElementById('bc-module').textContent = moduleName;
-        // Update URL without reload
-        const url = new URL(window.location.href);
+        var url = new URL(window.location.href);
         url.searchParams.set('module', moduleName);
         window.history.replaceState({}, '', url.toString());
     }
 
     appData[moduleName]._description = desc;
     await saveData(appData);
-    toast('Module enregistré.', 'success');
+    toast('Module enregistr\u00e9.', 'success');
 }
 
 // ── Add quiz ─────────────────────────────────────────────────
 async function addQuiz() {
-    const input = document.getElementById('new-quiz-input');
-    const name = input.value.trim();
+    var input = document.getElementById('new-quiz-input');
+    var name = input.value.trim();
     if (!name) { toast('Entrez un nom de quiz.', 'error'); return; }
-    if (getModule()[name] !== undefined) { toast('Ce quiz existe déjà.', 'error'); return; }
+    if (getModule()[name] !== undefined) { toast('Ce quiz existe d\u00e9j\u00e0.', 'error'); return; }
     appData[moduleName][name] = [];
     await saveData(appData);
     input.value = '';
     renderQuizTable();
-    toast(`Quiz "${name}" créé.`, 'success');
+    toast('Quiz "' + name + '" cr\u00e9\u00e9.', 'success');
 }
 
 // ── Delete quiz ──────────────────────────────────────────────
 async function deleteQuiz(key) {
-    const ok = await confirmModal(`Supprimer le quiz «&nbsp;${escHtml(key)}&nbsp;» ?`);
+    var ok = await confirmModal('Supprimer le quiz \u00ab\u00a0' + escHtml(key) + '\u00a0\u00bb\u00a0?');
     if (!ok) return;
     delete appData[moduleName][key];
     await saveData(appData);
     renderQuizTable();
-    toast(`Quiz "${key}" supprimé.`, 'success');
+    toast('Quiz "' + key + '" supprim\u00e9.', 'success');
 }
 
 // ── Rename quiz ──────────────────────────────────────────────
@@ -292,19 +288,18 @@ function openRename(key) {
     pendingRenameKey = key;
     document.getElementById('rename-input').value = key;
     document.getElementById('rename-modal').classList.remove('hidden');
-    setTimeout(() => document.getElementById('rename-input').select(), 50);
+    setTimeout(function() { document.getElementById('rename-input').select(); }, 50);
 }
 
 async function confirmRename() {
-    const newKey = document.getElementById('rename-input').value.trim();
+    var newKey = document.getElementById('rename-input').value.trim();
     if (!newKey) { toast('Entrez un nom.', 'error'); return; }
     if (newKey === pendingRenameKey) { document.getElementById('rename-modal').classList.add('hidden'); return; }
-    if (getModule()[newKey] !== undefined) { toast('Ce nom existe déjà.', 'error'); return; }
+    if (getModule()[newKey] !== undefined) { toast('Ce nom existe d\u00e9j\u00e0.', 'error'); return; }
 
-    const questions = appData[moduleName][pendingRenameKey];
-    // Preserve insertion order by rebuilding the object
-    const rebuilt = {};
-    Object.entries(appData[moduleName]).forEach(([k, v]) => {
+    var questions = appData[moduleName][pendingRenameKey];
+    var rebuilt = {};
+    Object.entries(appData[moduleName]).forEach(function([k, v]) {
         if (k === pendingRenameKey) rebuilt[newKey] = questions;
         else rebuilt[k] = v;
     });
@@ -312,11 +307,40 @@ async function confirmRename() {
     await saveData(appData);
     document.getElementById('rename-modal').classList.add('hidden');
     renderQuizTable();
-    toast(`Quiz renommé en "${newKey}".`, 'success');
+    toast('Quiz renomm\u00e9 en "' + newKey + '".', 'success');
     pendingRenameKey = null;
 }
 
-// ── Test quiz (opens student app in system browser) ──────────
+// ── Clipboard ────────────────────────────────────────────────
+function copyToClipboard(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+}
+
+function copyQuizLink(key) {
+    var repo = cachedSettings.githubRepo || '';
+    var slashIdx = repo.indexOf('/');
+    if (!repo || slashIdx === -1) {
+        toast('Configurez le d\u00e9p\u00f4t GitHub dans les param\u00e8tres.', 'error');
+        return;
+    }
+    var owner    = repo.slice(0, slashIdx);
+    var repoName = repo.slice(slashIdx + 1);
+    var fullKey  = moduleName + ' - ' + key;
+    var query    = '?quiz=' + encodeURIComponent(moduleName)
+                 + '&preselect=' + encodeURIComponent(fullKey);
+    var url = 'https://' + owner + '.github.io/' + repoName + '/' + query;
+    copyToClipboard(url);
+    toast('Lien copi\u00e9\u00a0!', 'success');
+}
+
+// ── Test quiz ────────────────────────────────────────────────
 async function testQuiz(key) {
     try {
         var jsContent = buildStudentJs(appData);
@@ -327,104 +351,559 @@ async function testQuiz(key) {
         await invokeCmd('open_student_app', { query: query });
         toast('Application \u00e9tudiant ouverte.', 'info');
     } catch (e) {
-        toast('Impossible d\'ouvrir l\'application \u00e9tudiant : ' + String(e), 'error');
+        toast('Impossible d\'ouvrir l\'application \u00e9tudiant\u00a0: ' + String(e), 'error');
     }
 }
 
-// ── Intro HTML editor ─────────────────────────────────────────
-var htmlEditorOpen = false;
+// ── Editing lock ─────────────────────────────────────────────
+function setEditingLock(locked) {
+    var ids = [
+        'btn-export-excel',
+        'btn-import-quiz-excel',
+        'btn-add-quiz',
+        'new-quiz-input',
+        'module-name-input',
+        'module-desc-input',
+        'intro-file-input',
+        'btn-edit-intro',
+        'btn-clear-intro'
+    ];
+    ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.disabled = locked;
+    });
+    var back = document.getElementById('btn-header-back');
+    if (back) back.classList.toggle('btn-disabled', locked);
+    document.querySelectorAll('#quiz-tbody button').forEach(function(btn) {
+        btn.disabled = locked;
+    });
+}
 
-function toggleHtmlEditor() {
-    htmlEditorOpen = !htmlEditorOpen;
-    const wrap = document.getElementById('html-editor-wrap');
-    const btn = document.getElementById('btn-toggle-html-editor');
-    if (htmlEditorOpen) {
-        document.getElementById('intro-html-editor').value = appData[moduleName]._intro || '';
-        wrap.style.display = 'block';
-        btn.textContent = 'Masquer l\'éditeur';
-    } else {
-        wrap.style.display = 'none';
-        btn.textContent = 'Modifier le HTML';
+// ── Intro edit mode ──────────────────────────────────────────
+function enterIntroEditMode() {
+    if (introEditActive) return;
+    introEditActive = true;
+    var preview = document.getElementById('intro-preview');
+    preview.classList.add('edit-mode');
+    document.getElementById('intro-editor-toolbar').classList.remove('hidden');
+    setEditingLock(true);
+    applyIntroEditability();
+    addRowActionColumn();
+    injectActionCol(preview);
+    if (!preview.querySelector('table')) {
+        insertFirstRow('title-row');
     }
 }
 
-async function applyHtml() {
-    const html = document.getElementById('intro-html-editor').value;
-    appData[moduleName]._intro = html;
-    renderIntroPreview(html);
+function exitIntroEditMode() {
+    introEditActive = false;
+    savedRange = null;
+    var preview = document.getElementById('intro-preview');
+    preview.classList.remove('edit-mode');
+    preview.querySelectorAll('[contenteditable]').forEach(function(el) {
+        el.removeAttribute('contenteditable');
+        delete el.dataset.noFormat;
+    });
+    removeRowActionColumn();
+    removeActionCol(preview);
+    closeInsertMenu();
+    document.getElementById('intro-editor-toolbar').classList.add('hidden');
+    setEditingLock(false);
+}
+
+function injectActionCol(preview) {
+    var colgroup = preview.querySelector('colgroup');
+    if (!colgroup) return;
+    var col = document.createElement('col');
+    col.className = 'action-col';
+    col.style.width = '52px';
+    colgroup.appendChild(col);
+}
+
+function removeActionCol(preview) {
+    var col = preview.querySelector('col.action-col');
+    if (col) col.remove();
+}
+
+// ── Cell editability ─────────────────────────────────────────
+function applyIntroEditability() {
+    var preview = document.getElementById('intro-preview');
+    preview.querySelectorAll('tr').forEach(function(tr) {
+        var cells = tr.querySelectorAll('td, th');
+
+        if (tr.classList.contains('blank-row')) {
+            cells.forEach(function(c) { c.contentEditable = 'false'; });
+
+        } else if (tr.classList.contains('section-header')) {
+            cells.forEach(function(c) {
+                c.contentEditable = 'true';
+                c.dataset.noFormat = 'true';
+            });
+
+        } else if (tr.classList.contains('focus-point')) {
+            cells.forEach(function(c) {
+                c.contentEditable = 'true';
+                if (c.tagName === 'TH') c.dataset.noFormat = 'true';
+            });
+
+        } else {
+            cells.forEach(function(c) { c.contentEditable = 'true'; });
+        }
+    });
+}
+
+// ── Selection tracking and format commands ───────────────────
+document.addEventListener('selectionchange', function() {
+    if (!introEditActive) return;
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    var range = sel.getRangeAt(0);
+    var preview = document.getElementById('intro-preview');
+    if (preview.contains(range.commonAncestorContainer)) {
+        savedRange = range.cloneRange();
+    }
+    updateToolbarState();
+});
+
+function restoreSelection() {
+    if (!savedRange) return;
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+}
+
+function selectionInNoFormatCell() {
+    var sel = window.getSelection();
+    if (!sel || !sel.anchorNode) return false;
+    var node = sel.anchorNode.nodeType === 3
+        ? sel.anchorNode.parentElement
+        : sel.anchorNode;
+    var cell = node.closest('td[data-no-format], th[data-no-format]');
+    return !!cell;
+}
+
+function applyFormat(cmd, value) {
+    if (selectionInNoFormatCell()) return;
+    restoreSelection();
+    document.execCommand(cmd, false, value || null);
+    updateToolbarState();
+}
+
+function updateToolbarState() {
+    document.getElementById('tb-bold').classList.toggle('active',
+        document.queryCommandState('bold'));
+    document.getElementById('tb-italic').classList.toggle('active',
+        document.queryCommandState('italic'));
+    document.getElementById('tb-underline').classList.toggle('active',
+        document.queryCommandState('underline'));
+}
+
+// ── Row management ───────────────────────────────────────────
+function addRowActionColumn() {
+    var preview = document.getElementById('intro-preview');
+    preview.querySelectorAll('tr').forEach(function(tr) {
+        tr.appendChild(makeActionCell());
+    });
+}
+
+function removeRowActionColumn() {
+    document.querySelectorAll('.row-action-cell').forEach(function(td) {
+        td.remove();
+    });
+}
+
+function makeActionCell() {
+    var td = document.createElement('td');
+    td.className = 'row-action-cell';
+    td.contentEditable = 'false';
+    td.innerHTML =
+        '<button class="row-action-btn row-delete-btn"       title="Supprimer">&#x2715;</button>' +
+        '<button class="row-action-btn row-insert-above-btn" title="Ins\u00e9rer au-dessus">&#x2191;</button>' +
+        '<button class="row-action-btn row-insert-btn"       title="Ins\u00e9rer en-dessous">&#x2193;</button>';
+    return td;
+}
+
+function showInsertMenu(tr, anchorBtn, direction) {
+    closeInsertMenu();
+    var menu = document.createElement('div');
+    menu.id = 'row-insert-menu';
+    menu.className = 'row-insert-menu';
+    menu.innerHTML = [
+        ['title-row',      'Titre (1 col, formattable)'],
+        ['section-header', 'Section (1 col, non formattable)'],
+        ['focus-point',    'Label + Contenu (2 col)'],
+        ['explanation',    'Exemple (3 col)'],
+        ['blank-row',      'Ligne vide'],
+    ].map(function(pair) {
+        return '<div class="row-insert-option" data-type="' + pair[0] + '">' + pair[1] + '</div>';
+    }).join('');
+
+    document.body.appendChild(menu);
+
+    var rect = anchorBtn.getBoundingClientRect();
+    menu.style.top   = (rect.bottom + 4) + 'px';
+    menu.style.left  = 'auto';
+    menu.style.right = (window.innerWidth - rect.right) + 'px';
+
+    menu.querySelectorAll('.row-insert-option').forEach(function(opt) {
+        opt.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (direction === 'before') {
+                insertRowBefore(tr, opt.dataset.type);
+            } else {
+                insertRowAfter(tr, opt.dataset.type);
+            }
+            closeInsertMenu();
+        });
+    });
+
+    setTimeout(function() {
+        document.addEventListener('click', closeInsertMenu, { once: true });
+    }, 0);
+}
+
+function closeInsertMenu() {
+    var menu = document.getElementById('row-insert-menu');
+    if (menu) menu.remove();
+}
+
+function buildNewRowElement(rowType) {
+    var newTr = document.createElement('tr');
+    newTr.className = rowType;
+
+    if (rowType === 'title-row') {
+        var tdTitle = document.createElement('td');
+        tdTitle.setAttribute('colspan', '3');
+        tdTitle.contentEditable = 'true';
+        newTr.appendChild(tdTitle);
+
+    } else if (rowType === 'section-header') {
+        var tdSh = document.createElement('td');
+        tdSh.setAttribute('colspan', '3');
+        tdSh.contentEditable = 'true';
+        tdSh.dataset.noFormat = 'true';
+        newTr.appendChild(tdSh);
+
+    } else if (rowType === 'focus-point') {
+        var thFp = document.createElement('th');
+        thFp.contentEditable = 'true';
+        thFp.dataset.noFormat = 'true';
+        var tdFp = document.createElement('td');
+        tdFp.setAttribute('colspan', '2');
+        tdFp.contentEditable = 'true';
+        newTr.appendChild(thFp);
+        newTr.appendChild(tdFp);
+
+    } else if (rowType === 'explanation') {
+        for (var i = 0; i < 3; i++) {
+            var tdEx = document.createElement('td');
+            tdEx.contentEditable = 'true';
+            newTr.appendChild(tdEx);
+        }
+
+    } else if (rowType === 'blank-row') {
+        var tdBl = document.createElement('td');
+        tdBl.setAttribute('colspan', '3');
+        tdBl.innerHTML = '&nbsp;';
+        tdBl.contentEditable = 'false';
+        newTr.appendChild(tdBl);
+    }
+
+    newTr.appendChild(makeActionCell());
+    return newTr;
+}
+
+function insertRowAfter(tr, rowType) {
+    tr.after(buildNewRowElement(rowType));
+}
+
+function insertRowBefore(tr, rowType) {
+    tr.before(buildNewRowElement(rowType));
+}
+
+function insertFirstRow(rowType) {
+    var preview = document.getElementById('intro-preview');
+    preview.innerHTML = '';
+
+    var table = document.createElement('table');
+    table.className = 'xlsx-table intro-table';
+
+    var colgroup = document.createElement('colgroup');
+    ['33.33%', '33.33%', '33.34%'].forEach(function(w) {
+        var col = document.createElement('col');
+        col.style.width = w;
+        colgroup.appendChild(col);
+    });
+    var actionCol = document.createElement('col');
+    actionCol.className = 'action-col';
+    actionCol.style.width = '52px';
+    colgroup.appendChild(actionCol);
+
+    var tbody = document.createElement('tbody');
+    table.appendChild(colgroup);
+    table.appendChild(tbody);
+    preview.appendChild(table);
+
+    tbody.appendChild(buildNewRowElement(rowType));
+}
+
+function resetToEmptyTitleRow(tr) {
+    var actionCell = tr.querySelector('.row-action-cell');
+    tr.className = 'title-row';
+    tr.innerHTML = '';
+    var td = document.createElement('td');
+    td.setAttribute('colspan', '3');
+    td.contentEditable = 'true';
+    tr.appendChild(td);
+    if (actionCell) tr.appendChild(actionCell);
+}
+
+// ── Save / cancel ────────────────────────────────────────────
+async function saveIntroEdit() {
+    var preview = document.getElementById('intro-preview');
+    var clone = preview.cloneNode(true);
+
+    clone.querySelectorAll('[contenteditable]').forEach(function(el) {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('data-no-format');
+    });
+    clone.querySelectorAll('.row-action-cell').forEach(function(td) {
+        td.remove();
+    });
+    var actionColClone = clone.querySelector('col.action-col');
+    if (actionColClone) actionColClone.remove();
+
+    appData[moduleName]._intro = clone.innerHTML;
+    exitIntroEditMode();
     await saveData(appData);
-    toast('Introduction mise à jour.', 'success');
+    toast('Introduction sauvegard\u00e9e.', 'success');
 }
 
-// ── Intro from Excel ─────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
-    if (!moduleName) { toast('Module non spécifié.', 'error'); return; }
+function cancelIntroEdit() {
+    renderIntroPreview(appData[moduleName]._intro || '');
+    exitIntroEditMode();
+}
+
+// ── JSON export/import ───────────────────────────────────────
+function exportModuleJson() {
+    var safeName = moduleName.replace(/[^a-zA-Z0-9_\-]/g, '_');
+    invokeCmd('save_named_json_dialog', { name: safeName + '.module.json' }).then(function(path) {
+        if (!path) return;
+        var payload = {};
+        payload[moduleName] = appData[moduleName];
+        invokeCmd('write_text_file_at', { path: path, content: JSON.stringify(payload, null, 2) })
+            .then(function() { toast('Module export\u00e9.', 'success'); })
+            .catch(function(e) { toast('Erreur export\u00a0: ' + String(e), 'error'); });
+    });
+}
+
+function exportQuizJson(key) {
+    var safeMod  = moduleName.replace(/[^a-zA-Z0-9_\-]/g, '_');
+    var safeQuiz = key.replace(/[^a-zA-Z0-9_\-]/g, '_');
+    invokeCmd('save_named_json_dialog', { name: safeMod + '-' + safeQuiz + '.quizz.json' }).then(function(path) {
+        if (!path) return;
+        var payload = {};
+        payload[moduleName] = {};
+        payload[moduleName][key] = (appData[moduleName] || {})[key] || [];
+        invokeCmd('write_text_file_at', { path: path, content: JSON.stringify(payload, null, 2) })
+            .then(function() { toast('Quiz \u00ab\u00a0' + key + '\u00a0\u00bb export\u00e9.', 'success'); })
+            .catch(function(e) { toast('Erreur export\u00a0: ' + String(e), 'error'); });
+    });
+}
+
+async function importIntroFromJson() {
+    var path = await invokeCmd('open_json_dialog');
+    if (!path) return;
+    var text = await invokeCmd('read_text_file_at', { path: path });
+    var incoming;
+    try { incoming = JSON.parse(text); } catch (e) { toast('JSON invalide\u00a0: ' + e.message, 'error'); return; }
+
+    var modules = Object.keys(incoming);
+    if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
+
+    var chosen;
+    if (incoming[moduleName] !== undefined) {
+        chosen = moduleName;
+    } else if (modules.length === 1) {
+        chosen = modules[0];
+    } else {
+        chosen = await selectModal('Choisir le module source de l\u2019introduction\u00a0:', modules);
+        if (!chosen) return;
+    }
+
+    var intro = (incoming[chosen] || {})._intro || '';
+    if (!intro) { toast('Aucune introduction trouv\u00e9e dans ce module.', 'error'); return; }
+
+    appData[moduleName]._intro = intro;
+    await saveData(appData);
+    renderIntroPreview(intro);
+    toast('Introduction import\u00e9e depuis \u00ab\u00a0' + chosen + '\u00a0\u00bb.', 'success');
+}
+
+async function importQuizFromJson() {
+    var path = await invokeCmd('open_json_dialog');
+    if (!path) return;
+    var text = await invokeCmd('read_text_file_at', { path: path });
+    var incoming;
+    try { incoming = JSON.parse(text); } catch (e) { toast('JSON invalide\u00a0: ' + e.message, 'error'); return; }
+
+    var modules = Object.keys(incoming);
+    if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
+
+    var srcModule;
+    if (incoming[moduleName] !== undefined) {
+        srcModule = moduleName;
+    } else if (modules.length === 1) {
+        srcModule = modules[0];
+    } else {
+        srcModule = await selectModal('Choisir le module source\u00a0:', modules);
+        if (!srcModule) return;
+    }
+
+    var quizzes = Object.keys(incoming[srcModule] || {}).filter(function(k) {
+        return k !== '_intro' && k !== '_description';
+    });
+    if (quizzes.length === 0) { toast('Aucun quiz dans ce module.', 'error'); return; }
+
+    var srcQuiz;
+    if (quizzes.length === 1) {
+        srcQuiz = quizzes[0];
+    } else {
+        srcQuiz = await selectModal('Choisir le quiz \u00e0 importer\u00a0:', quizzes);
+        if (!srcQuiz) return;
+    }
+
+    var destKey = srcQuiz.startsWith(srcModule + ' - ')
+        ? srcQuiz.slice(srcModule.length + 3)
+        : srcQuiz;
+
+    if (appData[moduleName] && appData[moduleName][destKey] !== undefined) {
+        var ok = await confirmModal('Le quiz <strong>' + escHtml(destKey) + '</strong> existe d\u00e9j\u00e0. Le remplacer\u00a0?');
+        if (!ok) return;
+    }
+
+    appData[moduleName][destKey] = incoming[srcModule][srcQuiz];
+    await saveData(appData);
+    renderQuizTable();
+    toast('Quiz \u00ab\u00a0' + destKey + '\u00a0\u00bb import\u00e9.', 'success');
+}
+
+// ── Init ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async function() {
+    if (!moduleName) { toast('Module non sp\u00e9cifi\u00e9.', 'error'); return; }
 
     appData = await loadData();
     if (!appData[moduleName]) {
         appData[moduleName] = { _description: '', _intro: '' };
     }
 
-    // Populate header + fields
+    try {
+        var rawSettings = await invokeCmd('read_settings');
+        cachedSettings = JSON.parse(rawSettings || '{}');
+    } catch (e) {
+        cachedSettings = {};
+    }
+
     document.getElementById('bc-module').textContent = moduleName;
-    document.title = `Quiz Admin — ${moduleName}`;
+    document.title = 'Quiz Admin \u2014 ' + moduleName;
     document.getElementById('module-name-input').value = moduleName;
     document.getElementById('module-desc-input').value = appData[moduleName]._description || '';
     renderIntroPreview(appData[moduleName]._intro || '');
     renderQuizTable();
 
-    // Auto-save on blur
     document.getElementById('module-name-input').addEventListener('blur', saveModule);
     document.getElementById('module-desc-input').addEventListener('blur', saveModule);
 
-    // Export Excel
-    document.getElementById('btn-export-excel').addEventListener('click', () => {
+    document.getElementById('btn-export-excel').addEventListener('click', function() {
         try {
-            const data = buildModuleXlsx(moduleName, appData[moduleName]);
+            var data = buildModuleXlsx(moduleName, appData[moduleName]);
             downloadXlsx(data, moduleName.replace(/[^a-zA-Z0-9_-]/g, '_') + '.xlsx');
-            toast('Export Excel prêt.', 'success');
+            toast('Export Excel pr\u00eat.', 'success');
         } catch (e) {
-            toast('Erreur export : ' + e.message, 'error');
+            toast('Erreur export\u00a0: ' + e.message, 'error');
         }
     });
 
-    // Add quiz
+    document.getElementById('btn-export-module-json').addEventListener('click', exportModuleJson);
+    document.getElementById('btn-import-intro-json').addEventListener('click', importIntroFromJson);
+    document.getElementById('btn-import-quiz-json').addEventListener('click', importQuizFromJson);
+
     document.getElementById('btn-add-quiz').addEventListener('click', addQuiz);
-    document.getElementById('new-quiz-input').addEventListener('keydown', (e) => {
+    document.getElementById('new-quiz-input').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') addQuiz();
     });
 
-    // Intro editor
-    document.getElementById('btn-toggle-html-editor').addEventListener('click', toggleHtmlEditor);
-    document.getElementById('btn-apply-html').addEventListener('click', applyHtml);
-    document.getElementById('btn-cancel-html').addEventListener('click', () => {
-        document.getElementById('html-editor-wrap').style.display = 'none';
-        htmlEditorOpen = false;
-        document.getElementById('btn-toggle-html-editor').textContent = 'Modifier le HTML';
+    document.getElementById('btn-edit-intro').addEventListener('click', enterIntroEditMode);
+    document.getElementById('btn-save-intro-edit').addEventListener('click', saveIntroEdit);
+    document.getElementById('btn-cancel-intro-edit').addEventListener('click', cancelIntroEdit);
+
+    document.getElementById('tb-bold').addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        applyFormat('bold');
     });
-    document.getElementById('btn-clear-intro').addEventListener('click', async () => {
-        const ok = await confirmModal('Effacer l\'introduction de ce module ?');
+    document.getElementById('tb-italic').addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        applyFormat('italic');
+    });
+    document.getElementById('tb-underline').addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        applyFormat('underline');
+    });
+    document.getElementById('tb-color').addEventListener('change', function(e) {
+        applyFormat('foreColor', e.target.value);
+    });
+
+    document.getElementById('intro-preview').addEventListener('keydown', function(e) {
+        if (!introEditActive) return;
+        if (e.key === 'Enter') e.preventDefault();
+    });
+
+    document.getElementById('intro-preview').addEventListener('click', function(e) {
+        if (!introEditActive) return;
+        var delBtn = e.target.closest('.row-delete-btn');
+        if (delBtn) {
+            var tr = delBtn.closest('tr');
+            var tbody = tr.closest('tbody');
+            if (tbody && tbody.querySelectorAll('tr').length === 1) {
+                resetToEmptyTitleRow(tr);
+            } else {
+                tr.remove();
+            }
+            return;
+        }
+        var aboveBtn = e.target.closest('.row-insert-above-btn');
+        if (aboveBtn) {
+            e.stopPropagation();
+            showInsertMenu(aboveBtn.closest('tr'), aboveBtn, 'before');
+            return;
+        }
+        var insBtn = e.target.closest('.row-insert-btn');
+        if (insBtn) {
+            e.stopPropagation();
+            showInsertMenu(insBtn.closest('tr'), insBtn, 'after');
+        }
+    });
+
+    document.getElementById('btn-clear-intro').addEventListener('click', async function() {
+        var ok = await confirmModal('Effacer l\'introduction de ce module\u00a0?');
         if (!ok) return;
         appData[moduleName]._intro = '';
         renderIntroPreview('');
         await saveData(appData);
-        toast('Introduction effacée.', 'success');
+        toast('Introduction effac\u00e9e.', 'success');
     });
 
-    // Intro from Excel file
-    document.getElementById('intro-file-input').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
+    document.getElementById('intro-file-input').addEventListener('change', async function(e) {
+        var file = e.target.files[0];
         if (!file) return;
-        const buffer = await file.arrayBuffer();
-        const html = window.parseIntroXlsx(buffer);
+        var buffer = await file.arrayBuffer();
+        var html = window.parseIntroXlsx(buffer);
         if (!html) { toast('Impossible de lire l\'introduction depuis ce fichier.', 'error'); return; }
 
-        // Update module name from filename
-        const nameFromFile = file.name.replace(/\.xlsx$/i, '').trim();
+        var nameFromFile = file.name.replace(/\.xlsx$/i, '').trim();
         document.getElementById('module-name-input').value = nameFromFile;
 
-        // Update description from workbook metadata (Subject or Title property)
-        const meta = window.parseIntroMeta(buffer);
+        var meta = window.parseIntroMeta(buffer);
         if (meta && meta.description) {
             document.getElementById('module-desc-input').value = meta.description;
         }
@@ -432,14 +911,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         appData[moduleName]._intro = html;
         renderIntroPreview(html);
         await saveData(appData);
-        toast('Introduction importée.', 'success');
+        toast('Introduction import\u00e9e.', 'success');
         e.target.value = '';
     });
 
-    // Import Quiz from Excel modal
     var importQuizWb = null;
 
-    document.getElementById('btn-import-quiz-excel').addEventListener('click', () => {
+    document.getElementById('btn-import-quiz-excel').addEventListener('click', function() {
         importQuizWb = null;
         document.getElementById('import-quiz-filename').textContent = '';
         document.getElementById('import-quiz-sheet-group').style.display = 'none';
@@ -447,50 +925,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('import-quiz-modal').classList.remove('hidden');
     });
 
-    document.getElementById('import-quiz-file').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
+    document.getElementById('import-quiz-file').addEventListener('change', async function(e) {
+        var file = e.target.files[0];
         if (!file) return;
-        const buffer = await file.arrayBuffer();
+        var buffer = await file.arrayBuffer();
         importQuizWb = XLSX.read(buffer, { type: 'array' });
-        const sheets = importQuizWb.SheetNames.filter(n => n.toLowerCase() !== 'introduction');
-        const sel = document.getElementById('import-quiz-sheet');
-        sel.innerHTML = sheets.map(n => `<option value="${escHtml(n)}">${escHtml(n)}</option>`).join('');
+        var sheets = importQuizWb.SheetNames.filter(function(n) {
+            return n.toLowerCase() !== 'introduction';
+        });
+        var sel = document.getElementById('import-quiz-sheet');
+        sel.innerHTML = sheets.map(function(n) {
+            return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>';
+        }).join('');
         document.getElementById('import-quiz-filename').textContent = file.name;
         document.getElementById('import-quiz-sheet-group').style.display = sheets.length ? '' : 'none';
         document.getElementById('import-quiz-confirm').disabled = sheets.length === 0;
         e.target.value = '';
     });
 
-    document.getElementById('import-quiz-confirm').addEventListener('click', async () => {
-        const sheetName = document.getElementById('import-quiz-sheet').value;
+    document.getElementById('import-quiz-confirm').addEventListener('click', async function() {
+        var sheetName = document.getElementById('import-quiz-sheet').value;
         if (!importQuizWb || !sheetName) return;
-        const rows = XLSX.utils.sheet_to_json(importQuizWb.Sheets[sheetName], { defval: '' });
-        const imported = rows.map(row => ({
-            Type: row.Type || row.type || '',
-            Question: row.Question || row.question || '',
-            Options: row.Options || row.options || '',
-            Answer: row.Answer || row.answer || '',
-            FeedbackCorrect: row.FeedbackCorrect || row['Feedback Correct'] || '',
-            FeedbackIncorrect: row.FeedbackIncorrect || row['Feedback Incorrect'] || '',
-        })).filter(q => q.Type && q.Question);
+        var rows = XLSX.utils.sheet_to_json(importQuizWb.Sheets[sheetName], { defval: '' });
+        var imported = rows.map(function(row) {
+            return {
+                Type: row.Type || row.type || '',
+                Question: row.Question || row.question || '',
+                Options: row.Options || row.options || '',
+                Answer: row.Answer || row.answer || '',
+                FeedbackCorrect: row.FeedbackCorrect || row['Feedback Correct'] || '',
+                FeedbackIncorrect: row.FeedbackIncorrect || row['Feedback Incorrect'] || '',
+            };
+        }).filter(function(q) { return q.Type && q.Question; });
         appData[moduleName][sheetName] = imported;
         await saveData(appData);
         renderQuizTable();
         document.getElementById('import-quiz-modal').classList.add('hidden');
-        toast(`Quiz "${sheetName}" import\u00e9 \u2014 ${imported.length} question(s).`, 'success');
+        toast('Quiz "' + sheetName + '" import\u00e9 \u2014 ' + imported.length + ' question(s).', 'success');
     });
 
-    document.getElementById('import-quiz-cancel').addEventListener('click', () => {
+    document.getElementById('import-quiz-cancel').addEventListener('click', function() {
         document.getElementById('import-quiz-modal').classList.add('hidden');
     });
 
-    // Rename modal
     document.getElementById('rename-confirm').addEventListener('click', confirmRename);
-    document.getElementById('rename-cancel').addEventListener('click', () => {
+    document.getElementById('rename-cancel').addEventListener('click', function() {
         document.getElementById('rename-modal').classList.add('hidden');
         pendingRenameKey = null;
     });
-    document.getElementById('rename-input').addEventListener('keydown', (e) => {
+    document.getElementById('rename-input').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') confirmRename();
     });
 });

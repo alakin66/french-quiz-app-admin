@@ -254,6 +254,22 @@ pub async fn save_json_dialog(app: tauri::AppHandle) -> Result<Option<String>, S
 }
 
 #[tauri::command]
+pub async fn save_named_json_dialog(app: tauri::AppHandle, name: String) -> Result<Option<String>, String> {
+    let (tx, rx) = tokio::sync::oneshot::channel();
+    app.dialog()
+        .file()
+        .add_filter("JSON", &["json"])
+        .set_file_name(&name)
+        .save_file(move |file| {
+            let result = file
+                .and_then(|fp| fp.into_path().ok())
+                .and_then(|p| p.to_str().map(String::from));
+            let _ = tx.send(result);
+        });
+    rx.await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn open_student_app(query: Option<String>) -> Result<(), String> {
     let root = repo_root()?;
     let index = root.join("index.html");
@@ -261,7 +277,8 @@ pub fn open_student_app(query: Option<String>) -> Result<(), String> {
         return Err("index.html introuvable dans le dossier racine.".to_string());
     }
     let path = index.to_str().ok_or("Chemin invalide")?;
-    let url = format!("file://{}{}", path, query.unwrap_or_default());
+    let encoded_path = path.replace(' ', "%20");
+    let url = format!("file://{}{}", encoded_path, query.unwrap_or_default());
     Command::new("open")
         .arg(&url)
         .spawn()

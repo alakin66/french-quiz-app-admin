@@ -1,0 +1,135 @@
+{
+  "_TEMPLATE_GUIDE": {
+    "_purpose": "Provide this file to an LLM to generate a new quiz module. Fill in the fields marked with <FILL_IN>. Remove all '_comment' and '_TEMPLATE_GUIDE' keys from the final output.",
+
+    "_top_level_structure": "The root object contains one key per module. Each module key is a plain string name (e.g. 'Les Pronoms', 'Le Subjonctif'). A module contains: _description, _intro, and one or more quiz keys.",
+
+    "_quiz_key_naming": "Quiz keys follow the pattern: '<Topic> - <Level>'. Examples: 'Pronoms COD & COI - A2', 'Subjonctif Présent - B1', 'Révision Mixte - B2'. The level suffix (A1, A2, B1, B2, C1) is optional but recommended.",
+
+    "_intro_html_guide": {
+      "_purpose": "The _intro value is an HTML table string rendered before the quiz. It summarises the grammar rule visually. Produce clean, compact HTML — no extra whitespace between tags on the same row.",
+      "_table_wrapper": "<table class=\"xlsx-table intro-table\"><colgroup>...</colgroup><tbody>...</tbody></table>",
+      "_colgroup": "Define column widths summing to 100%. 3 columns at 33%/33%/34% is standard. Omit the 'action-col' (that is added automatically by the renderer).",
+      "_row_types": {
+        "title-row":     "tr.title-row — Main title. First cell is <th> (bold), second cell spans 2 columns and gives a one-sentence description.",
+        "blank-row":     "tr.blank-row — Empty spacer row. Use <td colspan='3'>&nbsp;</td>.",
+        "focus-point":   "tr.focus-point — Highlighted rule or definition. First cell is <th> (label), second cell spans 2 and contains the rule (bold key terms).",
+        "section-header":"tr.section-header — Section divider. One <td colspan='3'> with a letter prefix, e.g. 'A. Les pronoms sujets'.",
+        "explanation":   "tr.explanation — Detail row. Three cells: term/form | explanation | example. Use <i>Explication</i> / <i>Exemple</i> as column headers after section-header."
+      },
+      "_inline_formatting": "Use <b> for key terms, <i> for meta-labels, <u> for the replaced noun in examples, <span style='color:#548DD4;'> for COD pronouns (blue), <span style='color:#FF0000;'> for COI (red), <span style='color:#00B050;'> for Y/EN (green), <span style='color:#F79646;'> for general highlights (orange)."
+    },
+
+    "_question_types": {
+      "MultipleChoice": {
+        "_description": "Student picks ONE correct answer from 4 options.",
+        "_Options": "Exactly 4 options, comma-separated. Include plausible distractors.",
+        "_Answer": "Exactly one of the Options values.",
+        "_Question_tip": "Use ___ (3 underscores) as the blank placeholder in fill-in-context sentences."
+      },
+      "FillInBlank": {
+        "_description": "Student types the answer freely (no options shown).",
+        "_Options": "Must be an empty string \"\".",
+        "_Answer": "The exact expected string. Accept only one value.",
+        "_Question_tip": "Always include ___ in the sentence to show where to type."
+      },
+      "TrueFalse": {
+        "_description": "Student picks Vrai or Faux.",
+        "_Options": "Always exactly \"Vrai, Faux\".",
+        "_Answer": "Either \"Vrai\" or \"Faux\"."
+      },
+      "OddOneOut": {
+        "_description": "Student identifies the item that does NOT belong to a group.",
+        "_Options": "Exactly 4 options, comma-separated. One is the odd one out.",
+        "_Answer": "The odd-one-out option.",
+        "_Question_tip": "Phrase the question as 'Lequel/Laquelle n'est PAS...' or 'Quel mot ne va pas avec...'"
+      },
+      "Vocabulary": {
+        "_description": "Student matches a word or phrase to its definition or translation.",
+        "_Options": "Comma-separated list of choices (minimum 3).",
+        "_Answer": "The correct choice from Options.",
+        "_Question_tip": "State the word/phrase to identify, e.g. 'Que signifie \"se souvenir\" ?'"
+      }
+    },
+
+    "_feedback_tips": [
+      "FeedbackCorrect: confirm why the answer is right in one sentence. Start with an encouragement word (Bravo !, Exact !, Bien !, Parfait !).",
+      "FeedbackIncorrect: explain the rule that applies. Start with 'Faux.', 'Non.', or 'Incorrect.' then give the rule.",
+      "Both feedbacks should reference the specific form used in the question, not just the abstract rule."
+    ],
+
+    "_multi_select_note": "Answer can contain multiple comma-separated values when more than one option is correct (e.g. \"le, la\"). The student must select all of them. Use this sparingly."
+  },
+
+  "YOUR_MODULE_NAME": {
+    "_comment_module": "Replace 'YOUR_MODULE_NAME' with the actual module name. This key is displayed as the topic title in the student app.",
+
+    "_description": "<FILL_IN: one short sentence describing the module, e.g. 'Les pronoms personnels en français'>",
+
+    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n</colgroup>\n<tbody>\n  <tr class=\"title-row\"><th><FILL_IN: Rule name></th><td colspan=\"2\"><FILL_IN: One-sentence scope description></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Définition</th><td colspan=\"2\"><FILL_IN: Core definition with <b>key terms</b> bolded></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Règle</th><td colspan=\"2\"><FILL_IN: Main rule, e.g. sentence structure></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Exemple</th><td colspan=\"2\"><FILL_IN: Concrete example sentence></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td></td><td><i>Explication</i></td><td><i>Exemple</i></td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">A. <FILL_IN: First section name></td></tr>\n  <tr class=\"explanation\"><td><FILL_IN: Form></td><td><FILL_IN: When to use it></td><td><FILL_IN: Example sentence></td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">B. <FILL_IN: Second section name></td></tr>\n  <tr class=\"explanation\"><td><FILL_IN: Form></td><td><FILL_IN: When to use it></td><td><FILL_IN: Example sentence></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\"><FILL_IN: A practical tip or memory aid for the student></td></tr>\n</tbody>\n</table>",
+
+    "_comment_quizzes": "Add one key per quiz level below. Suggested progression: A2 (basic recognition), B1 (production), B2 (complex / mixed).",
+
+    "QUIZ_TOPIC - A2": {
+      "_comment": "REMOVE this _comment key in the final output. Replace 'QUIZ_TOPIC' with the grammar point name (matching the module name is fine). Each quiz is an array of question objects. Aim for 10–15 questions per quiz, mixing all relevant types.",
+      "_type": "THIS IS A COMMENT KEY — REMOVE IT. The value of this quiz key must be a plain array [], not an object. See the correct format below."
+    },
+
+    "QUIZ_TOPIC - A2_QUESTIONS": [
+      {
+        "_comment": "REMOVE this object in the final output. It is documentation only.",
+        "_note": "Each quiz is a JSON array of question objects. The key above ('QUIZ_TOPIC - A2') maps directly to this array — there is no wrapper object."
+      },
+
+      {
+        "Type": "MultipleChoice",
+        "_comment_type": "One correct answer out of 4 options. Use ___ as the blank in the sentence.",
+        "Question": "<FILL_IN: Complete sentence with ___ placeholder, e.g. 'Tu vois Marie ? → Oui, je ___ vois.'>",
+        "Options": "<FILL_IN: 4 comma-separated options, e.g. 'le, la, les, lui'>",
+        "Answer": "<FILL_IN: Exactly one of the Options>",
+        "FeedbackCorrect": "<FILL_IN: Why it is correct, e.g. 'Bravo ! Marie est féminin singulier → COD = la.'>",
+        "FeedbackIncorrect": "<FILL_IN: Rule reminder, e.g. 'Faux. Marie (féminin singulier) est COD → la.'>"
+      },
+
+      {
+        "Type": "FillInBlank",
+        "_comment_type": "Student types freely. Options must be empty string. Use ___ in the question.",
+        "Question": "<FILL_IN: Sentence with ___ placeholder, e.g. 'Il mange les pommes. → Il ___ mange.'>",
+        "Options": "",
+        "Answer": "<FILL_IN: Exact expected answer, e.g. 'les'>",
+        "FeedbackCorrect": "<FILL_IN: Confirmation with rule>",
+        "FeedbackIncorrect": "<FILL_IN: Rule explanation>"
+      },
+
+      {
+        "Type": "TrueFalse",
+        "_comment_type": "Options must always be exactly 'Vrai, Faux'. Answer must be 'Vrai' or 'Faux'.",
+        "Question": "<FILL_IN: A statement about the grammar rule, e.g. 'Le pronom COD le peut remplacer un nom féminin singulier.'>",
+        "Options": "Vrai, Faux",
+        "Answer": "<FILL_IN: 'Vrai' or 'Faux'>",
+        "FeedbackCorrect": "<FILL_IN: Confirmation>",
+        "FeedbackIncorrect": "<FILL_IN: Correction>"
+      },
+
+      {
+        "Type": "OddOneOut",
+        "_comment_type": "Student identifies the item that does NOT belong. Exactly 4 options.",
+        "Question": "<FILL_IN: e.g. 'Quel pronom n'est PAS un pronom COD ?'>",
+        "Options": "<FILL_IN: 4 comma-separated items, one of which does not belong>",
+        "Answer": "<FILL_IN: The odd-one-out item>",
+        "FeedbackCorrect": "<FILL_IN: Why this item is the odd one out>",
+        "FeedbackIncorrect": "<FILL_IN: Explain which item is the odd one out and why>"
+      },
+
+      {
+        "Type": "Vocabulary",
+        "_comment_type": "Student matches a word/phrase to its meaning. Minimum 3 options.",
+        "Question": "<FILL_IN: e.g. 'Que signifie \"se souvenir de\" en anglais ?'>",
+        "Options": "<FILL_IN: 3–4 comma-separated choices>",
+        "Answer": "<FILL_IN: The correct choice from Options>",
+        "FeedbackCorrect": "<FILL_IN: Confirmation with context>",
+        "FeedbackIncorrect": "<FILL_IN: Correct answer with usage example>"
+      }
+    ]
+  }
+}

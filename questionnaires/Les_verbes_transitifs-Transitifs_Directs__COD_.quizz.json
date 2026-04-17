@@ -1,0 +1,86 @@
+{
+  "Les verbes transitifs": {
+    "Transitifs Directs (COD)": [
+      {
+        "Type": "MultipleChoice",
+        "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
+        "Options": "manger, parler, ressembler, sourire",
+        "Answer": "manger",
+        "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
+        "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme)."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Nous ___ la télévision tous les soirs.",
+        "Options": "",
+        "Answer": "regardons",
+        "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
+        "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
+        "Options": "",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
+        "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
+        "Options": "acheter, vendre, répondre, donner",
+        "Answer": "répondre",
+        "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
+        "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
+        "Options": "COD, COI, Sujet",
+        "Answer": "COD",
+        "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
+        "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Ils ont ___ leur maison l'année dernière.",
+        "Options": "",
+        "Answer": "vendu",
+        "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
+        "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
+        "Options": "Je lui mange, Je la mange, Je y mange",
+        "Answer": "Je la mange",
+        "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
+        "FeedbackIncorrect": "Faux, c'est 'la'."
+      },
+      {
+        "Type": "TrueFalse",
+        "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
+        "Options": "",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
+        "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Choisis la bonne phrase :",
+        "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
+        "Answer": "J'écoute la radio",
+        "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
+        "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Tu ___ ton temps avec ces bêtises.",
+        "Options": "",
+        "Answer": "perds",
+        "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
+        "FeedbackIncorrect": "C'est le verbe 'perdre'."
+      }
+    ]
+  }
+}

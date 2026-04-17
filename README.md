@@ -67,7 +67,8 @@ Page d'accueil listant tous les modules dans un tableau (nom, description, nombr
 | Bouton | Action |
 |--------|--------|
 | (nom du quiz) | Ouvre la page Questions |
-| Tester | Ouvre l'app étudiante en présélectionnant ce quiz |
+| Tester | Écrit `quizzes.js` puis ouvre l'app étudiante directement sur ce quiz |
+| 🔗 Copier le lien | Copie dans le presse-papiers l'URL GitHub Pages de ce quiz (format `?quiz=...&preselect=...`) |
 | Renommer | Modifie le nom du quiz |
 | Supprimer | Supprime le quiz avec confirmation |
 | + Ajouter Quiz | Crée un nouveau quiz vide |
@@ -90,7 +91,7 @@ Les champs nom et description se sauvegardent automatiquement à la perte du foc
 - Dupliquer ou supprimer une ligne
 - Les nouvelles lignes affichent un menu déroulant pour le type ; les lignes existantes affichent le type en texte
 
-**Types de questions disponibles :** `MultipleChoice` · `OddOneOut` · `TrueFalse` · `FillInBlank`
+**Types de questions disponibles :** `MultipleChoice` · `OddOneOut` · `TrueFalse` · `FillInBlank` · `Vocabulary`
 
 ---
 
@@ -132,6 +133,16 @@ Configuration pour la publication GitHub automatique.
 - **Sélection aléatoire** — mélange ou ordre original au choix
 - **Suivi des progrès** — résultats enregistrés en `localStorage` avec badges ✅ 🟡 🔴
 - **Mode Révision** — visible uniquement en local (`localhost` / `file://`), permet de parcourir les questions sans chronomètre
+- **Lien direct vers un quiz** — l'URL accepte des paramètres pour ouvrir un module et présélectionner un quiz automatiquement
+
+### Paramètres URL
+
+| Paramètre | Exemple | Effet |
+|-----------|---------|-------|
+| `?quiz=NomModule` | `?quiz=Les%20Pronoms` | Ouvre directement ce module (passe l'écran de sélection) |
+| `&preselect=CléQuiz` | `&preselect=Les%20Pronoms%20-%20COD%20A2` | Présélectionne ce quiz et lance immédiatement la session |
+
+Le bouton **🔗 Copier le lien** de l'outil admin génère automatiquement ces URLs au format GitHub Pages.
 
 ### Types de questions
 
@@ -150,6 +161,19 @@ Configuration pour la publication GitHub automatique.
 - **Autres onglets** → un quiz par onglet
 - **Ligne 1** (entêtes obligatoires) : `Type` · `Question` · `Options` · `Answer` · `FeedbackCorrect` · `FeedbackIncorrect`
 - `Options` et `Answer` : valeurs multiples séparées par des virgules
+
+---
+
+## Créer du contenu avec un LLM
+
+Le fichier `quiz-template.json` est un gabarit annoté que vous pouvez fournir directement à un LLM (Claude, ChatGPT, etc.) pour générer un nouveau module de quiz.
+
+**Usage :**
+1. Copier le contenu de `quiz-template.json`
+2. L'envoyer au LLM avec le prompt : *« Remplis ce gabarit pour créer un module sur [sujet]. Supprime toutes les clés `_comment*` et `_TEMPLATE_GUIDE` de la sortie. »*
+3. Coller le JSON généré dans l'outil admin via **📂 Importer Quizzes** (ou fusionner manuellement)
+
+Le gabarit documente : la structure du module, le format HTML de l'introduction, les 5 types de questions avec leurs contraintes, et les règles de rédaction des feedbacks.
 
 ---
 
@@ -205,3 +229,14 @@ URL étudiants : `https://<user>.github.io/<repo>/`
 | Lecture/écriture Excel | [SheetJS](https://sheetjs.com/) (`xlsx`) |
 | Publication | Git (via Tauri backend) |
 | Hébergement | GitHub Pages |
+
+---
+
+## Contributeurs
+
+| Contributeur | Rôle |
+|---|---|
+| [@alakin66](https://github.com/alakin66) | Auteur |
+| [Claude](https://claude.ai) (Anthropic) | Pair programmer IA |
+
+Les commits générés avec l'aide de Claude incluent automatiquement une ligne `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` dans le message de commit.

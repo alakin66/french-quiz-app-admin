@@ -126,12 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (optStart) {
                 quizSelect.value = preselectParam;
                 introQuizSelect.value = preselectParam;
+                selectedQuizKey = preselectParam;
                 startBtn.disabled = false;
                 introStartBtn.disabled = false;
                 var preTotal = (selectedTopicKey
                     ? (quizzesData[selectedTopicKey][preselectParam] || []).length
                     : 0);
-                if (preTotal > 0) initCountControls(preTotal);
+                if (preTotal > 0) {
+                    initCountControls(preTotal);
+                    launchQuiz(preselectParam);
+                }
             }
         }
     }

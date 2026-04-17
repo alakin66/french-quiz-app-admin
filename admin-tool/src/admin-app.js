@@ -82,6 +82,33 @@ function promptModal(msg, defaultValue) {
     });
 }
 
+function selectModal(labelHtml, options) {
+    return new Promise(function(resolve) {
+        var overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        var optsHtml = options.map(function(o) {
+            return '<option value="' + escHtml(o) + '">' + escHtml(o) + '</option>';
+        }).join('');
+        overlay.innerHTML =
+            '<div class="modal">' +
+            '<div class="modal-title">S\u00e9lectionner</div>' +
+            '<div class="modal-body">' +
+            '<div class="form-group" style="margin-bottom:0">' +
+            '<label>' + labelHtml + '</label>' +
+            '<select class="form-control" id="_sel_inp">' + optsHtml + '</select>' +
+            '</div></div>' +
+            '<div class="modal-actions">' +
+            '<button class="btn btn-secondary" id="_sel_cancel">Annuler</button>' +
+            '<button class="btn btn-primary" id="_sel_ok">Confirmer</button>' +
+            '</div></div>';
+        document.body.appendChild(overlay);
+        var sel = overlay.querySelector('#_sel_inp');
+        function done(val) { document.body.removeChild(overlay); resolve(val); }
+        overlay.querySelector('#_sel_ok').addEventListener('click', function() { done(sel.value); });
+        overlay.querySelector('#_sel_cancel').addEventListener('click', function() { done(null); });
+    });
+}
+
 function navTo(page, params) {
     const url = new URL(page, window.location.href);
     if (params) {
@@ -154,6 +181,7 @@ window.AdminApp = {
     toast,
     confirmModal,
     promptModal,
+    selectModal,
     navTo,
     getParam,
     loadData,

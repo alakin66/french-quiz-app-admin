@@ -19,6 +19,7 @@ pub fn run() {
             commands::open_excel_dialog,
             commands::open_json_dialog,
             commands::save_json_dialog,
+            commands::save_named_json_dialog,
             commands::open_student_app,
             commands::read_binary_file,
             commands::read_text_file_at,
