@@ -40,8 +40,7 @@
             </nav>
         </div>
         <div class="app-header-actions">
-            <button class="btn btn-ghost btn-sm" id="btn-export-excel">&#x1F4C4; Exporter Excel</button>
-            <button class="btn btn-ghost btn-sm" id="btn-export-module-json">&#x1F4E4; Exporter Module JSON</button>
+            <button class="btn btn-ghost btn-sm" id="btn-export-module-json">&#x1F4E4; Exporter Module</button>
             <a class="btn btn-ghost btn-sm" id="btn-header-back" href="index.html">&#x2190; Retour</a>
         </div>
     </header>
@@ -67,11 +66,7 @@
                 <span class="card-title">&#x1F4CB; Introduction</span>
                 <div class="intro-actions">
                     <button class="btn btn-primary btn-sm" id="btn-edit-intro">Éditer</button>
-                    <label class="btn btn-secondary btn-sm" style="cursor:pointer">
-                        &#x2B06; Importer Introduction depuis Excel
-                        <input type="file" id="intro-file-input" accept=".xlsx" style="display:none">
-                    </label>
-                    <button class="btn btn-secondary btn-sm" id="btn-import-intro-json">&#x1F4C2; Importer Introduction JSON</button>
+                    <button class="btn btn-secondary btn-sm" id="btn-import-intro-json">&#x1F4C2; Importer Introduction</button>
                     <button class="btn btn-secondary btn-sm" id="btn-clear-intro">Effacer</button>
                 </div>
             </div>
@@ -102,8 +97,7 @@
             <div class="card-header">
                 <span class="card-title">&#x1F4DD; Quiz</span>
                 <span id="quiz-count-badge" class="badge badge-primary">0</span>
-                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-excel">&#x2B06; Importer Quiz depuis Excel</button>
-                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-json">&#x1F4C2; Importer Quizz JSON</button>
+                <button class="btn btn-secondary btn-sm" id="btn-import-quiz-json">&#x1F4C2; Importer Quiz</button>
             </div>
             <div class="card-body" style="padding:0">
                 <table class="data-table" id="quiz-table">
@@ -127,31 +121,6 @@
     </div>
 </div>
 
-<!-- Import Quiz from Excel modal -->
-<div class="modal-overlay hidden" id="import-quiz-modal">
-    <div class="modal">
-        <div class="modal-title">Importer Quiz depuis Excel</div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label>Fichier Excel</label>
-                <label class="btn btn-secondary btn-sm" style="cursor:pointer;display:inline-block">
-                    &#x1F4C2; Choisir un fichier .xlsx
-                    <input type="file" id="import-quiz-file" accept=".xlsx" style="display:none">
-                </label>
-                <span id="import-quiz-filename" class="text-muted" style="margin-left:8px;font-size:13px"></span>
-            </div>
-            <div class="form-group" id="import-quiz-sheet-group" style="display:none">
-                <label for="import-quiz-sheet">Feuille (quiz) à importer</label>
-                <select id="import-quiz-sheet" class="form-control"></select>
-            </div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-secondary" id="import-quiz-cancel">Annuler</button>
-            <button class="btn btn-primary" id="import-quiz-confirm" disabled>Importer</button>
-        </div>
-    </div>
-</div>
-
 <!-- Rename modal -->
 <div class="modal-overlay hidden" id="rename-modal">
     <div class="modal">
@@ -169,10 +138,7 @@
     </div>
 </div>
 
-<script src="xlsx.full.min.js"></script>
 <script src="admin-app.js"></script>
-<script src="intro-parser.js"></script>
-<script src="excel-builder.js"></script>
 <script>
 var appData = {};
 var moduleName = getParam('module');
@@ -220,7 +186,7 @@ function renderQuizTable() {
             ' onclick="navTo(\'questions.html\', {module: ' + mJson + ', quiz: ' + kJson + '})">Questions</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="testQuiz(' + kJson + ')">Tester</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="copyQuizLink(' + kJson + ')">Copier le lien</button>' +
-            '<button class="btn btn-secondary btn-sm" onclick="exportQuizJson(' + kJson + ')">&#x1F4E4; Exporter</button>' +
+            '<button class="btn btn-secondary btn-sm" onclick="exportQuizJson(' + kJson + ')">Exporter</button>' +
             '<button class="btn btn-secondary btn-sm" onclick="openRename(' + kJson + ')">Renommer</button>' +
             '<button class="btn btn-danger btn-sm" onclick="deleteQuiz(' + kJson + ')">Supprimer</button>' +
             '</div></td></tr>';
@@ -358,13 +324,10 @@ async function testQuiz(key) {
 // ── Editing lock ─────────────────────────────────────────────
 function setEditingLock(locked) {
     var ids = [
-        'btn-export-excel',
-        'btn-import-quiz-excel',
         'btn-add-quiz',
         'new-quiz-input',
         'module-name-input',
         'module-desc-input',
-        'intro-file-input',
         'btn-edit-intro',
         'btn-clear-intro'
     ];
@@ -721,15 +684,9 @@ async function importIntroFromJson() {
     var modules = Object.keys(incoming);
     if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
 
-    var chosen;
-    if (incoming[moduleName] !== undefined) {
-        chosen = moduleName;
-    } else if (modules.length === 1) {
-        chosen = modules[0];
-    } else {
-        chosen = await selectModal('Choisir le module source de l\u2019introduction\u00a0:', modules);
-        if (!chosen) return;
-    }
+    var preselect = incoming[moduleName] !== undefined ? moduleName : modules[0];
+    var chosen = await selectModal('Choisir le module source de l\u2019introduction\u00a0:', modules, preselect);
+    if (!chosen) return;
 
     var intro = (incoming[chosen] || {})._intro || '';
     if (!intro) { toast('Aucune introduction trouv\u00e9e dans ce module.', 'error'); return; }
@@ -750,28 +707,17 @@ async function importQuizFromJson() {
     var modules = Object.keys(incoming);
     if (modules.length === 0) { toast('Fichier vide.', 'error'); return; }
 
-    var srcModule;
-    if (incoming[moduleName] !== undefined) {
-        srcModule = moduleName;
-    } else if (modules.length === 1) {
-        srcModule = modules[0];
-    } else {
-        srcModule = await selectModal('Choisir le module source\u00a0:', modules);
-        if (!srcModule) return;
-    }
+    var modPreselect = incoming[moduleName] !== undefined ? moduleName : modules[0];
+    var srcModule = await selectModal('Choisir le module source\u00a0:', modules, modPreselect);
+    if (!srcModule) return;
 
     var quizzes = Object.keys(incoming[srcModule] || {}).filter(function(k) {
         return k !== '_intro' && k !== '_description';
     });
     if (quizzes.length === 0) { toast('Aucun quiz dans ce module.', 'error'); return; }
 
-    var srcQuiz;
-    if (quizzes.length === 1) {
-        srcQuiz = quizzes[0];
-    } else {
-        srcQuiz = await selectModal('Choisir le quiz \u00e0 importer\u00a0:', quizzes);
-        if (!srcQuiz) return;
-    }
+    var srcQuiz = await selectModal('Choisir le quiz \u00e0 importer\u00a0:', quizzes, quizzes[0]);
+    if (!srcQuiz) return;
 
     var destKey = srcQuiz.startsWith(srcModule + ' - ')
         ? srcQuiz.slice(srcModule.length + 3)
@@ -813,16 +759,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     document.getElementById('module-name-input').addEventListener('blur', saveModule);
     document.getElementById('module-desc-input').addEventListener('blur', saveModule);
-
-    document.getElementById('btn-export-excel').addEventListener('click', function() {
-        try {
-            var data = buildModuleXlsx(moduleName, appData[moduleName]);
-            downloadXlsx(data, moduleName.replace(/[^a-zA-Z0-9_-]/g, '_') + '.xlsx');
-            toast('Export Excel pr\u00eat.', 'success');
-        } catch (e) {
-            toast('Erreur export\u00a0: ' + e.message, 'error');
-        }
-    });
 
     document.getElementById('btn-export-module-json').addEventListener('click', exportModuleJson);
     document.getElementById('btn-import-intro-json').addEventListener('click', importIntroFromJson);
@@ -891,81 +827,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         renderIntroPreview('');
         await saveData(appData);
         toast('Introduction effac\u00e9e.', 'success');
-    });
-
-    document.getElementById('intro-file-input').addEventListener('change', async function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        var buffer = await file.arrayBuffer();
-        var html = window.parseIntroXlsx(buffer);
-        if (!html) { toast('Impossible de lire l\'introduction depuis ce fichier.', 'error'); return; }
-
-        var nameFromFile = file.name.replace(/\.xlsx$/i, '').trim();
-        document.getElementById('module-name-input').value = nameFromFile;
-
-        var meta = window.parseIntroMeta(buffer);
-        if (meta && meta.description) {
-            document.getElementById('module-desc-input').value = meta.description;
-        }
-
-        appData[moduleName]._intro = html;
-        renderIntroPreview(html);
-        await saveData(appData);
-        toast('Introduction import\u00e9e.', 'success');
-        e.target.value = '';
-    });
-
-    var importQuizWb = null;
-
-    document.getElementById('btn-import-quiz-excel').addEventListener('click', function() {
-        importQuizWb = null;
-        document.getElementById('import-quiz-filename').textContent = '';
-        document.getElementById('import-quiz-sheet-group').style.display = 'none';
-        document.getElementById('import-quiz-confirm').disabled = true;
-        document.getElementById('import-quiz-modal').classList.remove('hidden');
-    });
-
-    document.getElementById('import-quiz-file').addEventListener('change', async function(e) {
-        var file = e.target.files[0];
-        if (!file) return;
-        var buffer = await file.arrayBuffer();
-        importQuizWb = XLSX.read(buffer, { type: 'array' });
-        var sheets = importQuizWb.SheetNames.filter(function(n) {
-            return n.toLowerCase() !== 'introduction';
-        });
-        var sel = document.getElementById('import-quiz-sheet');
-        sel.innerHTML = sheets.map(function(n) {
-            return '<option value="' + escHtml(n) + '">' + escHtml(n) + '</option>';
-        }).join('');
-        document.getElementById('import-quiz-filename').textContent = file.name;
-        document.getElementById('import-quiz-sheet-group').style.display = sheets.length ? '' : 'none';
-        document.getElementById('import-quiz-confirm').disabled = sheets.length === 0;
-        e.target.value = '';
-    });
-
-    document.getElementById('import-quiz-confirm').addEventListener('click', async function() {
-        var sheetName = document.getElementById('import-quiz-sheet').value;
-        if (!importQuizWb || !sheetName) return;
-        var rows = XLSX.utils.sheet_to_json(importQuizWb.Sheets[sheetName], { defval: '' });
-        var imported = rows.map(function(row) {
-            return {
-                Type: row.Type || row.type || '',
-                Question: row.Question || row.question || '',
-                Options: row.Options || row.options || '',
-                Answer: row.Answer || row.answer || '',
-                FeedbackCorrect: row.FeedbackCorrect || row['Feedback Correct'] || '',
-                FeedbackIncorrect: row.FeedbackIncorrect || row['Feedback Incorrect'] || '',
-            };
-        }).filter(function(q) { return q.Type && q.Question; });
-        appData[moduleName][sheetName] = imported;
-        await saveData(appData);
-        renderQuizTable();
-        document.getElementById('import-quiz-modal').classList.add('hidden');
-        toast('Quiz "' + sheetName + '" import\u00e9 \u2014 ' + imported.length + ' question(s).', 'success');
-    });
-
-    document.getElementById('import-quiz-cancel').addEventListener('click', function() {
-        document.getElementById('import-quiz-modal').classList.add('hidden');
     });
 
     document.getElementById('rename-confirm').addEventListener('click', confirmRename);

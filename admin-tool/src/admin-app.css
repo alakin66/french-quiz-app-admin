@@ -589,7 +589,7 @@ a:hover { text-decoration: underline; }
 
 .intro-preview .xlsx-table td,
 .intro-preview .intro-table td {
-    padding: 8px 12px;
+    padding: 4px 8px;
     vertical-align: top;
     border: 1px solid #E0E0E0;
 }
@@ -613,6 +613,11 @@ a:hover { text-decoration: underline; }
     text-align: left;
 }
 
+.intro-preview .title-row td:nth-child(2),
+.intro-preview .title-row th:nth-child(2) {
+    font-size: 13px;
+}
+
 .intro-preview .focus-point th,
 .intro-preview .xlsx-table tr.focus-point th {
     background: var(--color-primary);
@@ -634,7 +639,7 @@ a:hover { text-decoration: underline; }
 }
 
 .intro-preview .blank-row td {
-    padding: 4px;
+    padding: 1px;
     background: transparent;
     border: none;
 }

@@ -82,7 +82,7 @@ function promptModal(msg, defaultValue) {
     });
 }
 
-function selectModal(labelHtml, options) {
+function selectModal(labelHtml, options, preselect) {
     return new Promise(function(resolve) {
         var overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
@@ -103,6 +103,7 @@ function selectModal(labelHtml, options) {
             '</div></div>';
         document.body.appendChild(overlay);
         var sel = overlay.querySelector('#_sel_inp');
+        if (preselect !== undefined) sel.value = preselect;
         function done(val) { document.body.removeChild(overlay); resolve(val); }
         overlay.querySelector('#_sel_ok').addEventListener('click', function() { done(sel.value); });
         overlay.querySelector('#_sel_cancel').addEventListener('click', function() { done(null); });
