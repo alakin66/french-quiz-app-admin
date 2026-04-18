@@ -371,7 +371,7 @@ window.quizzesData = {
   },
   "Les verbes transitifs": {
     "_description": "Les verbes transitifs en français",
-    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n<col class=\"action-col\" style=\"width: 52px;\"></colgroup>\n<tbody>\n  <tr class=\"focus-point\"><th>Les verbes transitifs</th><td colspan=\"2\">Les Verbes Transitifs en Français</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Qu'est-ce qu'un verbe transitif ?</th><td colspan=\"2\">Un verbe transitif est un verbe qui a besoin d'un complément d'objet pour compléter son sens.<br>On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td></td><td><i>Construction</i></td><td><i>Exemple</i></td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Direct (COD)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + complément direct</td><td>Le verbe se construit SANS préposition avant son complément.</td><td>Je mange une pomme. / Il lit un livre.</td></tr>\n  <tr class=\"explanation\"><td>Transitif Indirect (COI)</td><td>Le verbe se construit AVEC une préposition (à, de) avant son complément.</td><td>Verbe + à/de + complément</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Pronoms de remplacement</td></tr>\n  <tr class=\"explanation\"><td>Pour le COD</td><td><font color=\"#942192\">Utiliser</font> : le, la, l', les</td><td></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (personne)</td><td>Utiliser : lui, leur</td><td></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (chose)</td><td>Utiliser : y</td><td></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'de'</td><td>Utiliser : en</td><td></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Posez la question 'Qui ?' ou 'Quoi ?' directement après le verbe → COD (sans préposition). Si vous avez besoin de 'à qui ?' ou 'de quoi ?' → COI (avec préposition).</td></tr>\n</tbody>\n</table>",
+    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n<col class=\"action-col\" style=\"width: 52px;\"></colgroup>\n<tbody>\n  <tr class=\"title-row\"><td colspan=\"3\">Les verbes transitifs</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Qu'est-ce qu'un verbe transitif ?</th><td colspan=\"2\">Un verbe transitif est un verbe qui a besoin d'un <font color=\"#0433ff\">complément d'objet </font>pour compléter son sens.<br>On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td></td><td><i>Construction</i></td><td><i>Exemple</i></td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Direct (COD)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + complément direct</td><td>Le verbe se construit SANS préposition avant son complément.</td><td>Je mange <b>une pomme</b>. / Il lit <b>un livre.</b></td></tr>\n  <tr class=\"explanation\"><td>Transitif Indirect (COI)</td><td>Le verbe se construit AVEC une préposition (à, de) avant son complément.</td><td>Verbe + à/de + complément</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Pronoms de remplacement</td></tr>\n  <tr class=\"explanation\"><td>Pour le COD</td><td><font color=\"#000000\">Utiliser</font> : le, la, l', les</td><td><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Je regarde&nbsp;</span><b data-path-to-node=\"5,0,0\" data-index-in-node=\"28\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">le film</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">.&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">→&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Je&nbsp;</span><b data-path-to-node=\"5,1,0\" data-index-in-node=\"17\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">le</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">&nbsp;regarde.</span></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (personne)</td><td>Utiliser : lui, leur</td><td><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Je téléphone&nbsp;</span><b data-path-to-node=\"8,0,0\" data-index-in-node=\"30\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">à ma mère</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">.&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">→&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Je&nbsp;</span><b data-path-to-node=\"8,1,0\" data-index-in-node=\"17\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">lui</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">&nbsp;téléphone.</span></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (chose)</td><td>Utiliser : y</td><td><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Je pense&nbsp;</span><b data-path-to-node=\"11,0,0\" data-index-in-node=\"26\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">à mon avenir</b><font color=\"#000000\" face=\"-webkit-standard\" size=\"3\"><span style=\"caret-color: rgb(0, 0, 0);\">.&nbsp;</span></font><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">→&nbsp;</span><font color=\"#000000\" face=\"-webkit-standard\" size=\"3\"><span style=\"caret-color: rgb(0, 0, 0);\">J’<b>y</b> pense.</span></font></td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'de'</td><td>Utiliser : en</td><td><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Tu veux&nbsp;</span><b data-path-to-node=\"14,0,0\" data-index-in-node=\"25\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">du café</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">&nbsp;?&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">→&nbsp;</span><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">Oui, j'</span><b data-path-to-node=\"14,1,0\" data-index-in-node=\"21\" style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);\">en</b><span style=\"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-family: -webkit-standard; font-size: medium;\">&nbsp;veux.</span></td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Posez la question 'Qui ?' ou 'Quoi ?' directement après le verbe → COD (sans préposition). Si vous avez besoin de 'à qui ?' ou 'de quoi ?' → COI (avec préposition).</td></tr>\n</tbody>\n</table>",
     "Les verbes transitifs - Transitifs Directs (COD)": [
       {
         "Type": "MultipleChoice",
@@ -537,454 +537,219 @@ window.quizzesData = {
       }
     ]
   },
-  "Verbes Transitifs": {
-    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n<col class=\"action-col\" style=\"width: 52px;\"></colgroup>\n<tbody>\n  <tr class=\"title-row\"><th>Les Verbes Transitifs</th><td colspan=\"2\">Les Verbes Transitifs en Français</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Qu'est-ce qu'un verbe transitif ?</th><td colspan=\"2\">Un verbe transitif est un verbe qui a besoin d'un complément d'objet pour compléter son sens.<br>On distingue deux catégories : les verbes transitifs DIRECTS et les verbes transitifs INDIRECTS.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"explanation\"><td></td><td><i>Construction</i></td><td><i>Exemple</i></td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Direct (COD)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + complément direct</td><td>Le verbe se construit <font color=\"#0433ff\">SANS</font> préposition avant son complément.</td><td>Je mange une pomme. / Il lit un livre.</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Transitif Indirect (COI)</td></tr>\n  <tr class=\"explanation\"><td>Verbe + à/de + complément</td><td>Le verbe se construit AVEC une préposition (à, de) avant son complément.</td><td>Je parle à Marc. / Il se souvient de toi.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Pronoms de remplacement</td></tr>\n  <tr class=\"explanation\"><td>Pour le COD</td><td>Utiliser : le, la, l', les</td><td>Je mange la pomme → Je la mange.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (personne)</td><td>Utiliser : lui, leur</td><td>Je parle à Marc → Je lui parle.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'à' (chose)</td><td>Utiliser : y</td><td>Je pense à ce projet → J'y pense.</td></tr>\n  <tr class=\"explanation\"><td>Pour le COI avec 'de'</td><td>Utiliser : en</td><td>Il parle de son voyage → Il en parle.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Posez la question 'Qui ?' ou 'Quoi ?' directement après le verbe → COD (sans préposition). Si vous avez besoin de 'à qui ?' ou 'de quoi ?' → COI (avec préposition).</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"focus-point\"><th>Label</th><td colspan=\"2\">Contenu</td></tr>\n</tbody>\n</table>",
-    "Verbes Transitifs - Transitifs Directs (COD)": [
+  "La conjugaison des verbes en 'ir'": {
+    "_description": "La conjugaison des verbes en 'ir'",
+    "_intro": "<table class=\"xlsx-table intro-table\"><colgroup><col style=\"width:33.33%\"><col style=\"width:33.33%\"><col style=\"width:33.34%\"></colgroup><tbody><tr class=\"title-row\"><th>Les verbes en -ir</th><td colspan=\"2\">Apprenez à conjuguer les verbes en -ir-.</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"focus-point\"><th>Définition</th><td colspan=\"2\">Les verbes en <b>-ir</b> se séparent entre le <b>2e groupe</b> (modèle <i>finir</i>) et le <b>3e groupe</b> (modèles <i>partir, venir</i>).</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"focus-point\"><th>Règles</th><td colspan=\"2\">Pour le 2e groupe : radical + <b>-is, -is, -it, -issons, -issez, -issent</b>. Pour le 3e groupe : les terminaisons varient.</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"focus-point\"><th>Exemples</th><td colspan=\"2\">Je <b>choisis</b> mon option. Nous <b>sortons</b> du gymnase.</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"explanation\"><td></td><td><i>Explication</i></td><td><i>Exemple</i></td></tr><tr class=\"section-header\"><td colspan=\"3\">A. Le 2e groupe (Finir)</td></tr><tr class=\"explanation\"><td>Radical + <b>-issons</b> (avec nous)</td><td>C'est le cas de la majorité des verbes en -ir.</td><td>Nous <b>réussissons</b> nos examens de maturité.</td></tr><tr class=\"section-header\"><td colspan=\"3\">B. Le 3e groupe (Partir, Venir, Ouvrir)</td></tr><tr class=\"explanation\"><td>Terminaisons irrégulières</td><td>Ils sont moins nombreux mais très utilisés au quotidien.</td><td>Ils <b>viennent</b> à la cantine. Je t'<b>offre</b> un thé.</td></tr><tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr><tr class=\"focus-point\"><th>Conseils</th><td colspan=\"2\">Pour savoir à quel groupe appartient un verbe, testez-le avec <b>nous</b>. Si ça se termine par <b>-issons</b>, c'est le 2e groupe !</td></tr></tbody></table>",
+    "La conjugaison des verbes en 'ir' - Conjugaison au présent": [
       {
         "Type": "MultipleChoice",
-        "Question": "Lequel de ces verbes est un verbe transitif direct (qui prend un COD sans préposition) ?",
-        "Options": "manger, parler, ressembler, sourire",
-        "Answer": "manger",
-        "FeedbackCorrect": "Correct ! On dit 'manger quelque chose'.",
-        "FeedbackIncorrect": "Faux. 'Manger' prend un objet direct (ex: manger une pomme)."
+        "Question": "Le matin, tu ___ toujours les mêmes céréales.",
+        "Options": "choisis, choisit, choissis, choisisse",
+        "Answer": "choisis",
+        "FeedbackCorrect": "Exact ! Avec 'tu', le verbe choisir (2e groupe) prend la terminaison '-is'.",
+        "FeedbackIncorrect": "Incorrect. 'Choisir' est du 2e groupe. La terminaison correcte avec 'tu' est '-is' (tu choisis)."
+      },
+      {
+        "Type": "MultipleChoice",
+        "Question": "Mes amis ___ en vacances en Italie cet été.",
+        "Options": "partent, partis, partissent, partes",
+        "Answer": "partent",
+        "FeedbackCorrect": "Bravo ! 'Partir' est un verbe du 3e groupe : ils partent.",
+        "FeedbackIncorrect": "Faux. 'Partir' est un verbe du 3e groupe (nous partons, ils partent). La forme 'partissent' n'existe pas."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Nous ___ la télévision tous les soirs.",
+        "Question": "Nous ___ nos devoirs avant de sortir en ville. (finir)",
         "Options": "",
-        "Answer": "regardons",
-        "FeedbackCorrect": "Très bien ! 'Regarder' est un verbe transitif direct.",
-        "FeedbackIncorrect": "Incorrect. Le verbe est 'regarder' conjugué avec 'nous'."
+        "Answer": "finissons",
+        "FeedbackCorrect": "Parfait ! 'Finir' est le modèle parfait du 2e groupe : nous finissons.",
+        "FeedbackIncorrect": "Non. Le verbe 'finir' appartient au 2e groupe, il faut donc ajouter '-issons' avec 'nous' : nous finissons."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "Elle ___ de Genève pour étudier à Lausanne. (venir)",
+        "Options": "",
+        "Answer": "vient",
+        "FeedbackCorrect": "Bien ! 'Venir' se conjugue avec un 't' à la 3e personne du singulier : elle vient.",
+        "FeedbackIncorrect": "Faux. 'Venir' est irrégulier (3e groupe) : je viens, tu viens, il/elle vient."
       },
       {
         "Type": "TrueFalse",
-        "Question": "Un verbe transitif direct est suivi immédiatement de son objet, sans préposition comme 'à' ou 'de'.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "C'est exact ! Ex: Je lis un livre.",
-        "FeedbackIncorrect": "C'est faux, c'est justement la définition du transitif direct."
+        "Question": "Le verbe 'dormir' appartient au 2e groupe, on dit donc 'nous dormissons'.",
+        "Options": "Vrai, Faux",
+        "Answer": "Faux",
+        "FeedbackCorrect": "Exact, c'est faux ! On dit 'nous dormons', il appartient donc au 3e groupe.",
+        "FeedbackIncorrect": "Incorrect. Si c'était vrai, on dirait 'nous dormissons'. Or, la bonne forme est 'nous dormons' (3e groupe)."
       },
       {
         "Type": "OddOneOut",
-        "Question": "Trouvez le verbe qui N'EST PAS transitif direct :",
-        "Options": "acheter, vendre, répondre, donner",
-        "Answer": "répondre",
-        "FeedbackCorrect": "Correct ! On 'répond À quelqu'un' (transitif indirect).",
-        "FeedbackIncorrect": "Incorrect. 'Répondre' construit avec la préposition 'à'."
+        "Question": "Lequel de ces verbes n'appartient PAS au 2e groupe ?",
+        "Options": "grandir, rougir, sortir, réfléchir",
+        "Answer": "sortir",
+        "FeedbackCorrect": "Bravo ! On dit 'nous sortons' (3e groupe), alors que les autres verbes font bien '-issons'.",
+        "FeedbackIncorrect": "Faux. Il fallait choisir 'sortir'. On dit 'nous sortons' (3e groupe) et non 'nous sortissons'."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "Dans la phrase 'Elle lit ce poème', quelle est la fonction de 'ce poème' ?",
-        "Options": "COD, COI, Sujet",
-        "Answer": "COD",
-        "FeedbackCorrect": "Bravo ! C'est le Complément d'Objet Direct du verbe 'lit'.",
-        "FeedbackIncorrect": "Faux, c'est l'objet direct car il n'y a pas de préposition."
+        "Question": "Pendant le week-end, je ___ au moins neuf heures par nuit.",
+        "Options": "dors, dort, dormis, dorme",
+        "Answer": "dors",
+        "FeedbackCorrect": "Exact ! 'Dormir' perd sa consonne finale au singulier : je dors.",
+        "FeedbackIncorrect": "Faux. 'Dormir' (3e groupe) s'écrit avec un 's' à la première personne : je dors."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Ils ont ___ leur maison l'année dernière.",
+        "Question": "Vous ___ toujours vos examens avec de bonnes notes. (réussir)",
         "Options": "",
-        "Answer": "vendu",
-        "FeedbackCorrect": "Correct ! Vendre (quelque chose).",
-        "FeedbackIncorrect": "Incorrect. 'ont vendu' est transitif direct."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Quel pronom remplace le COD dans : 'Je mange la pomme' ?",
-        "Options": "Je lui mange, Je la mange, Je y mange",
-        "Answer": "Je la mange",
-        "FeedbackCorrect": "Parfait ! 'la' remplace 'la pomme'.",
-        "FeedbackIncorrect": "Faux, c'est 'la'."
+        "Answer": "réussissez",
+        "FeedbackCorrect": "Parfait ! 'Réussir' est un verbe du 2e groupe : vous réussissez.",
+        "FeedbackIncorrect": "Non. 'Réussir' est au 2e groupe. Avec 'vous', la terminaison est '-issez' : vous réussissez."
       },
       {
         "Type": "TrueFalse",
-        "Question": "Le participe passé conjugué avec 'avoir' s'accorde avec le COD s'il est placé APRÈS le verbe.",
-        "Options": "",
-        "Answer": "Faux",
-        "FeedbackCorrect": "Exact, il s'accorde seulement s'il est mis AVANT le verbe !",
-        "FeedbackIncorrect": "Attention ! Il s'accorde uniquement si le COD le précède avant le verbe."
+        "Question": "Les verbes 'ouvrir', 'offrir' et 'souffrir' se conjuguent comme des verbes du 1er groupe (-er) au présent.",
+        "Options": "Vrai, Faux",
+        "Answer": "Vrai",
+        "FeedbackCorrect": "Bravo ! Bien qu'ils finissent en -ir, on dit : j'ouvre, tu offres, il souffre.",
+        "FeedbackIncorrect": "Faux. C'est bel et bien vrai ! Malgré leur terminaison en -ir, ils font : j'ouvre, tu ouvres, il ouvre."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "Choisis la bonne phrase :",
-        "Options": "J'écoute à la radio, J'écoute la radio, J'écoute de la radio",
-        "Answer": "J'écoute la radio",
-        "FeedbackCorrect": "Bravo ! Écouter est transitif direct en français.",
-        "FeedbackIncorrect": "En français, 'écouter' ne prend pas de préposition."
+        "Question": "Elles ___ leurs cahiers sur le pupitre.",
+        "Options": "tiennent, tenons, tenez, tienent",
+        "Answer": "tiennent",
+        "FeedbackCorrect": "Exact ! 'Tenir' se conjugue comme 'venir' : elles tiennent (avec deux 'n').",
+        "FeedbackIncorrect": "Incorrect. À la 3e personne du pluriel, le verbe 'tenir' prend deux 'n' : elles tiennent."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Tu ___ ton temps avec ces bêtises.",
+        "Question": "Il ___ la fenêtre car il fait trop chaud dans la classe. (ouvrir)",
         "Options": "",
-        "Answer": "perds",
-        "FeedbackCorrect": "Correct, 'perdre' est transitif direct.",
-        "FeedbackIncorrect": "C'est le verbe 'perdre'."
+        "Answer": "ouvre",
+        "FeedbackCorrect": "Parfait ! 'Ouvrir' prend exceptionnellement les terminaisons des verbes en -er : il ouvre.",
+        "FeedbackIncorrect": "Non. 'Ouvrir' est une exception du 3e groupe ; il prend la terminaison '-e' avec il/elle/on : il ouvre."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Quel verbe ne se conjugue PAS sur le même modèle que 'venir' au présent ?",
+        "Options": "tenir, retenir, servir, devenir",
+        "Answer": "servir",
+        "FeedbackCorrect": "Bien joué ! 'Servir' donne 'je sers', alors que les autres finissent en '-iens' (je viens, je tiens).",
+        "FeedbackIncorrect": "Incorrect. La réponse était 'servir'. On dit 'je sers' et non 'je siens'."
+      },
+      {
+        "Type": "FillInBlank",
+        "Question": "À la cantine du gymnase, on ___ d'excellents repas le midi. (servir)",
+        "Options": "",
+        "Answer": "sert",
+        "FeedbackCorrect": "Bravo ! Le pronom 'on' est à la 3e personne du singulier : on sert.",
+        "FeedbackIncorrect": "Incorrect. Le verbe 'servir' (3e groupe) conjugué avec 'il/elle/on' perd son 'v' final du radical : on sert."
       }
     ],
-    "Verbes Transitifs - Transitifs Indirects (COI)": [
+    "La conjugaison des verbes en 'ir' - Conjugaison au passé": [
       {
         "Type": "MultipleChoice",
-        "Question": "Lequel de ces verbes est transitif indirect (se construit avec une préposition 'à' ou 'de') ?",
-        "Options": "parler, voir, écouter",
-        "Answer": "parler",
-        "FeedbackCorrect": "Correct ! On 'parle À quelqu'un' ou 'DE quelque chose'.",
-        "FeedbackIncorrect": "Faux. Voir et écouter sont directs. Parler nécessite une préposition."
+        "Question": "Hier soir, nous ___ de manger très tard.",
+        "Options": "avons fini, avons finis, sommes finis, finissons",
+        "Answer": "avons fini",
+        "FeedbackCorrect": "Bravo ! Au passé composé, le verbe 'finir' utilise l'auxiliaire avoir et le participe passé 'fini'.",
+        "FeedbackIncorrect": "Faux. Le passé composé se forme avec l'auxiliaire avoir (avons) et le participe passé 'fini' (sans 's' car le COD n'est pas placé avant)."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Je téléphone ___ mon frère.",
+        "Question": "Tu ___ à quelle heure hier ? (partir - passé composé, masculin singulier)",
         "Options": "",
-        "Answer": "à",
-        "FeedbackCorrect": "Très bien ! Téléphoner À quelqu'un.",
-        "FeedbackIncorrect": "Il manque la préposition 'à'."
+        "Answer": "es parti",
+        "FeedbackCorrect": "Exact ! 'Partir' utilise l'auxiliaire être, donc on écrit 'tu es parti'.",
+        "FeedbackIncorrect": "Incorrect. Il faut utiliser l'auxiliaire 'être' (es) et le participe passé 'parti'."
       },
       {
         "Type": "TrueFalse",
-        "Question": "Un verbe transitif indirect a besoin d'une préposition pour introduire son objet.",
-        "Options": "",
+        "Question": "Le participe passé du verbe 'ouvrir' est 'ouvert'.",
+        "Options": "Vrai, Faux",
         "Answer": "Vrai",
-        "FeedbackCorrect": "C'est exact, contrairement aux verbes transitifs directs.",
-        "FeedbackIncorrect": "C'est faux, la préposition est obligatoire."
+        "FeedbackCorrect": "Parfait ! 'Ouvrir' est un verbe du 3e groupe irrégulier, son participe passé est bien 'ouvert'.",
+        "FeedbackIncorrect": "Faux. L'affirmation est vraie, 'ouvrir' fait 'ouvert' au participe passé (par exemple : j'ai ouvert la fenêtre)."
       },
       {
         "Type": "OddOneOut",
-        "Question": "Choisissez le verbe qui N'EST PAS transitif indirect avec 'à' :",
-        "Options": "ressembler à, penser à, oublier, plaire à",
-        "Answer": "oublier",
-        "FeedbackCorrect": "Correct ! 'Oublier' est transitif direct (oublier quelque chose/quelqu'un).",
-        "FeedbackIncorrect": "Incorrect. Oublier est direct."
+        "Question": "Quelle conjugaison à l'imparfait n'est PAS correcte ?",
+        "Options": "je finissais, tu dormais, il choisait, nous venions",
+        "Answer": "il choisait",
+        "FeedbackCorrect": "Bien joué ! 'Choisir' est un verbe du 2e groupe. Il faut dire 'il choisissait' avec le suffixe '-iss-'.",
+        "FeedbackIncorrect": "Faux. C'est 'il choisait' qui est incorrect. Pour le 2e groupe à l'imparfait, on ajoute '-iss-' au radical : 'il choisissait'."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "Quel pronom remplace le COI dans : 'Je parle à Marie' ?",
-        "Options": "Je la parle, Je lui parle, Je le parle",
-        "Answer": "Je lui parle",
-        "FeedbackCorrect": "Bravo ! 'lui' remplace un nom de personne introduit par 'à'.",
-        "FeedbackIncorrect": "Faux, c'est 'lui'."
+        "Question": "Quand j'étais petit, je ___ tous les jours dans le parc.",
+        "Options": "courais, courrais, courrissais, cours",
+        "Answer": "courais",
+        "FeedbackCorrect": "Exact ! 'Courir' est du 3e groupe. À l'imparfait, le radical est 'cour-' et la terminaison pour 'je' est '-ais'.",
+        "FeedbackIncorrect": "Incorrect. À l'imparfait, on prend le radical 'cour-' et on ajoute '-ais' ce qui donne 'je courais'."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Il se souvient ___ cet événement.",
+        "Question": "Avant, vous ___ toujours le menu végétarien. (choisir - imparfait)",
         "Options": "",
-        "Answer": "de",
-        "FeedbackCorrect": "Correct ! Se souvenir DE quelque chose.",
-        "FeedbackIncorrect": "Se souvenir prend toujours la préposition 'de'."
+        "Answer": "choisissiez",
+        "FeedbackCorrect": "Parfait ! Avec 'vous', on prend le radical du 2e groupe 'choisiss-' et on ajoute la terminaison '-iez'.",
+        "FeedbackIncorrect": "Faux. C'est un verbe du 2e groupe : il faut le radical '-iss-' et la terminaison '-iez', ce qui donne 'choisissiez'."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "Quel pronom remplace le COI introduit par 'de' : 'Il parle de son voyage' ?",
-        "Options": "Il lui parle, Il en parle, Il y parle",
-        "Answer": "Il en parle",
-        "FeedbackCorrect": "Parfait ! 'en' remplace un groupe nominal introduit par 'de'.",
-        "FeedbackIncorrect": "Faux, c'est 'en'."
+        "Question": "Elles ___ au cinéma hier soir.",
+        "Options": "sont sorti, ont sorti, sont sorties, ont sorties",
+        "Answer": "sont sorties",
+        "FeedbackCorrect": "Bravo ! 'Sortir' s'emploie avec l'auxiliaire 'être' et s'accorde au féminin pluriel (-es).",
+        "FeedbackIncorrect": "Faux. Avec l'auxiliaire 'être', le participe passé s'accorde avec le sujet 'Elles' (féminin pluriel), ce qui donne 'sont sorties'."
+      },
+      {
+        "Type": "OddOneOut",
+        "Question": "Quel verbe n'utilise PAS l'auxiliaire 'être' au passé composé ?",
+        "Options": "venir, partir, sortir, finir",
+        "Answer": "finir",
+        "FeedbackCorrect": "Exact ! On dit 'j'ai fini' (auxiliaire avoir). Les autres verbes de déplacement utilisent 'être'.",
+        "FeedbackIncorrect": "Faux. 'Finir' est l'intrus car il utilise l'auxiliaire 'avoir' au passé composé (j'ai fini)."
       },
       {
         "Type": "TrueFalse",
-        "Question": "On peut utiliser le pronom 'lui' pour remplacer des objets inanimés introduits par 'à'.",
-        "Options": "",
+        "Question": "Pour former l'imparfait du verbe 'réussir', on utilise le radical 'réuss-'.",
+        "Options": "Vrai, Faux",
         "Answer": "Faux",
-        "FeedbackCorrect": "Exact ! Pour les objets inanimés on utilise 'y' (Je pense à la maison -> j'y pense).",
-        "FeedbackIncorrect": "Faux. On utilise 'y' pour les objets, 'lui' est pour les personnes isolées."
+        "FeedbackCorrect": "Bien vu ! On utilise la base du 'nous' au présent, donc le radical est 'réussiss-' (je réussissais).",
+        "FeedbackIncorrect": "Non, c'est faux. Comme c'est un verbe du 2e groupe, on prend la forme avec 'nous' au présent (nous réussissons) pour trouver le radical de l'imparfait : 'réussiss-'."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "Choisis la bonne phrase :",
-        "Options": "Je joue le piano, Je joue du piano",
-        "Answer": "Je joue du piano",
-        "FeedbackCorrect": "Bravo ! Jouer d'un instrument = COI avec 'de'.",
-        "FeedbackIncorrect": "Faux. Jouer d'un instrument prend 'de'."
+        "Question": "Pour mon anniversaire, mes amis m'___ un magnifique cadeau.",
+        "Options": "ont offerts, ont offert, sont offerts, ont offris",
+        "Answer": "ont offert",
+        "FeedbackCorrect": "Exact ! 'Offrir' fait 'offert' au participe passé et utilise l'auxiliaire 'avoir' sans accord ici.",
+        "FeedbackIncorrect": "Faux. Le participe passé de 'offrir' est 'offert', utilisé avec l'auxiliaire avoir : 'ont offert'. Le 'm'' est COI, il n'y a donc pas d'accord."
       },
       {
         "Type": "FillInBlank",
-        "Question": "Nous nous intéressons ___ ce projet.",
+        "Question": "Ma sœur ___ me voir ce week-end. (venir - passé composé)",
         "Options": "",
-        "Answer": "à",
-        "FeedbackCorrect": "Correct, s'intéresser 'à' quelque chose.",
-        "FeedbackIncorrect": "Il manque 'à'."
-      }
-    ]
-  },
-  "Test": {
-    "_intro": "<table class=\"xlsx-table intro-table\"><colgroup><col style=\"width: 33.33%;\"><col style=\"width: 33.33%;\"><col style=\"width: 33.34%;\"></colgroup><tbody><tr class=\"title-row\"><td colspan=\"3\">Dddf</td></tr></tbody></table>",
-    "Test - Test": [
-      {
-        "Type": "MultipleChoice",
-        "Question": "ddd",
-        "Options": "ddd",
-        "Answer": "ddd",
-        "FeedbackCorrect": "ddd",
-        "FeedbackIncorrect": "Ddd"
+        "Answer": "est venue",
+        "FeedbackCorrect": "Bravo ! 'Venir' prend l'auxiliaire 'être' et s'accorde au féminin avec le sujet 'Ma sœur'.",
+        "FeedbackIncorrect": "Faux. Il faut utiliser l'auxiliaire être et l'accorder au féminin singulier : 'est venue'."
       },
       {
         "Type": "MultipleChoice",
-        "Question": "xxx",
-        "Options": "xxx",
-        "Answer": "xxx",
-        "FeedbackCorrect": "xxx",
-        "FeedbackIncorrect": "Xxx"
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "xxx",
-        "Options": "xxx",
-        "Answer": "xxx",
-        "FeedbackCorrect": "xxx",
-        "FeedbackIncorrect": "Xxx"
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Hh",
-        "Options": "",
-        "Answer": "",
-        "FeedbackCorrect": "",
-        "FeedbackIncorrect": ""
-      }
-    ]
-  },
-  "Les Pronoms Relatifs": {
-    "_intro": "<table class=\"xlsx-table intro-table\">\n<colgroup>\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.33%\">\n  <col style=\"width:33.34%\">\n</colgroup>\n<tbody>\n  <tr class=\"title-row\"><th>Les Pronoms Relatifs en Français</th><td colspan=\"2\">Les Pronoms Relatifs en Français – COD, COI, Y, EN</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Qu&apos;est-ce qu&apos;un pronom relatif ?</th><td colspan=\"2\">Un pronom relatif est un mot qui introduit une proposition subordonnée relative.<br/>Il remplace un nom (ou pronom) appelé antécédent, et relie deux phrases en une seule.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Les pronoms relatifs de base</td></tr>\n  <tr class=\"explanation\"><td></td><td>Explication</td><td>Exemple</td></tr>\n  <tr class=\"explanation\"><td>qui</td><td>Remplace le SUJET du verbe dans la proposition subordonnée.</td><td>C&apos;est le chat qui dort.</td></tr>\n  <tr class=\"explanation\"><td>que / qu&apos;</td><td>Remplace le COMPLÉMENT D&apos;OBJET DIRECT (COD).</td><td>Le livre que je lis est passionnant.</td></tr>\n  <tr class=\"explanation\"><td>où</td><td>Remplace un LIEU ou un TEMPS.</td><td>La ville où je vis est belle. / Le jour où il est parti...</td></tr>\n  <tr class=\"explanation\"><td>dont</td><td>Remplace le complément introduit par &apos;DE&apos;.</td><td>Le film dont je t&apos;ai parlé est excellent.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"section-header\"><td colspan=\"3\">Les pronoms relatifs composés</td></tr>\n  <tr class=\"explanation\"><td></td><td>Explication</td><td>Exemple</td></tr>\n  <tr class=\"explanation\"><td>auquel / à laquelle / auxquels...</td><td>Après les prépositions avec &apos;à&apos; (ex: à + lequel = auquel).</td><td>Le projet auquel je travaille est innovant.</td></tr>\n  <tr class=\"explanation\"><td>duquel / desquels / desquelles...</td><td>Après les prépositions avec &apos;de&apos; (ex: de + lequel = duquel).</td><td>La raison pour laquelle il est parti.</td></tr>\n  <tr class=\"explanation\"><td>lequel / laquelle...</td><td>Après une préposition (avec, sur, pour...). S&apos;accorde avec l&apos;antécédent.</td><td>La table sur laquelle j&apos;ai posé mon café.</td></tr>\n  <tr class=\"blank-row\"><td colspan=\"3\">&nbsp;</td></tr>\n  <tr class=\"focus-point\"><th>Conseil</th><td colspan=\"2\">Identifiez d&apos;abord la fonction grammaticale du mot remplacé (sujet ? objet ? lieu ? complément avec &apos;de&apos; ?) pour choisir le bon pronom !</td></tr>\n</tbody>\n</table>",
-    "Les Pronoms Relatifs - Pronoms Relatifs - Basique": [
-      {
-        "Type": "MultipleChoice",
-        "Question": "C'est le livre ___ j'ai lu hier.",
-        "Options": "qui, que, où, dont",
-        "Answer": "que",
-        "FeedbackCorrect": "Correct ! On utilise 'que' pour remplacer un complément d'objet direct.",
-        "FeedbackIncorrect": "Faux. N'oubliez pas qu'on utilise 'que' pour un objet direct ('j'ai lu' quoi ? 'le livre')."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "La fille ___ parle avec le professeur est ma sœur.",
-        "Options": "",
-        "Answer": "qui",
-        "FeedbackCorrect": "Très bien ! 'qui' remplace le sujet de la phrase.",
-        "FeedbackIncorrect": "Incorrect. Souvenez-vous que 'qui' est utilisé quand le pronom est le sujet du verbe."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "Le pronom relatif 'où' s'utilise pour indiquer un lieu ou un moment.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "C'est exact ! Exemple : La maison où j'habite.",
-        "FeedbackIncorrect": "C'est faux ! 'Où' sert bien à remplacer un complément de lieu ou de temps."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "C'est le restaurant ___ nous allons souvent manger.",
-        "Options": "",
-        "Answer": "où",
-        "FeedbackCorrect": "Parfait ! 'où' indique le lieu.",
-        "FeedbackIncorrect": "Non. Le restaurant est un lieu de destination, il faut utiliser 'où'."
+        "Question": "Quand tu étais étudiant, tu ___ très peu la nuit.",
+        "Options": "dormissais, dormais, a dormi, dormait",
+        "Answer": "dormais",
+        "FeedbackCorrect": "Exact ! 'Dormir' est un verbe du 3e groupe. Le radical à l'imparfait est 'dorm-' et la terminaison est '-ais'.",
+        "FeedbackIncorrect": "Incorrect. 'Dormir' n'est pas du 2e groupe (il ne prend pas de -iss-). La bonne réponse est 'dormais'."
       },
       {
         "Type": "OddOneOut",
-        "Question": "Lequel de ces mots n'est PAS un pronom relatif ?",
-        "Options": "qui, que, avec, où",
-        "Answer": "avec",
-        "FeedbackCorrect": "Correct ! 'avec' est une préposition.",
-        "FeedbackIncorrect": "Raté ! 'avec' est une préposition et non un pronom."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Le chat ___ dort sur le canapé s'appelle Félix.",
-        "Options": "qui, que, où",
-        "Answer": "qui",
-        "FeedbackCorrect": "Bravo ! Le chat fait l'action de dormir, il faut donc le sujet 'qui'.",
-        "FeedbackIncorrect": "Faux. C'est le sujet du verbe dormir, donc il faut 'qui'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Voici la pomme ___ tu as achetée.",
-        "Options": "",
-        "Answer": "que",
-        "FeedbackCorrect": "Correct ! La pomme est COD du verbe acheter.",
-        "FeedbackIncorrect": "Incorrect. Tu as acheté 'quoi' ? La pomme (COD). Donc 'que'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "Le pronom 'que' se transforme en 'qu'' devant une voyelle.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "Exactement ! Exemple: l'homme qu'il voit.",
-        "FeedbackIncorrect": "C'est pourtant vrai, on élide le 'e' de que devant une voyelle (qu'il)."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Le jour ___ nous sommes partis, il pleuvait.",
-        "Options": "que, qui, où",
-        "Answer": "où",
-        "FeedbackCorrect": "Parfait ! 'Où' remplace très souvent un indicateur de temps comme 'le jour' ou 'l'année'.",
-        "FeedbackIncorrect": "Faux. Pour désigner un moment temporel spécifique (le jour, le mois), on utilise 'où'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "C'est la maison ___ j'ai grandi.",
-        "Options": "",
-        "Answer": "où",
-        "FeedbackCorrect": "Bien joué, c'est un complément de lieu.",
-        "FeedbackIncorrect": "Non. On a grandi 'dans cette maison', c'est donc un lieu -> 'où'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "La chanson ___ je chante est célèbre.",
-        "Options": "qui, que, où",
-        "Answer": "que",
-        "FeedbackCorrect": "Correct. Je chante 'la chanson' (COD).",
-        "FeedbackIncorrect": "Incorrect. Utilisé pour un COD, c'est 'que'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Le bus ___ arrive est toujours en retard.",
-        "Options": "",
-        "Answer": "qui",
-        "FeedbackCorrect": "C'est le bus qui fait l'action d'arriver (sujet).",
-        "FeedbackIncorrect": "Attention: le bus est en position de sujet pour le verbe 'arrive'. Il faut 'qui'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "On peut utiliser 'qui' pour un objet inanimé.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "Vrai ! (Ex: la voiture qui roule).",
-        "FeedbackIncorrect": "Faux, on l'utilise pour des objets aussi s'ils sont sujets (Ex: la pluie qui tombe) ! "
-      },
-      {
-        "Type": "OddOneOut",
-        "Question": "Trouvez l'intrus (pas un pronom relatif basique) :",
-        "Options": "qui, que, où, lequel",
-        "Answer": "lequel",
-        "FeedbackCorrect": "Correct ! 'Lequel' est un pronom relatif complexe/composé.",
-        "FeedbackIncorrect": "Faux. 'Lequel' n'est pas un pronom relatif simple (il s'accorde en genre et en nombre)."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "C'est un problème ___ je ne comprends pas.",
-        "Options": "qui, que, où",
-        "Answer": "que",
-        "FeedbackCorrect": "Bravo, 'que' car problème est objet direct.",
-        "FeedbackIncorrect": "Faux. Je ne comprends pas 'quoi' ? Le problème. Donc 'que'."
-      }
-    ],
-    "Les Pronoms Relatifs - Pronoms Relatifs - Avancé": [
-      {
-        "Type": "MultipleChoice",
-        "Question": "C'est le film ___ je t'ai parlé.",
-        "Options": "que, qui, dont, lequel",
-        "Answer": "dont",
-        "FeedbackCorrect": "Correct ! On parle 'de' quelque chose -> dont.",
-        "FeedbackIncorrect": "Le verbe est 'parler de', il faut donc utiliser le pronom 'dont'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "La table sur ___ j'ai posé mon ordinateur.",
-        "Options": "",
-        "Answer": "laquelle",
-        "FeedbackCorrect": "Parfait ! Féminin singulier après préposition 'sur'.",
-        "FeedbackIncorrect": "Après 'sur', pour un mot féminin singulier ('table'), c'est 'laquelle'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "'Ce que' remplace le sujet du verbe.",
-        "Options": "",
-        "Answer": "Faux",
-        "FeedbackCorrect": "Exact ! C'est 'ce qui' qui remplace le sujet.",
-        "FeedbackIncorrect": "Faux. 'Ce que' remplace toujours un objet direct. Le sujet, c'est 'ce qui'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Les amis avec ___ je voyage sont très sympathiques.",
-        "Options": "qui, lesquels, dont, que",
-        "Answer": "qui, lesquels",
-        "FeedbackCorrect": "Correct ! Après 'avec' pour des personnes, 'lesquels' et 'qui' sont valides.",
-        "FeedbackIncorrect": "Dommage. Après 'avec' on peut utiliser 'qui' ou 'lesquels'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "C'est la raison pour ___ il a démissionné.",
-        "Options": "",
-        "Answer": "laquelle",
-        "FeedbackCorrect": "Très bien ! 'raison' est féminin singulier.",
-        "FeedbackIncorrect": "'Raison' est féminin, la préposition est 'pour', donc 'pour laquelle'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Voici les documents ___ j'ai besoin.",
-        "Options": "",
-        "Answer": "dont",
-        "FeedbackCorrect": "Parfait ! Avoir besoin 'de' -> dont.",
-        "FeedbackIncorrect": "On dit 'avoir besoin DE'. Le pronom relatif qui remplace 'de + antécédent' est 'dont'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Explique-moi ___ t'inquiète tant.",
-        "Options": "ce que, ce qui, dont",
-        "Answer": "ce qui",
-        "FeedbackCorrect": "Bravo. C'est le sujet du verbe inquiéter.",
-        "FeedbackIncorrect": "Erreur. L'antécédent fait l'action d'inquiéter. C'est un sujet neutre : 'ce qui'."
-      },
-      {
-        "Type": "TrueFalse",
-        "Question": "Le pronom 'duquel' est la contraction de 'de' + 'lequel'.",
-        "Options": "",
-        "Answer": "Vrai",
-        "FeedbackCorrect": "C'est bien ça !",
-        "FeedbackIncorrect": "C'est vrai. En français, 'de + le' se contacte souvent, y compris pour 'de lequel' -> 'duquel'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "La réunion au cours de ___ nous avons discuté a été longue.",
-        "Options": "",
-        "Answer": "laquelle",
-        "FeedbackCorrect": "Exact, 'réunion' est féminin singulier.",
-        "FeedbackIncorrect": "Après 'au cours de', on accorde: 'réunion' est féminin singulier, on dit donc 'laquelle'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "J'ai lu ton essai ___ je recommande de modifier la conclusion.",
-        "Options": "dont, avec lequel, pour lequel",
-        "Answer": "dont",
-        "FeedbackCorrect": "Correct! Recommander la conclusion 'de l'essai' -> dont.",
-        "FeedbackIncorrect": "Faux. On modifie la conclusion 'de l'essai'. Le complément avec 'de' devient 'dont'."
-      },
-      {
-        "Type": "OddOneOut",
-        "Question": "Lequel de ces éléments n'est pas un pronom relatif composé ?",
-        "Options": "auquel, desquelles, dont, par lesquels",
-        "Answer": "dont",
-        "FeedbackCorrect": "Bravo ! 'Dont' est un pronom relatif simple.",
-        "FeedbackIncorrect": "Faux! 'Dont' est un pronom simple, contrairement aux autres qui comportent lequel/laquelle."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Dis-moi ___ tu as fait.",
-        "Options": "",
-        "Answer": "ce que",
-        "FeedbackCorrect": "Correct, tu as fait 'quelque chose' (COD).",
-        "FeedbackIncorrect": "Ici, l'élément est l'objet du verbe faire. C'est donc 'ce que'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "Les outils grâce ___ nous travaillons sont très modernes.",
-        "Options": "à qui, auxquels, desquels",
-        "Answer": "auxquels",
-        "FeedbackCorrect": "Très bien. Grâce 'à' + les outils (masculin pluriel) = auxquels.",
-        "FeedbackIncorrect": "Faux. 'Grâce à' exige 'à'. 'Outils' est pluriel, 'à + lesquels' se contracte en 'auxquels'."
-      },
-      {
-        "Type": "FillInBlank",
-        "Question": "Il y a un détail ___ je suis absolument certain.",
-        "Options": "",
-        "Answer": "dont",
-        "FeedbackCorrect": "Correct, on est certain 'de' quelque chose.",
-        "FeedbackIncorrect": "On est certain 'de' quelque chose. Le pronom est donc 'dont'."
-      },
-      {
-        "Type": "MultipleChoice",
-        "Question": "La collègue ___ je travaille est absente.",
-        "Options": "pour qui, avec qui, avec laquelle",
-        "Answer": "avec qui, avec laquelle",
-        "FeedbackCorrect": "Bravo, les deux prépositions conviennent pour une personne !",
-        "FeedbackIncorrect": "Raté. On peut dire 'avec qui' ou 'avec laquelle' (personne féminine)."
+        "Question": "Lequel de ces participes passés n'est PAS correct ?",
+        "Options": "parti, choisi, veni, réussi",
+        "Answer": "veni",
+        "FeedbackCorrect": "Parfait ! Le participe passé du verbe venir est 'venu', et non 'veni'.",
+        "FeedbackIncorrect": "Faux. C'est 'veni' qui n'existe pas. Le participe passé correct du verbe venir est 'venu'."
       }
     ]
   }
