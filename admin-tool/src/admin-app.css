@@ -592,6 +592,8 @@ a:hover { text-decoration: underline; }
     padding: 4px 8px;
     vertical-align: top;
     border: 1px solid #E0E0E0;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 .intro-preview .section-header td,
@@ -599,8 +601,8 @@ a:hover { text-decoration: underline; }
     background: var(--color-primary);
     color: #fff;
     font-weight: 700;
-    font-size: 14px;
-    padding: 10px 12px;
+    font-size: 12px;
+    padding: 5px 10px;
 }
 
 .intro-preview .title-row td,
@@ -608,14 +610,14 @@ a:hover { text-decoration: underline; }
     background: var(--color-primary);
     color: #fff;
     font-weight: 700;
-    font-size: 17px;
-    padding: 12px 16px;
+    font-size: 14px;
+    padding: 7px 10px;
     text-align: left;
 }
 
 .intro-preview .title-row td:nth-child(2),
 .intro-preview .title-row th:nth-child(2) {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .intro-preview .focus-point th,
@@ -625,7 +627,8 @@ a:hover { text-decoration: underline; }
     font-weight: 700;
     text-align: left;
     vertical-align: top;
-    padding: 8px 12px;
+    padding: 5px 8px;
+    font-size: 12px;
 }
 
 .intro-preview .focus-point td,
@@ -635,11 +638,11 @@ a:hover { text-decoration: underline; }
     color: var(--color-primary-dark);
     text-align: left;
     vertical-align: top;
-    padding: 8px 12px;
+    padding: 5px 8px;
 }
 
 .intro-preview .blank-row td {
-    padding: 1px;
+    padding: 1px 0;
     background: transparent;
     border: none;
 }

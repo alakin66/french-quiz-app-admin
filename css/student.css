@@ -700,16 +700,16 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
 .intro-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.83rem;
     margin-bottom: 1rem;
 }
 
 .intro-table th,
 .intro-table td {
-    padding: 10px 14px;
+    padding: 5px 10px;
     text-align: left;
     border-bottom: 1px solid var(--border);
-    line-height: 1.5;
+    line-height: 1.35;
     vertical-align: top;
 }
 
@@ -718,7 +718,7 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
     color: var(--primary);
     background: var(--secondary-light);
     white-space: nowrap;
-    font-size: 0.85rem;
+    font-size: 0.79rem;
     width: 22%;
 }
 
@@ -731,8 +731,8 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
     background: var(--primary);
     color: white;
     font-weight: 700;
-    font-size: 1.1rem;
-    padding: 12px 16px;
+    font-size: 0.93rem;
+    padding: 7px 11px;
     text-align: left;
     border-bottom: none;
 }
@@ -741,10 +741,10 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
     background: var(--primary);
     color: white;
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.73rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    padding: 8px 14px;
+    padding: 4px 10px;
     border-bottom: none;
 }
 
@@ -753,12 +753,26 @@ select:focus, input[type="text"]:focus, input[type="number"]:focus {
     color: white;
     font-weight: 700;
     white-space: normal;
-    font-size: 0.9rem;
+    font-size: 0.83rem;
 }
 
 .intro-table tr.focus-point td {
     background: #EEF0FB;
     font-weight: 600;
+}
+
+.intro-table tr.blank-row td {
+    padding: 0;
+    height: 6px;
+    line-height: 0;
+    font-size: 0;
+    border-bottom: none;
+    background: transparent;
+}
+
+.intro-table tr.explanation td {
+    font-size: 0.81rem;
+    color: var(--text-secondary, #444);
 }
 
 /* ============================================

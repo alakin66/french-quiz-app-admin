@@ -634,6 +634,55 @@ function resetToEmptyTitleRow(tr) {
     if (actionCell) tr.appendChild(actionCell);
 }
 
+// ── Paste stripping ──────────────────────────────────────────
+function cleanPasteNode(node) {
+    var KEEP_INLINE = { B: 1, STRONG: 1, I: 1, EM: 1, U: 1, BR: 1 };
+    var BLOCK_TAGS  = { P: 1, DIV: 1, H1: 1, H2: 1, H3: 1, H4: 1, H5: 1,
+                        H6: 1, LI: 1, UL: 1, OL: 1, BLOCKQUOTE: 1, PRE: 1 };
+    var i = node.childNodes.length;
+    while (i--) {
+        var child = node.childNodes[i];
+        if (child.nodeType !== 1) continue;
+        var tag = child.tagName;
+        if (BLOCK_TAGS[tag] || tag === 'FONT') {
+            cleanPasteNode(child);
+            var frag = document.createDocumentFragment();
+            while (child.firstChild) frag.appendChild(child.firstChild);
+            if (BLOCK_TAGS[tag]) frag.appendChild(document.createElement('br'));
+            node.replaceChild(frag, child);
+        } else if (KEEP_INLINE[tag]) {
+            while (child.attributes.length > 0) child.removeAttribute(child.attributes[0].name);
+            cleanPasteNode(child);
+        } else if (tag === 'SPAN') {
+            var style = child.getAttribute('style') || '';
+            var colorMatch = style.match(/color\s*:\s*([^;]+)/);
+            while (child.attributes.length > 0) child.removeAttribute(child.attributes[0].name);
+            if (colorMatch) child.setAttribute('style', 'color:' + colorMatch[1].trim());
+            cleanPasteNode(child);
+            if (!child.getAttribute('style')) {
+                var frag2 = document.createDocumentFragment();
+                while (child.firstChild) frag2.appendChild(child.firstChild);
+                node.replaceChild(frag2, child);
+            }
+        } else {
+            cleanPasteNode(child);
+            var frag3 = document.createDocumentFragment();
+            while (child.firstChild) frag3.appendChild(child.firstChild);
+            node.replaceChild(frag3, child);
+        }
+    }
+}
+
+function stripPastedHtml(html) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    cleanPasteNode(tmp);
+    while (tmp.lastChild && tmp.lastChild.nodeName === 'BR') {
+        tmp.removeChild(tmp.lastChild);
+    }
+    return tmp.innerHTML;
+}
+
 // ── Save / cancel ────────────────────────────────────────────
 async function saveIntroEdit() {
     var preview = document.getElementById('intro-preview');
@@ -807,7 +856,26 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     document.getElementById('intro-preview').addEventListener('keydown', function(e) {
         if (!introEditActive) return;
-        if (e.key === 'Enter') e.preventDefault();
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (selectionInNoFormatCell()) return;
+            document.execCommand('insertLineBreak');
+        }
+    });
+
+    document.getElementById('intro-preview').addEventListener('paste', function(e) {
+        if (!introEditActive) return;
+        e.preventDefault();
+        var html = (e.clipboardData || window.clipboardData).getData('text/html');
+        var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        var cleaned;
+        if (html) {
+            cleaned = stripPastedHtml(html);
+        } else {
+            var lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+            cleaned = lines.map(function(line) { return escHtml(line); }).join('<br>');
+        }
+        if (cleaned) document.execCommand('insertHTML', false, cleaned);
     });
 
     document.getElementById('intro-preview').addEventListener('click', function(e) {

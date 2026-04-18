@@ -44,12 +44,6 @@
         "_Answer": "The odd-one-out option.",
         "_Question_tip": "Phrase the question as 'Lequel/Laquelle n'est PAS...' or 'Quel mot ne va pas avec...'"
       },
-      "Vocabulary": {
-        "_description": "Student matches a word or phrase to its definition or translation.",
-        "_Options": "Comma-separated list of choices (minimum 3).",
-        "_Answer": "The correct choice from Options.",
-        "_Question_tip": "State the word/phrase to identify, e.g. 'Que signifie \"se souvenir\" ?'"
-      }
     },
 
     "_feedback_tips": [
@@ -121,15 +115,6 @@
         "FeedbackIncorrect": "<FILL_IN: Explain which item is the odd one out and why>"
       },
 
-      {
-        "Type": "Vocabulary",
-        "_comment_type": "Student matches a word/phrase to its meaning. Minimum 3 options.",
-        "Question": "<FILL_IN: e.g. 'Que signifie \"se souvenir de\" en anglais ?'>",
-        "Options": "<FILL_IN: 3–4 comma-separated choices>",
-        "Answer": "<FILL_IN: The correct choice from Options>",
-        "FeedbackCorrect": "<FILL_IN: Confirmation with context>",
-        "FeedbackIncorrect": "<FILL_IN: Correct answer with usage example>"
-      }
     ]
   }
 }
