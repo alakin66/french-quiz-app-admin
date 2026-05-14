@@ -21,6 +21,8 @@ pub fn run() {
             commands::save_json_dialog,
             commands::save_named_json_dialog,
             commands::open_student_app,
+            commands::open_folder_dialog,
+            commands::init_repo_path,
             commands::read_binary_file,
             commands::read_text_file_at,
             commands::write_text_file_at,

@@ -1,7 +1,7 @@
 {
   "productName": "Quiz Admin",
   "version": "0.1.0",
-  "identifier": "com.alakin66.quizadmin",
+  "identifier": "io.github.french-quiz-app.admin",
   "build": {
     "frontendDist": "../src",
     "devUrl": "http://localhost:1420",

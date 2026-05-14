@@ -269,6 +269,18 @@ async function publishQuizzes() {
 
 // ── Init ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const raw = await invokeCmd('read_settings');
+        const settings = JSON.parse(raw || '{}');
+        if (!settings.repoPath) {
+            window.location.href = 'settings.html?firstLaunch=1';
+            return;
+        }
+    } catch (e) {
+        window.location.href = 'settings.html?firstLaunch=1';
+        return;
+    }
+
     try { appData = await loadData(); }
     catch (e) { appData = {}; }
     renderTable();

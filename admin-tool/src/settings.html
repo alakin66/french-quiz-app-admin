@@ -27,6 +27,20 @@
             color: var(--color-text);
         }
         .info-box strong { color: var(--color-primary); }
+        .setup-banner {
+            background: rgba(255,193,7,0.12);
+            border: 1px solid rgba(255,193,7,0.4);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--color-text);
+            display: none;
+        }
+        .path-row { display: flex; gap: 8px; align-items: flex-end; }
+        .path-row .form-control { flex: 1; }
+        .path-row .btn { flex-shrink: 0; height: 38px; }
     </style>
 </head>
 <body>
@@ -57,12 +71,28 @@
         <div class="card settings-card">
             <div class="card-body">
 
+                <div class="setup-banner" id="setup-banner">
+                    &#x1F44B; <strong>Bienvenue !</strong> Avant de commencer, indiquez où se trouve votre dossier de quiz local. Cliquez sur <strong>Parcourir…</strong> pour le sélectionner.
+                </div>
+
                 <div class="info-box">
                     Ces paramètres permettent à l'outil d'administration de <strong>publier automatiquement</strong>
                     les quiz sur GitHub Pages via l'API Git.<br>
-                    Le fichier <code>settings.json</code> est stocké localement dans le dossier
-                    <code>admin-tool/</code> et n'est <strong>jamais</strong> versionné.
+                    Le fichier <code>settings.json</code> est stocké localement dans le dossier Application Support et n'est <strong>jamais</strong> versionné.
                 </div>
+
+                <!-- Repo path -->
+                <div class="form-group">
+                    <label for="repo-path">Dossier du dépôt local</label>
+                    <div class="path-row">
+                        <input type="text" id="repo-path" class="form-control"
+                            placeholder="~/Documents/French Quiz App" autocomplete="off">
+                        <button class="btn btn-secondary" id="btn-browse-repo" type="button">Parcourir…</button>
+                    </div>
+                    <div class="hint">Dossier contenant votre clone local du dépôt de quiz (doit avoir un sous-dossier <code>data/</code>).</div>
+                </div>
+
+                <hr class="section-divider">
 
                 <!-- GitHub username -->
                 <div class="form-group">
@@ -155,8 +185,6 @@
 
 <script src="admin-app.js"></script>
 <script>
-// invokeCmd, toast, confirmModal are globals from admin-app.js — no re-declaration needed
-
 async function loadSettings() {
     try {
         const raw = await invokeCmd('read_settings');
@@ -167,8 +195,20 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
+    const repoPath = document.getElementById('repo-path').value.trim();
+    if (!repoPath) {
+        toast('Veuillez sélectionner un dossier de dépôt local.', 'error');
+        return;
+    }
+    try {
+        await invokeCmd('init_repo_path', { path: repoPath });
+    } catch (e) {
+        toast('Impossible de créer le dossier : ' + String(e), 'error');
+        return;
+    }
     const checkedProvider = document.querySelector('input[name="llm-provider"]:checked');
     const settings = {
+        repoPath,
         githubUser:  document.getElementById('gh-user').value.trim(),
         githubRepo:  document.getElementById('gh-repo').value.trim(),
         githubToken: document.getElementById('gh-token').value.trim(),
@@ -189,9 +229,10 @@ async function saveSettings() {
 async function clearSettings() {
     const ok = await confirmModal('Effacer tous les paramètres ?');
     if (!ok) return;
-    document.getElementById('gh-user').value    = '';
-    document.getElementById('gh-repo').value    = '';
-    document.getElementById('gh-token').value   = '';
+    document.getElementById('repo-path').value   = '';
+    document.getElementById('gh-user').value     = '';
+    document.getElementById('gh-repo').value     = '';
+    document.getElementById('gh-token').value    = '';
     document.getElementById('llm-api-key').value = '';
     document.getElementById('llm-claude').checked = true;
     document.getElementById('llm-gemini').checked = false;
@@ -204,32 +245,47 @@ async function clearSettings() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('firstLaunch') === '1') {
+        document.getElementById('setup-banner').style.display = 'block';
+    }
+
     const settings = await loadSettings();
-    document.getElementById('gh-user').value  = settings.githubUser  || '';
-    document.getElementById('gh-repo').value  = settings.githubRepo  || '';
-    document.getElementById('gh-token').value = settings.githubToken || '';
+    document.getElementById('repo-path').value = settings.repoPath || '';
+    document.getElementById('gh-user').value   = settings.githubUser  || '';
+    document.getElementById('gh-repo').value   = settings.githubRepo  || '';
+    document.getElementById('gh-token').value  = settings.githubToken || '';
 
     const isGemini = settings.llmProvider === 'gemini';
-    document.getElementById('llm-claude').checked  = !isGemini;
-    document.getElementById('llm-gemini').checked  = isGemini;
-    document.getElementById('llm-api-key').value   = settings.llmApiKey || '';
+    document.getElementById('llm-claude').checked = !isGemini;
+    document.getElementById('llm-gemini').checked = isGemini;
+    document.getElementById('llm-api-key').value  = settings.llmApiKey || '';
 
     document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
     document.getElementById('btn-clear-settings').addEventListener('click', clearSettings);
 
-    // Token visibility toggle
+    document.getElementById('btn-browse-repo').addEventListener('click', async () => {
+        const chosen = await invokeCmd('open_folder_dialog');
+        if (!chosen) return;
+        document.getElementById('repo-path').value = chosen;
+        try {
+            await invokeCmd('init_repo_path', { path: chosen });
+            toast('Dossier sélectionné et initialisé.', 'success');
+        } catch (e) {
+            toast('Impossible d\'initialiser le dossier : ' + String(e), 'error');
+        }
+    });
+
     const tokenInput = document.getElementById('gh-token');
     document.getElementById('btn-toggle-token').addEventListener('click', () => {
         tokenInput.type = tokenInput.type === 'password' ? 'text' : 'password';
     });
 
-    // LLM key visibility toggle
     const llmKeyInput = document.getElementById('llm-api-key');
     document.getElementById('btn-toggle-llm-key').addEventListener('click', () => {
         llmKeyInput.type = llmKeyInput.type === 'password' ? 'text' : 'password';
     });
 
-    // GitHub token creation link
     document.getElementById('gh-token-link').addEventListener('click', (e) => {
         e.preventDefault();
         try {
@@ -239,8 +295,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Save on Enter key in fields
-    ['gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
+    ['repo-path','gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
         document.getElementById(id).addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveSettings();
         });
