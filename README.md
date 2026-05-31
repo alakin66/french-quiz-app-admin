@@ -220,6 +220,42 @@ URL étudiants : `https://<user>.github.io/<repo>/`
 
 ---
 
+## Développement & Build (Admin Tool)
+
+### Prérequis
+- [Rust](https://www.rust-lang.org/tools/install) (toolchain stable)
+- [Node.js](https://nodejs.org/) 20+ et npm
+
+### Développement
+```bash
+cd admin-tool
+npm install
+npm run tauri dev      # lance l'app desktop en mode dev (hot-reload du frontend)
+```
+
+Après toute modification Rust dans `admin-tool/src-tauri/` :
+```bash
+cd admin-tool/src-tauri
+cargo check
+```
+
+### Build local (macOS Apple Silicon)
+```bash
+cd admin-tool
+npm run tauri build -- --target aarch64-apple-darwin
+# Artefact : admin-tool/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
+```
+
+### Publier une release
+Le workflow `.github/workflows/release.yml` construit et publie automatiquement le `.dmg`
+lors du push d'un tag de version :
+```bash
+git tag v0.1.0
+git push origin v0.1.0   # déclenche le build macOS + crée la GitHub Release avec le .dmg
+```
+
+---
+
 ## Technologies
 
 | Composant | Technologies |
