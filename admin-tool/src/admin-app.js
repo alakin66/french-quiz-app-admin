@@ -122,10 +122,97 @@ function getParam(name) {
     return new URLSearchParams(window.location.search).get(name) || '';
 }
 
+// ── GitHub Contents API data layer ───────────────────────────
+// Reads/writes data/quizzes.json and data/quizzes.js directly via the GitHub
+// REST API — no local clone or git required (v2 of the publish model).
+var GH_API_BASE = 'https://api.github.com';
+var ghFileShas = {};
+
+async function readSettings() {
+    try { return JSON.parse(await invokeCmd('read_settings') || '{}'); }
+    catch (e) { return {}; }
+}
+
+function ghRepoParts(settings) {
+    var repo = (settings.githubRepo || '').trim();
+    var idx = repo.indexOf('/');
+    if (idx === -1) throw new Error('Dépôt GitHub non configuré (format attendu : owner/repo).');
+    return { owner: repo.slice(0, idx), repoName: repo.slice(idx + 1) };
+}
+
+function ghHeaders(settings) {
+    if (!settings.githubToken) throw new Error('Token GitHub non configuré.');
+    return {
+        'Authorization': 'Bearer ' + settings.githubToken,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+    };
+}
+
+function utf8ToBase64(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+}
+
+function base64ToUtf8(b64) {
+    var bin = atob((b64 || '').replace(/\n/g, ''));
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+}
+
+async function ghGetFile(settings, path) {
+    var parts = ghRepoParts(settings);
+    var url = GH_API_BASE + '/repos/' + parts.owner + '/' + parts.repoName + '/contents/' + path;
+    var resp = await fetch(url, { headers: ghHeaders(settings) });
+    if (resp.status === 404) { ghFileShas[path] = null; return null; }
+    if (!resp.ok) throw new Error('GitHub GET ' + path + ' : ' + resp.status + ' — ' + (await resp.text()));
+    var data = await resp.json();
+    ghFileShas[path] = data.sha;
+    return base64ToUtf8(data.content);
+}
+
+async function ghPutFile(settings, path, content, message) {
+    var parts = ghRepoParts(settings);
+    var url = GH_API_BASE + '/repos/' + parts.owner + '/' + parts.repoName + '/contents/' + path;
+    if (!(path in ghFileShas)) {
+        await ghGetFile(settings, path);
+    }
+    function buildBody() {
+        var b = { message: message, content: utf8ToBase64(content) };
+        if (ghFileShas[path]) b.sha = ghFileShas[path];
+        return JSON.stringify(b);
+    }
+    var resp = await fetch(url, { method: 'PUT', headers: ghHeaders(settings), body: buildBody() });
+    if (resp.status === 409 || resp.status === 422) {
+        await ghGetFile(settings, path);
+        resp = await fetch(url, { method: 'PUT', headers: ghHeaders(settings), body: buildBody() });
+    }
+    if (!resp.ok) throw new Error('GitHub PUT ' + path + ' : ' + resp.status + ' — ' + (await resp.text()));
+    var data = await resp.json();
+    ghFileShas[path] = data.content && data.content.sha;
+    return data;
+}
+
+function studentAppUrl(settings, query) {
+    var parts = ghRepoParts(settings);
+    return 'https://' + parts.owner + '.github.io/' + parts.repoName + '/' + (query || '');
+}
+
 async function loadData() {
-    const raw = await invokeCmd('read_data');
+    var settings = await readSettings();
+    var text;
     try {
-        return JSON.parse(raw || '{}');
+        text = await ghGetFile(settings, 'data/quizzes.json');
+    } catch (e) {
+        toast('Lecture depuis GitHub impossible : ' + String(e.message || e), 'error');
+        throw e;
+    }
+    if (text == null) return {};
+    try {
+        return JSON.parse(text || '{}');
     } catch (e) {
         toast('Erreur de parsing JSON des données.', 'error');
         return {};
@@ -133,8 +220,20 @@ async function loadData() {
 }
 
 async function saveData(data) {
-    await invokeCmd('write_data', { json: JSON.stringify(data, null, 2) });
-    await invokeCmd('write_quizzes_js', { content: buildStudentJs(data) });
+    var settings = await readSettings();
+    try {
+        await ghPutFile(settings, 'data/quizzes.json', JSON.stringify(data, null, 2),
+            'admin: mise à jour quizzes.json');
+    } catch (e) {
+        toast('Enregistrement sur GitHub impossible : ' + String(e.message || e), 'error');
+        throw e;
+    }
+}
+
+async function publishStudentJs(data, commitMsg) {
+    var settings = await readSettings();
+    await ghPutFile(settings, 'data/quizzes.js', buildStudentJs(data),
+        commitMsg || 'admin: publication quizzes.js');
 }
 
 function buildStudentJs(data) {
@@ -235,6 +334,9 @@ window.AdminApp = {
     getParam,
     loadData,
     saveData,
+    publishStudentJs,
+    readSettings,
+    studentAppUrl,
     buildStudentJs,
     escHtml,
     shortQuizName,

@@ -67,10 +67,11 @@ async function newModule() {
 // ── Test student app ─────────────────────────────────────────
 async function testStudentApp() {
     try {
-        await invokeCmd('open_student_app', { query: '' });
-        toast('Application étudiant ouverte.', 'info');
+        const settings = await readSettings();
+        await invokeCmd('open_student_app', { url: studentAppUrl(settings, '') });
+        toast('Site étudiant ouvert (dernière version publiée).', 'info');
     } catch (e) {
-        toast('Impossible d\'ouvrir l\'application étudiant : ' + String(e), 'error');
+        toast('Impossible d\'ouvrir le site étudiant : ' + String(e.message || e), 'error');
     }
 }
 
@@ -249,17 +250,23 @@ async function publishQuizzes() {
     };
 
     try {
-        appendLog('G\u00e9n\u00e9ration de quizzes.js...');
-        const js = buildStudentJs(appData);
-        await invokeCmd('write_quizzes_js', { content: js });
-        appendLog('quizzes.js \u00e9crit.', 'log-success');
+        const settings = await readSettings();
+        const commitMsg = msgEl.value || 'chore: update quizzes';
 
-        appendLog('Publication Git...');
-        const result = await invokeCmd('git_publish', { commitMsg: msgEl.value || 'chore: update quizzes.js' });
-        appendLog(result, 'log-success');
+        appendLog('Envoi de quizzes.json vers GitHub...');
+        await ghPutFile(settings, 'data/quizzes.json', JSON.stringify(appData, null, 2),
+            commitMsg + ' (quizzes.json)');
+        appendLog('quizzes.json publi\u00e9.', 'log-success');
+
+        appendLog('Envoi de quizzes.js vers GitHub...');
+        await ghPutFile(settings, 'data/quizzes.js', buildStudentJs(appData),
+            commitMsg + ' (quizzes.js)');
+        appendLog('quizzes.js publi\u00e9.', 'log-success');
+
+        appendLog('GitHub Pages d\u00e9ploiera le site sous ~1 min.', 'log-success');
         toast('Publi\u00e9 avec succ\u00e8s !', 'success');
     } catch (e) {
-        appendLog(String(e), 'log-error');
+        appendLog(String(e.message || e), 'log-error');
         toast('Erreur lors de la publication.', 'error');
     } finally {
         spinner.classList.add('hidden');
@@ -272,7 +279,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const raw = await invokeCmd('read_settings');
         const settings = JSON.parse(raw || '{}');
-        if (!settings.repoPath) {
+        if (!settings.githubRepo || !settings.githubToken) {
             window.location.href = 'settings.html?firstLaunch=1';
             return;
         }

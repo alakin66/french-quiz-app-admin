@@ -38,9 +38,6 @@
             color: var(--color-text);
             display: none;
         }
-        .path-row { display: flex; gap: 8px; align-items: flex-end; }
-        .path-row .form-control { flex: 1; }
-        .path-row .btn { flex-shrink: 0; height: 38px; }
     </style>
 </head>
 <body>
@@ -72,27 +69,14 @@
             <div class="card-body">
 
                 <div class="setup-banner" id="setup-banner">
-                    &#x1F44B; <strong>Bienvenue !</strong> Avant de commencer, indiquez où se trouve votre dossier de quiz local. Cliquez sur <strong>Parcourir…</strong> pour le sélectionner.
+                    &#x1F44B; <strong>Bienvenue !</strong> Avant de commencer, renseignez votre <strong>dépôt GitHub</strong> et un <strong>token d'accès</strong> ci-dessous. Aucun clone local n'est nécessaire.
                 </div>
 
                 <div class="info-box">
-                    Ces paramètres permettent à l'outil d'administration de <strong>publier automatiquement</strong>
-                    les quiz sur GitHub Pages via l'API Git.<br>
+                    Ces paramètres permettent à l'outil d'administration de <strong>lire et publier</strong>
+                    les quiz directement via l'<strong>API GitHub</strong> (aucun dossier local ni git requis).<br>
                     Le fichier <code>settings.json</code> est stocké localement dans le dossier Application Support et n'est <strong>jamais</strong> versionné.
                 </div>
-
-                <!-- Repo path -->
-                <div class="form-group">
-                    <label for="repo-path">Dossier du dépôt local</label>
-                    <div class="path-row">
-                        <input type="text" id="repo-path" class="form-control"
-                            placeholder="~/Documents/French Quiz App" autocomplete="off">
-                        <button class="btn btn-secondary" id="btn-browse-repo" type="button">Parcourir…</button>
-                    </div>
-                    <div class="hint">Dossier contenant votre clone local du dépôt de quiz (doit avoir un sous-dossier <code>data/</code>).</div>
-                </div>
-
-                <hr class="section-divider">
 
                 <!-- GitHub username -->
                 <div class="form-group">
@@ -195,23 +179,21 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
-    const repoPath = document.getElementById('repo-path').value.trim();
-    if (!repoPath) {
-        toast('Veuillez sélectionner un dossier de dépôt local.', 'error');
+    const githubRepo  = document.getElementById('gh-repo').value.trim();
+    const githubToken = document.getElementById('gh-token').value.trim();
+    if (githubRepo.indexOf('/') === -1) {
+        toast('Renseignez le dépôt GitHub au format owner/repo.', 'error');
         return;
     }
-    try {
-        await invokeCmd('init_repo_path', { path: repoPath });
-    } catch (e) {
-        toast('Impossible de créer le dossier : ' + String(e), 'error');
+    if (!githubToken) {
+        toast('Renseignez un token d\'accès GitHub.', 'error');
         return;
     }
     const checkedProvider = document.querySelector('input[name="llm-provider"]:checked');
     const settings = {
-        repoPath,
         githubUser:  document.getElementById('gh-user').value.trim(),
-        githubRepo:  document.getElementById('gh-repo').value.trim(),
-        githubToken: document.getElementById('gh-token').value.trim(),
+        githubRepo:  githubRepo,
+        githubToken: githubToken,
         llmProvider: checkedProvider ? checkedProvider.value : 'claude',
         llmApiKey:   document.getElementById('llm-api-key').value.trim(),
     };
@@ -229,7 +211,6 @@ async function saveSettings() {
 async function clearSettings() {
     const ok = await confirmModal('Effacer tous les paramètres ?');
     if (!ok) return;
-    document.getElementById('repo-path').value   = '';
     document.getElementById('gh-user').value     = '';
     document.getElementById('gh-repo').value     = '';
     document.getElementById('gh-token').value    = '';
@@ -251,7 +232,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const settings = await loadSettings();
-    document.getElementById('repo-path').value = settings.repoPath || '';
     document.getElementById('gh-user').value   = settings.githubUser  || '';
     document.getElementById('gh-repo').value   = settings.githubRepo  || '';
     document.getElementById('gh-token').value  = settings.githubToken || '';
@@ -263,18 +243,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
     document.getElementById('btn-clear-settings').addEventListener('click', clearSettings);
-
-    document.getElementById('btn-browse-repo').addEventListener('click', async () => {
-        const chosen = await invokeCmd('open_folder_dialog');
-        if (!chosen) return;
-        document.getElementById('repo-path').value = chosen;
-        try {
-            await invokeCmd('init_repo_path', { path: chosen });
-            toast('Dossier sélectionné et initialisé.', 'success');
-        } catch (e) {
-            toast('Impossible d\'initialiser le dossier : ' + String(e), 'error');
-        }
-    });
 
     const tokenInput = document.getElementById('gh-token');
     document.getElementById('btn-toggle-token').addEventListener('click', () => {
@@ -295,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    ['repo-path','gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
+    ['gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
         document.getElementById(id).addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveSettings();
         });
