@@ -254,6 +254,10 @@ git tag v0.1.0
 git push origin v0.1.0   # déclenche le build macOS + crée la GitHub Release avec le .dmg
 ```
 
+### Architecture (détails)
+Pour les détails internes — pipeline de données, commandes Tauri (`commands.rs`), format admin
+vs format étudiant, flux des écrans, `localStorage` — voir **[`CLAUDE.md`](CLAUDE.md)**.
+
 ---
 
 ## Technologies
