@@ -230,7 +230,7 @@ URL étudiants : `https://<user>.github.io/<repo>/`
 ```bash
 cd admin-tool
 npm install
-npm run tauri dev      # lance l'app desktop en mode dev (hot-reload du frontend)
+npm run dev            # lance l'app desktop en mode dev (hot-reload du frontend)
 ```
 
 Après toute modification Rust dans `admin-tool/src-tauri/` :
@@ -242,7 +242,7 @@ cargo check
 ### Build local (macOS Apple Silicon)
 ```bash
 cd admin-tool
-npm run tauri build -- --target aarch64-apple-darwin
+npm run build -- --target aarch64-apple-darwin
 # Artefact : admin-tool/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg
 ```
 

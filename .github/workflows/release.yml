@@ -40,7 +40,7 @@ jobs:
         working-directory: admin-tool
         # tauri.conf.json sets macOS.signingIdentity "-" → the bundled .app is
         # ad-hoc signed during dmg creation (opens with right-click → Open).
-        run: npm run tauri build -- --target aarch64-apple-darwin
+        run: npm run build -- --target aarch64-apple-darwin
 
       - name: Verify ad-hoc signature
         run: |
