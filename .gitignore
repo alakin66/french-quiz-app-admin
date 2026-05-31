@@ -6,3 +6,8 @@ admin-tool/src-tauri/gen/
 quizzes/
 Excel-files/
 scripts/
+
+# internal/dev docs — not published to the repo
+CLAUDE.md
+plan.md
+changes.md
