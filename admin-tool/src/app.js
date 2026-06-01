@@ -67,20 +67,27 @@ async function newModule() {
 // ── Test student app ─────────────────────────────────────────
 async function testStudentApp() {
     try {
-        const settings = await readSettings();
-        await invokeCmd('open_student_app', { url: studentAppUrl(settings, '') });
-        toast('Site étudiant ouvert (dernière version publiée).', 'info');
+        await invokeCmd('write_quizzes_js', { content: buildStudentJs(appData) });
+        await invokeCmd('open_student_app', { query: '' });
     } catch (e) {
-        toast('Impossible d\'ouvrir le site étudiant : ' + String(e.message || e), 'error');
+        toast('Impossible d\'ouvrir le test local : ' + String(e.message || e), 'error');
     }
 }
 
 // ── Export Questionnaire ─────────────────────────────────────
+function questionnaireFileName() {
+    const d = new Date();
+    const p = n => String(n).padStart(2, '0');
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate())
+        + ' ' + p(d.getHours()) + '-' + p(d.getMinutes()) + ' questionnaire.json';
+}
+
 async function exportQuestionnaire() {
-    const path = await invokeCmd('save_named_json_dialog', { name: 'questionnaire.json' });
-    if (!path) return;
-    await invokeCmd('write_text_file_at', { path, content: JSON.stringify(appData, null, 2) });
-    toast('Questionnaire export\u00e9.', 'success');
+    const saved = await invokeCmd('save_questionnaire', {
+        name: questionnaireFileName(),
+        content: JSON.stringify(appData, null, 2),
+    });
+    toast('Questionnaire enregistr\u00e9\u00a0: ' + saved, 'success');
 }
 
 // ── Import Questionnaire (merge) ─────────────────────────────
@@ -210,6 +217,7 @@ function setupDropZone() {
         logEl.textContent = '';
         for (const [fileName, bytes] of files) {
             await processExcelBuffer(new Uint8Array(bytes).buffer, fileName, logEl);
+            try { await invokeCmd('save_excel', { name: fileName, bytes: bytes }); } catch (e) {}
         }
     });
 
@@ -225,7 +233,9 @@ function setupDropZone() {
         const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.xlsx'));
         if (files.length === 0) { toast('Veuillez d\u00e9poser des fichiers .xlsx.', 'error'); return; }
         for (const file of files) {
-            await processExcelBuffer(await file.arrayBuffer(), file.name, logEl);
+            const buf = await file.arrayBuffer();
+            await processExcelBuffer(buf, file.name, logEl);
+            try { await invokeCmd('save_excel', { name: file.name, bytes: Array.from(new Uint8Array(buf)) }); } catch (e) {}
         }
     });
 }
@@ -279,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const raw = await invokeCmd('read_settings');
         const settings = JSON.parse(raw || '{}');
-        if (!settings.githubRepo || !settings.githubToken) {
+        if (!settings.workingDir) {
             window.location.href = 'settings.html?firstLaunch=1';
             return;
         }

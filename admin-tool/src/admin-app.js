@@ -196,44 +196,18 @@ async function ghPutFile(settings, path, content, message) {
     return data;
 }
 
-function studentAppUrl(settings, query) {
-    var parts = ghRepoParts(settings);
-    return 'https://' + parts.owner + '.github.io/' + parts.repoName + '/' + (query || '');
-}
-
 async function loadData() {
-    var settings = await readSettings();
-    var text;
     try {
-        text = await ghGetFile(settings, 'data/quizzes.json');
+        return JSON.parse(await invokeCmd('read_data') || '{}');
     } catch (e) {
-        toast('Lecture depuis GitHub impossible : ' + String(e.message || e), 'error');
-        throw e;
-    }
-    if (text == null) return {};
-    try {
-        return JSON.parse(text || '{}');
-    } catch (e) {
-        toast('Erreur de parsing JSON des données.', 'error');
+        toast('Erreur de lecture des données locales.', 'error');
         return {};
     }
 }
 
 async function saveData(data) {
-    var settings = await readSettings();
-    try {
-        await ghPutFile(settings, 'data/quizzes.json', JSON.stringify(data, null, 2),
-            'admin: mise à jour quizzes.json');
-    } catch (e) {
-        toast('Enregistrement sur GitHub impossible : ' + String(e.message || e), 'error');
-        throw e;
-    }
-}
-
-async function publishStudentJs(data, commitMsg) {
-    var settings = await readSettings();
-    await ghPutFile(settings, 'data/quizzes.js', buildStudentJs(data),
-        commitMsg || 'admin: publication quizzes.js');
+    await invokeCmd('write_data', { json: JSON.stringify(data, null, 2) });
+    await invokeCmd('write_quizzes_js', { content: buildStudentJs(data) });
 }
 
 function buildStudentJs(data) {
@@ -334,9 +308,7 @@ window.AdminApp = {
     getParam,
     loadData,
     saveData,
-    publishStudentJs,
     readSettings,
-    studentAppUrl,
     buildStudentJs,
     escHtml,
     shortQuizName,

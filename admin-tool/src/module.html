@@ -322,13 +322,12 @@ function copyQuizLink(key) {
 // ── Test quiz ────────────────────────────────────────────────
 async function testQuiz(key) {
     try {
-        var settings = await readSettings();
-        await publishStudentJs(appData, 'admin: test ' + moduleName);
+        await invokeCmd('write_quizzes_js', { content: buildStudentJs(appData) });
         var fullKey = moduleName + ' - ' + key;
         var query = '?quiz=' + encodeURIComponent(moduleName)
                   + '&preselect=' + encodeURIComponent(fullKey);
-        await invokeCmd('open_student_app', { url: studentAppUrl(settings, query) });
-        toast('Quiz publi\u00e9 ; le site s\'ouvre (d\u00e9ploiement ~1 min).', 'info');
+        await invokeCmd('open_student_app', { query: query });
+        toast('Application \u00e9tudiant ouverte.', 'info');
     } catch (e) {
         toast('Impossible de tester le quiz\u00a0: ' + String(e.message || e), 'error');
     }

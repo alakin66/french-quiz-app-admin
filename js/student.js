@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initApp() {
         const topics = Object.keys(quizzesData);
+        populateTopics(topics);
         const urlParams = new URLSearchParams(window.location.search);
         const directQuizParam = urlParams.get('quiz');
         const preselectParam = urlParams.get('preselect');
@@ -114,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (topics.length === 1) {
             selectTopic(topics[0]);
         } else {
-            populateTopics(topics);
             startScreen.classList.remove('active');
             startScreen.classList.add('hidden');
             topicScreen.classList.remove('hidden');
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const topicHistory = history[topic] || {};
 
         const buildOptions = () =>
-            '<option value="" disabled selected>-- Sélectionnez un niveau/quiz --</option>'
+            '<option value="" disabled>-- Sélectionnez un niveau/quiz --</option>'
             + subQuizKeys.map(key => {
                 const result = topicHistory[key];
                 const badge = result ? ` \u00a0${scoreBadge(result)}` : '';
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         quizSelect.disabled = false;
         introQuizSelect.disabled = false;
 
-        if (subQuizKeys.length === 1) {
+        if (subQuizKeys.length > 0) {
             quizSelect.value = subQuizKeys[0];
             introQuizSelect.value = subQuizKeys[0];
             startBtn.disabled = false;
@@ -335,11 +335,14 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(table);
     }
 
-    backToTopicsBtn.addEventListener('click', () => {
+    function goToTopics(fromScreen) {
         document.querySelector('.logo-container h1').textContent = 'Quiz de Français';
         document.title = 'Quiz de Français';
-        switchScreen(startScreen, topicScreen);
-    });
+        populateTopics(Object.keys(quizzesData));
+        switchScreen(fromScreen, topicScreen);
+    }
+
+    backToTopicsBtn.addEventListener('click', () => goToTopics(startScreen));
 
     const clearHistoryBtn = document.getElementById('clear-history-btn');
     const historyCleared  = document.getElementById('history-cleared-msg');
@@ -359,9 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('back-from-intro-btn').addEventListener('click', () => {
-        switchScreen(introScreen, topicScreen);
-    });
+    document.getElementById('back-from-intro-btn').addEventListener('click', () => goToTopics(introScreen));
 
     introQuizSelect.addEventListener('change', function() {
         introStartBtn.disabled = !introQuizSelect.value;

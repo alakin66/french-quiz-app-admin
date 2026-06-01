@@ -38,6 +38,9 @@
             color: var(--color-text);
             display: none;
         }
+        .path-row { display: flex; gap: 8px; align-items: flex-end; }
+        .path-row .form-control { flex: 1; }
+        .path-row .btn { flex-shrink: 0; height: 38px; }
     </style>
 </head>
 <body>
@@ -69,14 +72,28 @@
             <div class="card-body">
 
                 <div class="setup-banner" id="setup-banner">
-                    &#x1F44B; <strong>Bienvenue !</strong> Avant de commencer, renseignez votre <strong>dépôt GitHub</strong> et un <strong>token d'accès</strong> ci-dessous. Aucun clone local n'est nécessaire.
+                    &#x1F44B; <strong>Bienvenue !</strong> Avant de commencer, choisissez un <strong>dossier de travail</strong> local, puis renseignez votre <strong>dépôt</strong> et <strong>token GitHub</strong> pour publier.
                 </div>
 
                 <div class="info-box">
-                    Ces paramètres permettent à l'outil d'administration de <strong>lire et publier</strong>
-                    les quiz directement via l'<strong>API GitHub</strong> (aucun dossier local ni git requis).<br>
+                    L'outil édite vos quiz dans un <strong>dossier de travail local</strong> (sous-dossiers
+                    <code>data/</code>, <code>questionnaires/</code>, <code>excel/</code>) et <strong>publie</strong>
+                    sur GitHub via l'<strong>API GitHub</strong>.<br>
                     Le fichier <code>settings.json</code> est stocké localement dans le dossier Application Support et n'est <strong>jamais</strong> versionné.
                 </div>
+
+                <!-- Working directory -->
+                <div class="form-group">
+                    <label for="working-dir">Dossier de travail</label>
+                    <div class="path-row">
+                        <input type="text" id="working-dir" class="form-control"
+                            placeholder="~/Documents/French Quiz App" autocomplete="off">
+                        <button class="btn btn-secondary" id="btn-browse-dir" type="button">Parcourir…</button>
+                    </div>
+                    <div class="hint">Contient <code>data/</code> (quiz courants), <code>questionnaires/</code> et <code>excel/</code>.</div>
+                </div>
+
+                <hr class="section-divider">
 
                 <!-- GitHub username -->
                 <div class="form-group">
@@ -179,8 +196,13 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
+    const workingDir  = document.getElementById('working-dir').value.trim();
     const githubRepo  = document.getElementById('gh-repo').value.trim();
     const githubToken = document.getElementById('gh-token').value.trim();
+    if (!workingDir) {
+        toast('Sélectionnez un dossier de travail.', 'error');
+        return;
+    }
     if (githubRepo.indexOf('/') === -1) {
         toast('Renseignez le dépôt GitHub au format owner/repo.', 'error');
         return;
@@ -189,8 +211,15 @@ async function saveSettings() {
         toast('Renseignez un token d\'accès GitHub.', 'error');
         return;
     }
+    try {
+        await invokeCmd('init_working_dir', { path: workingDir });
+    } catch (e) {
+        toast('Impossible d\'initialiser le dossier : ' + String(e), 'error');
+        return;
+    }
     const checkedProvider = document.querySelector('input[name="llm-provider"]:checked');
     const settings = {
+        workingDir:  workingDir,
         githubUser:  document.getElementById('gh-user').value.trim(),
         githubRepo:  githubRepo,
         githubToken: githubToken,
@@ -211,6 +240,7 @@ async function saveSettings() {
 async function clearSettings() {
     const ok = await confirmModal('Effacer tous les paramètres ?');
     if (!ok) return;
+    document.getElementById('working-dir').value = '';
     document.getElementById('gh-user').value     = '';
     document.getElementById('gh-repo').value     = '';
     document.getElementById('gh-token').value    = '';
@@ -232,6 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const settings = await loadSettings();
+    document.getElementById('working-dir').value = settings.workingDir || '';
     document.getElementById('gh-user').value   = settings.githubUser  || '';
     document.getElementById('gh-repo').value   = settings.githubRepo  || '';
     document.getElementById('gh-token').value  = settings.githubToken || '';
@@ -243,6 +274,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('btn-save-settings').addEventListener('click', saveSettings);
     document.getElementById('btn-clear-settings').addEventListener('click', clearSettings);
+
+    document.getElementById('btn-browse-dir').addEventListener('click', async () => {
+        const chosen = await invokeCmd('open_folder_dialog');
+        if (!chosen) return;
+        document.getElementById('working-dir').value = chosen;
+        try {
+            await invokeCmd('init_working_dir', { path: chosen });
+            toast('Dossier de travail initialisé.', 'success');
+        } catch (e) {
+            toast('Impossible d\'initialiser le dossier : ' + String(e), 'error');
+        }
+    });
 
     const tokenInput = document.getElementById('gh-token');
     document.getElementById('btn-toggle-token').addEventListener('click', () => {
@@ -263,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    ['gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
+    ['working-dir','gh-user','gh-repo','gh-token','llm-api-key'].forEach(id => {
         document.getElementById(id).addEventListener('keydown', (e) => {
             if (e.key === 'Enter') saveSettings();
         });
